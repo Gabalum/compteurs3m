@@ -1,22 +1,10 @@
 <?php
-require_once('../vendor/autoload.php');
+require_once('../bootstrap.php');
 use App\Compteurs;
 $compteurs = (Compteurs::getInstance())->getCompteurs();
 $dates = [];
 $chartData = [];
 $totems = [];
-$totemsColors = [
-    'XTH19101158'   => "#336699",
-    'X2H19070220'   => "#996633",
-    'X2H20042633'   => "#663399",
-    'X2H20042632'   => "#FF8800",
-    'X2H20063164'   => "#0088FF",
-    'X2H20063163'   => "#000000",
-    'X2H20063162'   => "#AA99CC",
-    'X2H20042634'   => "#8800FF",
-    'X2H20042635'   => "#AA55CC",
-    'X2H20063161'   => "#BB66FF",
-];
 ?>
 <!doctype html>
 <html lang="fr">
@@ -77,6 +65,12 @@ $totemsColors = [
                     <li><b>ff (18h)</b> : valeur ff (force du vent) à 18h</li>
                     <li><b>dd (18h)</b> : valeur dd (direction du vent) à 18h</li>
                     <li><b>cod_tend (18h)</b> : valeur cod_tend (type tendance baro) à 18h</li>
+                </ul>
+                <p>Puis sont ajoutées les données de OpenWeatherMap, il s'agit d'un code numérique : <a href="https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2" target="_blank">voir ici</a></p>
+                <ul>
+                    <li><b>weather_06</b> : code OpenWeatherMap à 6h</li>
+                    <li><b>weather_12</b> : code OpenWeatherMap à 12h</li>
+                    <li><b>weather_12</b> : code OpenWeatherMap à 18h</li>
                 </ul>
                 <p>Nota : l'absence de donnée est remplaceé par "-"</p>
             </div>
@@ -143,48 +137,7 @@ $totemsColors = [
                 <?php endforeach ?>
             <?php endif ?>
         </div>
-        <?php /* ?>
-        <div class="col-7">
-            <canvas id="chart" style="width:90%;" height="400"></canvas>
-            <div class="row" style="margin-top:50px; text-align:center">
-                <a href="./raw-dl.php" download class="btn btn-primary">Télécharger les données (CSV)</a>
-            </div>
-        </div>
-        <?php /* */ ?>
     </section>
-    <?php /* ?>
-<?php if(count($chartData) > 0): ?>
-    <?php $dates = array_unique($dates) ?>
-    <?php foreach($dates as $k => $d){ $dates[$k] = '"'.$d.'"'; } ?>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-    <script type="text/javascript">
-        var ctx = document.getElementById('chart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [<?php echo implode(',', $dates) ?>],
-                datasets: [
-                    <?php foreach($chartData as $k => $val): ?>
-                        <?php
-                            foreach($dates as $date){
-                                if(!isset($val[$date])){
-                                    $val[$date] = 0;
-                                }
-                            }
-                        ?>
-                        {
-                            label: "<?php echo $totems[$k] ?>",
-                            data: [<?php echo implode(',', $val) ?>],
-                            fill: false,
-                            borderColor: "<?php echo $totemsColors[$k] ?>",
-                        },
-                    <?php endforeach ?>
-                ]
-            }
-        });
-    </script>
-<?php endif ?>
-<?php /* */ ?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
 </body>

@@ -10,6 +10,7 @@ use \DateTime;
 class Meteo
 {
     private $data = null;
+    private $weatherData = null;
     private $link = null;
     private $file = null;
 
@@ -18,6 +19,7 @@ class Meteo
         $rows = intval($rows);
         $this->link = 'https://public.opendatasoft.com/api/records/1.0/search/?dataset=donnees-synop-essentielles-omm&q=montpellier&rows='.$rows.'&sort=date&facet=date&facet=nom&facet=temps_present&refine.numer_sta=07643';
         $this->file = dirname(__DIR__).'/data/meteo_'.$rows.'.json';
+        $this->weatherFile = dirname(__DIR__).'/data/weather.json';
     }
 
     public function getData()
@@ -88,5 +90,99 @@ class Meteo
         $file = fopen($this->file, 'w+');
         fwrite($file, json_encode($values, true));
         fclose($file);
+    }
+
+    public function getWeather()
+    {
+        if($this->weatherData == null){
+            if(!file_exists($this->weatherFile)){
+                $this->retrieveWeather();
+            }elseif(time() - filemtime($this->weatherFile) > 86400){ // une fois par jour
+                $this->retrieveWeather();
+            }
+            $this->weatherData = json_decode(file_get_contents($this->weatherFile), true);
+        }
+        return $this->weatherData;
+    }
+
+    /**
+    * @see https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+    */
+    public function retrieveWeather()
+    {
+        $values = [];
+        for($i = 5; $i > 0; $i--){
+            $date = (new DateTime())->modify('-'.$i.' days');
+            $tmp = dirname(__DIR__).'/data/weather/'.$date->format('Ymd').'.json';
+            if(!file_exists($tmp)){
+                $apiKey = $_ENV['WEATHER_KEY'];
+                $cityId = $_ENV['WEATHER_CITYID'];
+                $cityCountry = $_ENV['WEATHER_CITYCODE'];
+                $lat = $_ENV['WEATHER_LAT'];
+                $lon = $_ENV['WEATHER_LON'];
+                $dt = $date->format('U');
+                $url = 'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat='.$lat.'&lon='.$lon.'&dt='.$dt.'&appid='.$apiKey;
+                $data = file_get_contents($url);
+                $handler = fopen($tmp, 'w+');
+                fwrite($handler, $data);
+                fclose($handler);
+            }
+        }
+        $files = glob(dirname(__DIR__).'/data/weather/*.json');
+        if(count($files) > 0){
+            foreach($files as $file){
+                if(filemtime($file) > time() - 86400*20){ // données de 20 jours seulement
+                    $data = json_decode(file_get_contents($file));
+                    if(is_object($data) && isset($data->hourly) && is_array($data->hourly) && count($data->hourly) > 0){
+                        foreach($data->hourly as $item){
+                            $date = (new DateTime())->setTimestamp($item->dt);
+                            $heures = ['06', '12', '18'];
+                            if(in_array($date->format('H'), $heures)){
+                                if(!isset($values[$date->format('Ymd')])){
+                                    $values[$date->format('Ymd')] = [
+                                        '06' => [],
+                                        '12' => [],
+                                        '18' => [],
+                                    ];
+                                }
+                                $values[$date->format('Ymd')][$date->format('H')] = [
+                                    'code'      => $item->weather[0]->id,
+                                    'title'     => $item->weather[0]->main,
+                                    'desc'      => Helper::slugify($item->weather[0]->description),
+                                    'icon'      => $item->weather[0]->icon,
+                                    'iconurl'   => 'http://openweathermap.org/img/wn/'.$item->weather[0]->icon.'@2x.png',
+                                    'iconurl2'  => 'http://openweathermap.org/img/wn/'.str_replace('n', 'd', $item->weather[0]->icon).'@2x.png',
+                                    'wi-icon'   => $this->icoToWi($item->weather[0]->icon),
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        ksort($values);
+        $file = fopen($this->weatherFile, 'w+');
+        fwrite($file, json_encode($values, true));
+        fclose($file);
+    }
+
+    /**
+    * @see https://erikflowers.github.io/weather-icons/
+    **/
+    private function icoToWi($icon)
+    {
+        $icon = str_replace('n', 'd', $icon);
+        $table = [
+            '01d'   => 'wi-day-sunny',
+            '02d'   => 'wi-day-cloudy',
+            '03d'   => 'wi-cloud',
+            '04d'   => 'wi-cloudy',
+            '09d'   => 'wi-showers',
+            '10d'   => 'wi-day-showers',
+            '11d'   => 'wi-storm-showers',
+            '13d'   => 'wi-snowflake-cold',
+            '50d'   => 'wi-smoke',
+        ];
+        return (isset($table[$icon]) ? $table[$icon] : '');
     }
 }

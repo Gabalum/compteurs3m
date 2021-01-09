@@ -1,6 +1,6 @@
 <?php
 namespace App;
-require_once('../vendor/autoload.php');
+require_once('../bootstrap.php');
 $compteurs = (Compteurs::getInstance())->getCompteurs();
 $baseUrl = 'https://compteurs.velocite-montpellier.fr/';
 $title = 'Les compteurs vélos de Montpellier 3M';
@@ -10,6 +10,7 @@ $yesterday = (new \DateTime())->modify('-1 day');
 $limitMeteo = (new \DateTime())->modify('-'.$days.' day');
 $now = new \DateTime();
 $meteoData = (new Meteo())->getData();
+$weatherData = (new Meteo())->getWeather();
 ?>
 <!doctype html>
 <html lang="fr">
@@ -39,6 +40,7 @@ $meteoData = (new Meteo())->getData();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <link type="text/css" rel="stylesheet" href="<?php echo Helper::noCache('./assets/css/main.css') ?>" media="all" />
+    <link type="text/css" rel="stylesheet" href="<?php echo Helper::noCache('./assets/css/weather-icons.min.css') ?>" media="all" />
 	<link rel="apple-touch-icon" sizes="90x90" href="./assets/img/favicons/favicon.png">
 	<link rel="icon" type="image/x-icon" sizes="90x90" href="./assets/img/favicons/favicon.png">
 </head>
@@ -117,11 +119,12 @@ $meteoData = (new Meteo())->getData();
             <section class="meteo" id="meteo-temperature">
                 <h2>
                     <a href="#meteo-temperature">
-                        Températures
+                        Températures et météo
                     </a>
                 </h2>
                 <p class="legend">
-                    <em>Températures relevées à Maugio (données <a href="https://donneespubliques.meteofrance.fr/?fond=produit&id_produit=90&id_rubrique=32" target="_blank">Météo France</a>)</em>
+                    <em>Températures relevées à Maugio (données <a href="https://donneespubliques.meteofrance.fr/?fond=produit&id_produit=90&id_rubrique=32" target="_blank">Météo France</a>)</em> ;
+                    <em>Indications météo issues de <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap</a> sur Montpellier</em>
                 </p>
                 <table class="table table-dark table-striped table-hover">
                     <thead>
@@ -130,7 +133,6 @@ $meteoData = (new Meteo())->getData();
                             <th scope="col">06h00</th>
                             <th scope="col">12h00</th>
                             <th scope="col">18h00</th>
-                            <th>cod_tend</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,10 +140,30 @@ $meteoData = (new Meteo())->getData();
                             <?php if($d > $limitMeteo->format('Ymd') && $d < $now->format('Ymd')): ?>
                                 <tr>
                                     <th scope="row"><?php echo $m['date'] ?></th>
-                                    <td><?php echo $m['06'] ?></td>
-                                    <td><?php echo $m['12'] ?></td>
-                                    <td><?php echo $m['18'] ?></td>
-                                    <td><?php echo $m['06_cod_tend'] ?>, <?php echo $m['12_cod_tend'] ?>, <?php echo $m['18_cod_tend'] ?>, </td>
+                                    <td>
+                                        <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['06'])): ?>
+                                            <i class="wi <?php echo $weatherData[$d]['06']['wi-icon'] ?>"></i>
+                                        <?php else: ?>
+                                            <i class="wi"></i>
+                                        <?php endif ?>
+                                        <?php echo $m['06'] ?>
+                                    </td>
+                                    <td>
+                                        <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['12'])): ?>
+                                            <i class="wi <?php echo $weatherData[$d]['12']['wi-icon'] ?>"></i>
+                                        <?php else: ?>
+                                            <i class="wi"></i>
+                                        <?php endif ?>
+                                        <?php echo $m['12'] ?>
+                                    </td>
+                                    <td>
+                                        <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['18'])): ?>
+                                            <i class="wi <?php echo $weatherData[$d]['18']['wi-icon'] ?>"></i>
+                                        <?php else: ?>
+                                            <i class="wi"></i>
+                                        <?php endif ?>
+                                        <?php echo $m['18'] ?>
+                                    </td>
                                 </tr>
                             <?php endif ?>
                         <?php endforeach ?>

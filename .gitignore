@@ -1,3 +1,5 @@
 .git
 sync.sh
 vendor
+.env
+.env*
