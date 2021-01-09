@@ -3,4 +3,5 @@ sync.sh
 data/*
 .git
 .gitignore
+README.md
 
