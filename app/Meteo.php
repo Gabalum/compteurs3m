@@ -3,15 +3,21 @@ namespace App;
 
 use \DateTime;
 
+/**
+* @see https://public.opendatasoft.com/explore/dataset/donnees-synop-essentielles-omm/information/?flg=fr
+* @see https://donneespubliques.meteofrance.fr/?fond=produit&id_produit=90&id_rubrique=32
+*/
 class Meteo
 {
     private $data = null;
-    private $link = 'https://public.opendatasoft.com/api/records/1.0/search/?dataset=donnees-synop-essentielles-omm&q=montpellier&rows=2000&sort=date&facet=date&facet=nom&facet=temps_present&refine.numer_sta=07643';
+    private $link = null;
     private $file = null;
 
-    public function __construct()
+    public function __construct($rows = 200)
     {
-        $this->file = dirname(__DIR__).'/data/meteo.json';
+        $rows = intval($rows);
+        $this->link = 'https://public.opendatasoft.com/api/records/1.0/search/?dataset=donnees-synop-essentielles-omm&q=montpellier&rows='.$rows.'&sort=date&facet=date&facet=nom&facet=temps_present&refine.numer_sta=07643';
+        $this->file = dirname(__DIR__).'/data/meteo_'.$rows.'.json';
     }
 
     public function getData()
@@ -32,19 +38,49 @@ class Meteo
         $data = @json_decode(@file_get_contents($this->link));
         $values = [];
         $heures = ['06', '12', '18'];
+        $items = ['rr3', 'rr6', 'rr12', 'rr24', 'ff', 'dd', 'cod_tend'];
         if(is_object($data) && isset($data->records) && is_array($data->records) && count($data->records) > 0){
             foreach($data->records as $record){
                 $date = new DateTime($record->fields->date);
-                if(in_array($date->format('H'),$heures)) {
+                $h = $date->format('H');
+                if(in_array($h,$heures)) {
                     if(!isset($values[$date->format('Ymd')])){
                         $values[$date->format('Ymd')] = [
-                            'date'  => $date->format('d-m-Y'),
-                            '06'  => '',
-                            '12'  => '',
-                            '18'  => '',
+                            'date'          => $date->format('d-m-Y'),
+                            '06'            => '',
+                            '12'            => '',
+                            '18'            => '',
+                            '06_raw'        => '',
+                            '12_raw'        => '',
+                            '18_raw'        => '',
+                            '06_rr3'        => '', // précipitations sous 3 heures
+                            '06_rr6'        => '', // précipitations sous 6 heures
+                            '06_rr12'       => '', // précipitations sous 12 heures
+                            '06_rr24'       => '', // précipitations sous 24 heures
+                            '06_ff'         => '', // force du vent
+                            '06_dd'         => '', // force du vent
+                            '06_cod_tend'   => '', // type tendance baro
+                            '12_rr3'        => '', // précipitations sous 3 heures
+                            '12_rr6'        => '', // précipitations sous 6 heures
+                            '12_rr12'       => '', // précipitations sous 12 heures
+                            '12_rr24'       => '', // précipitations sous 24 heures
+                            '12_ff'         => '', // force du vent
+                            '12_dd'         => '', // force du vent
+                            '12_cod_tend'   => '', // type tendance baro
+                            '18_rr3'        => '', // précipitations sous 3 heures
+                            '18_rr6'        => '', // précipitations sous 6 heures
+                            '18_rr12'       => '', // précipitations sous 12 heures
+                            '18_rr24'       => '', // précipitations sous 24 heures
+                            '18_ff'         => '', // force du vent
+                            '18_dd'         => '', // force du vent
+                            '18_cod_tend'   => '', // type tendance baro
                         ];
                     }
-                    $values[$date->format('Ymd')][$date->format('H')] = (strlen($record->fields->tc) > 0 ? $record->fields->tc.' °C' : '-');
+                    $values[$date->format('Ymd')][$h] = (strlen($record->fields->tc) > 0 ? $record->fields->tc.' °C' : '-');
+                    $values[$date->format('Ymd')][$h.'_raw'] = (strlen($record->fields->tc) > 0 ? $record->fields->tc : '-');
+                    foreach($items as $it){
+                        $values[$date->format('Ymd')][$h.'_'.$it] =  (strlen($record->fields->$it) > 0 ? $record->fields->$it : '-');
+                    }
                 }
             }
             ksort($values);

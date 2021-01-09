@@ -1,0 +1,6 @@
+.excludes
+sync.sh
+data/*
+.git
+.gitignore
+

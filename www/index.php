@@ -130,6 +130,7 @@ $meteoData = (new Meteo())->getData();
                             <th scope="col">06h00</th>
                             <th scope="col">12h00</th>
                             <th scope="col">18h00</th>
+                            <th>cod_tend</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,6 +141,7 @@ $meteoData = (new Meteo())->getData();
                                     <td><?php echo $m['06'] ?></td>
                                     <td><?php echo $m['12'] ?></td>
                                     <td><?php echo $m['18'] ?></td>
+                                    <td><?php echo $m['06_cod_tend'] ?>, <?php echo $m['12_cod_tend'] ?>, <?php echo $m['18_cod_tend'] ?>, </td>
                                 </tr>
                             <?php endif ?>
                         <?php endforeach ?>

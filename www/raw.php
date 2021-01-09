@@ -42,6 +42,44 @@ $totemsColors = [
         <div class="col-12 text-center">
             <a href="./raw-dl.php" download class="btn btn-primary">Télécharger les données (CSV)</a>
             <a href="./meteo-dl.php" download class="btn btn-dark">Télécharger les températures (CSV)</a>
+            <a href="#infometeo" class="badge rounded-pill bg-secondary" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="infometeo">
+                <span class="fa fa-question">?</span>
+            </a>
+            <div class="collapse" id="infometeo" style="background: #ffe; text-align: left">
+                <h6>Doc Météo</h6>
+                <p>Les données météos sont issue du format SYNOP de Météo France : <a href="ftp://esurfmar.meteo.fr/pub/pb/tmp/doc_util_bdmo-v13.pdf" target="_blank">documentation</a> et <a href="https://donneespubliques.meteofrance.fr/client/document/doc_parametres_synop_168.pdf" target="_blank">autre documentation</a><br>Description des colonnes : </p>
+                <ul>
+                    <li><b>date</b> : date du relevé</li>
+                    <li><b>temp. 06h00</b> : température à 06h, avec °C derrière</li>
+                    <li><b>temp. 12h00</b> : température à 12h, avec °C derrière</li>
+                    <li><b>temp. 18h00</b> : température à 18h, avec °C derrière</li>
+                    <li><b>temp. 06h00 (brut)</b> : température à 06h, sans °C derrière</li>
+                    <li><b>temp. 12h00 (brut)</b> : température à 12h, sans °C derrière</li>
+                    <li><b>temp. 18h00 (brut)</b> : température à 18h, sans °C derrière</li>
+                    <li><b>rr3 (06h)</b> : valeur rr3 (précipitations dans les 3 heures pécédentes) à 6h</li>
+                    <li><b>rr6 (06h)</b> : valeur rr3 (précipitations dans les 6 heures pécédentes) à 6h</li>
+                    <li><b>rr12 (06h)</b> : valeur rr3 (précipitations dans les 12 heures pécédentes) à 6h</li>
+                    <li><b>rr24 (06h)</b> : valeur rr3 (précipitations dans les 24 heures pécédentes) à 6h</li>
+                    <li><b>ff (06h)</b> : valeur ff (force du vent) à 6h</li>
+                    <li><b>dd (06h)</b> : valeur dd (direction du vent) à 6h</li>
+                    <li><b>cod_tend (06h)</b> : valeur cod_tend (type tendance baro) à 6h</li>
+                    <li><b>rr3 (12h)</b> : valeur rr3 (précipitations dans les 3 heures pécédentes) à 12h</li>
+                    <li><b>rr6 (12h)</b> : valeur rr3 (précipitations dans les 6 heures pécédentes) à 12h</li>
+                    <li><b>rr12 (12h)</b> : valeur rr3 (précipitations dans les 12 heures pécédentes) à 12h</li>
+                    <li><b>rr24 (12h)</b> : valeur rr3 (précipitations dans les 24 heures pécédentes) à 12h</li>
+                    <li><b>ff (12h)</b> : valeur ff (force du vent) à 12h</li>
+                    <li><b>dd (12h)</b> : valeur dd (direction du vent) à 12h</li>
+                    <li><b>cod_tend (12h)</b> : valeur cod_tend (type tendance baro) à 12h</li>
+                    <li><b>rr3 (18h)</b> : valeur rr3 (précipitations dans les 3 heures pécédentes) à 18h</li>
+                    <li><b>rr6 (18h)</b> : valeur rr3 (précipitations dans les 6 heures pécédentes) à 18h</li>
+                    <li><b>rr12 (18h)</b> : valeur rr3 (précipitations dans les 12 heures pécédentes) à 18h</li>
+                    <li><b>rr24 (18h)</b> : valeur rr3 (précipitations dans les 24 heures pécédentes) à 18h</li>
+                    <li><b>ff (18h)</b> : valeur ff (force du vent) à 18h</li>
+                    <li><b>dd (18h)</b> : valeur dd (direction du vent) à 18h</li>
+                    <li><b>cod_tend (18h)</b> : valeur cod_tend (type tendance baro) à 18h</li>
+                </ul>
+                <p>Nota : l'absence de donnée est remplaceé par "-"</p>
+            </div>
         </div>
     </section>
     <section id="main" class="container">
@@ -147,5 +185,7 @@ $totemsColors = [
     </script>
 <?php endif ?>
 <?php /* */ ?>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
 </body>
 </html>
