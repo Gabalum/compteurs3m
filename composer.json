@@ -1,0 +1,9 @@
+{
+    "name":"Compteurs3M",
+    "description":"Compteurs vélo de Montpellier 3M",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
