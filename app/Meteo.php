@@ -145,7 +145,8 @@ class Meteo
                 $lat = $_ENV['WEATHER_LAT'];
                 $lon = $_ENV['WEATHER_LON'];
                 $dt = $date->format('U');
-                $url = 'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat='.$lat.'&lon='.$lon.'&dt='.$dt.'&appid='.$apiKey;
+                $url = 'https://api.openweathermap.org/data/2.5/onecall/timemachine?city?q='.$cityId.','.$cityCountry.'&dt='.$dt.'&appid='.$apiKey;
+                //$url = 'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat='.$lat.'&lon='.$lon.'&dt='.$dt.'&appid='.$apiKey;
                 $data = file_get_contents($url);
                 $handler = fopen($tmp, 'w+');
                 fwrite($handler, $data);
