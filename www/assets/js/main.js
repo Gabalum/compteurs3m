@@ -34,4 +34,19 @@ $(document).ready(function(){
             });
         }
     });
+    $('#menuToggler').on('change', function(){
+        var self = $(this);
+        if(self.prop('checked')) {
+            $('.map').css('visibility', 'hidden');
+        }else{
+            $('.map').css('visibility', 'visible');
+        }
+    });
+    $('#menu a').on('click', function(){
+        $('#menuToggler').prop('checked', false);
+        $('.map').css('visibility', 'visible');
+    });
+    
+    $('#menuToggler').prop('checked', false);
+    $('.map').css('visibility', 'visible');
 });

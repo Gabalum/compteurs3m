@@ -27,7 +27,8 @@ class Meteo
         if($this->data == null){
             if(!file_exists($this->file)){
                 $this->retrieveData();
-            }elseif(time() - filemtime($this->file) > 86400){ // une fois par jour
+            }elseif(date('Ymd', filemtime($this->file)) < date('Ymd')){ // si fichier de la veille
+            //}elseif(time() - filemtime($this->file) > 86400){ // une fois par jour
                 $this->retrieveData();
             }
             $this->data = json_decode(file_get_contents($this->file), true);
@@ -97,7 +98,8 @@ class Meteo
         if($this->weatherData == null){
             if(!file_exists($this->weatherFile)){
                 $this->retrieveWeather();
-            }elseif(time() - filemtime($this->weatherFile) > 86400){ // une fois par jour
+            }elseif(date('Ymd', filemtime($this->file)) < date('Ymd')){ // si fichier de la veille
+            //}elseif(time() - filemtime($this->weatherFile) > 86400){ // une fois par jour
                 $this->retrieveWeather();
             }
             $this->weatherData = json_decode(file_get_contents($this->weatherFile), true);

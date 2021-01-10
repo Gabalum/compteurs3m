@@ -45,6 +45,28 @@ $weatherData = (new Meteo())->getWeather();
 	<link rel="icon" type="image/x-icon" sizes="90x90" href="./assets/img/favicons/favicon.png">
 </head>
 <body>
+    <nav role="navigation" id="bugerNav">
+        <div id="menuToggle">
+            <input type="checkbox" id="menuToggler" />
+            <span></span>
+            <span></span>
+            <span></span>
+            <ul id="menu">
+                <?php if(count($compteurs) > 0): ?>
+                    <?php foreach($compteurs as $k => $compteur): ?>
+                        <li>
+                            <a href="#compteur-<?php echo $compteur->get('slug') ?>">
+                                <?php echo $compteur->get('labelHTML') ?>
+                            </a>
+                        </li>
+                    <?php endforeach ?>
+                    <li>
+                        <a href="#meteo-temperature">Météo</a>
+                    </li>
+                <?php endif ?>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
         <h1>Les compteurs vélos de Montpellier 3M</h1>
         <?php if(count($compteurs) > 0): ?>
