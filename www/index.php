@@ -6,11 +6,8 @@ $baseUrl = 'https://compteurs.velocite-montpellier.fr/';
 $title = 'Les compteurs vélos de Montpellier 3M';
 $desc = 'Découvrez les compteurs vélos grâce aux données en Open Data de Montpellier 3M';
 $days = 14;
-$yesterday = (new \DateTime())->modify('-1 day');
-$limitMeteo = (new \DateTime())->modify('-'.$days.' day');
-$now = new \DateTime();
-$meteoData = (new Meteo())->getData();
-$weatherData = (new Meteo())->getWeather();
+$meteoData = (new Meteo())->getData($days);
+$weatherData = (new Meteo())->getWeather($days);
 ?>
 <!doctype html>
 <html lang="fr">
@@ -60,9 +57,11 @@ $weatherData = (new Meteo())->getWeather();
                             </a>
                         </li>
                     <?php endforeach ?>
-                    <li>
-                        <a href="#meteo-temperature">Météo</a>
-                    </li>
+                    <?php if(count($meteoData) > 0): ?>
+                        <li>
+                            <a href="#meteo-temperature">Météo</a>
+                        </li>
+                    <?php endif ?>
                 <?php endif ?>
             </ul>
         </div>
@@ -159,35 +158,33 @@ $weatherData = (new Meteo())->getWeather();
                     </thead>
                     <tbody>
                         <?php foreach($meteoData as $d => $m): ?>
-                            <?php if($d > $limitMeteo->format('Ymd') && $d < $now->format('Ymd')): ?>
-                                <tr>
-                                    <th scope="row"><?php echo $m['date'] ?></th>
-                                    <td>
-                                        <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['06'])): ?>
-                                            <i class="wi <?php echo $weatherData[$d]['06']['wi-icon'] ?>"></i>
-                                        <?php else: ?>
-                                            <i class="wi"></i>
-                                        <?php endif ?>
-                                        <?php echo $m['06'] ?>
-                                    </td>
-                                    <td>
-                                        <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['12'])): ?>
-                                            <i class="wi <?php echo $weatherData[$d]['12']['wi-icon'] ?>"></i>
-                                        <?php else: ?>
-                                            <i class="wi"></i>
-                                        <?php endif ?>
-                                        <?php echo $m['12'] ?>
-                                    </td>
-                                    <td>
-                                        <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['18'])): ?>
-                                            <i class="wi <?php echo $weatherData[$d]['18']['wi-icon'] ?>"></i>
-                                        <?php else: ?>
-                                            <i class="wi"></i>
-                                        <?php endif ?>
-                                        <?php echo $m['18'] ?>
-                                    </td>
-                                </tr>
-                            <?php endif ?>
+                            <tr>
+                                <th scope="row"><?php echo $m['date'] ?></th>
+                                <td>
+                                    <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['06'])): ?>
+                                        <i class="wi <?php echo $weatherData[$d]['06']['wi-icon'] ?>"></i>
+                                    <?php else: ?>
+                                        <i class="wi"></i>
+                                    <?php endif ?>
+                                    <?php echo $m['06'] ?>
+                                </td>
+                                <td>
+                                    <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['12'])): ?>
+                                        <i class="wi <?php echo $weatherData[$d]['12']['wi-icon'] ?>"></i>
+                                    <?php else: ?>
+                                        <i class="wi"></i>
+                                    <?php endif ?>
+                                    <?php echo $m['12'] ?>
+                                </td>
+                                <td>
+                                    <?php if(isset($weatherData[$d]) && is_array($weatherData[$d]) && isset($weatherData[$d]['18'])): ?>
+                                        <i class="wi <?php echo $weatherData[$d]['18']['wi-icon'] ?>"></i>
+                                    <?php else: ?>
+                                        <i class="wi"></i>
+                                    <?php endif ?>
+                                    <?php echo $m['18'] ?>
+                                </td>
+                            </tr>
                         <?php endforeach ?>
                     </tbody>
                 </table>

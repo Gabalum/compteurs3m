@@ -22,7 +22,7 @@ class Meteo
         $this->weatherFile = dirname(__DIR__).'/data/weather.json';
     }
 
-    public function getData()
+    public function getData($days = null)
     {
         if($this->data == null){
             if(!file_exists($this->file)){
@@ -32,6 +32,17 @@ class Meteo
                 $this->retrieveData();
             }
             $this->data = json_decode(file_get_contents($this->file), true);
+        }
+        if(!is_null($days)){
+            $limitMeteo = (new \DateTime())->modify('-'.$days.' day')->format('Ymd');
+            $now = (new \DateTime())->format('Ymd');
+            if(count($this->data) > 0){
+                foreach($this->data as $d => $v){
+                    if($d <= $limitMeteo || $d >= $now){
+                        unset($this->data[$d]);
+                    }
+                }
+            }
         }
         return $this->data;
     }
@@ -93,7 +104,7 @@ class Meteo
         fclose($file);
     }
 
-    public function getWeather()
+    public function getWeather($days = null)
     {
         if($this->weatherData == null){
             if(!file_exists($this->weatherFile)){
@@ -103,6 +114,17 @@ class Meteo
                 $this->retrieveWeather();
             }
             $this->weatherData = json_decode(file_get_contents($this->weatherFile), true);
+        }
+        if(!is_null($days)){
+            $limitMeteo = (new \DateTime())->modify('-'.$days.' day')->format('Ymd');
+            $now = (new \DateTime())->format('Ymd');
+            if(count($this->weatherData) > 0){
+                foreach($this->weatherData as $d => $v){
+                    if($d <= $limitMeteo || $d >= $now){
+                        unset($this->weatherData[$d]);
+                    }
+                }
+            }
         }
         return $this->weatherData;
     }
