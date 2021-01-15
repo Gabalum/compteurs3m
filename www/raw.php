@@ -2,7 +2,6 @@
 namespace App;
 require_once('../bootstrap.php');
 $compteurs = (Compteurs::getInstance())->getCompteurs();
-$dates = [];
 $totems = [];
 ?>
 <!doctype html>
@@ -13,6 +12,12 @@ $totems = [];
     <title>Compteurs : données</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <style>
+        h2{
+            margin-top: 1.5rem;
+        }
+        h3{
+            margin-top: 2rem;
+        }
         h2 a, h2 a:hover, h2 a:visited, h2 a:active{
             color: #000;
             text-decoration: none;
@@ -151,6 +156,87 @@ $totems = [];
                                             </div>
                                         </div>
                                     </div>
+                                    <h3>Statistiques par jours</h3>
+                                    <div class="row">
+                                        <div class="col">
+                                            <?php $days = $compteur->get('days') ?>
+                                            <?php if(count($days) > 0): ?>
+                                                <b>Par jour de la semaine (toutes les données)</b>
+                                                <table class="text-center table table-striped align-middle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Jour</th>
+                                                            <th>Total</th>
+                                                            <th>Moyenne</th>
+                                                            <th>Record</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php $aDays = [] ?>
+                                                        <?php foreach($days as $dow => $values): ?>
+                                                            <tr>
+                                                                <th>
+                                                                    <?php echo Helper::frenchDayOfTheWeek($dow) ?>
+                                                                </th>
+                                                                <td>
+                                                                    <?php echo $values['sum'] ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php echo $values['avg'] ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php echo $values['value'] ?><br>
+                                                                    (<?php echo $values['date'] ?>)
+                                                                </td>
+                                                            </tr>
+                                                        <?php endforeach ?>
+                                                </table>
+                                                <div>
+                                                    <canvas id="bar-day-<?php echo $k ?>" class="bar bar-days" data-label="par jour " data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgTotal') ?>" data-max="<?php echo $compteur->get('recordTotal') ?>"></canvas>
+                                                </div>
+                                            <?php endif ?>
+                                        </div>
+                                        <div class="col">
+                                            <?php $days = $compteur->get('days-by-year') ?>
+                                            <?php if(count($days) > 0 && isset($days[date('Y')]) && count($days[date('Y')]) > 0): ?>
+                                                <?php $days = $days[date('Y')] ?>
+                                                <b>Par jour de la semaine (en <?php echo date('Y') ?>)</b>
+                                                <table class="text-center table table-striped align-middle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Jour</th>
+                                                            <th>Total</th>
+                                                            <th>Moyenne</th>
+                                                            <th>Record</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php $aDays = [] ?>
+                                                        <?php foreach($days as $dow => $values): ?>
+                                                            <tr>
+                                                                <th>
+                                                                    <?php echo Helper::frenchDayOfTheWeek($dow) ?>
+                                                                </th>
+                                                                <td>
+                                                                    <?php echo $values['sum'] ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php echo $values['avg'] ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php echo $values['value'] ?><br>
+                                                                    (<?php echo $values['date'] ?>)
+                                                                </td>
+                                                            </tr>
+                                                        <?php endforeach ?>
+                                                </table>
+                                                <div>
+                                                    <canvas id="bar-day2-<?php echo $k ?>" class="bar bar-days2" data-label="par jour" data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgCurYear') ?>" data-max="<?php echo $compteur->get('recordTotal') ?>"></canvas>
+                                                </div>
+                                            <?php endif ?>
+                                        </div>
+                                    </div>
+                                    <h3>Autres statistiques</h3>
                                     <div class="row">
                                         <div class="col">
                                             <?php if(count($monthes) > 0): ?>
@@ -190,46 +276,6 @@ $totems = [];
                                             <?php endif ?>
                                         </div>
                                         <div class="col">
-                                            <?php $days = $compteur->get('days') ?>
-                                            <?php if(count($days) > 0): ?>
-                                                <b>Par jour de la semaine (toutes les données)</b>
-                                                <table class="text-center table table-striped align-middle">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Jour</th>
-                                                            <th>Total</th>
-                                                            <th>Moyenne</th>
-                                                            <th>Record</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php $aDays = [] ?>
-                                                        <?php foreach($days as $dow => $values): ?>
-                                                            <tr>
-                                                                <th>
-                                                                    <?php echo Helper::frenchDayOfTheWeek($dow) ?>
-                                                                </th>
-                                                                <td>
-                                                                    <?php echo $values['sum'] ?>
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $values['avg'] ?>
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $values['value'] ?><br>
-                                                                    (<?php echo $values['date'] ?>)
-                                                                </td>
-                                                            </tr>
-                                                        <?php endforeach ?>
-                                                </table>
-                                                <div>
-                                                    <canvas id="bar-day-<?php echo $k ?>" class="bar bar-days" data-label="par jour " data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgTotal') ?>"></canvas>
-                                                </div>
-                                            <?php endif ?>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col col-md-6">
                                             <?php $weeks = $compteur->get('weeks') ?>
                                             <?php if(count($weeks) > 0): ?>
                                                 <b>Chiffres par semaine (en <?php echo date('Y') ?>)</b>
@@ -266,6 +312,7 @@ $totems = [];
                                                 </div>
                                             <?php endif ?>
                                         </div>
+
                                     </div>
                                     <?php if(is_array($data) && count($data) > 0): ?>
                                         <div class="raw-data-group">
@@ -277,7 +324,6 @@ $totems = [];
                                                         <?php echo $date ?> : <b><?php echo $val ?></b>
                                                     </li>
                                                 <?php endforeach ?>
-                                                <?php $dates = array_merge($dates, $compteur->get('chartDates', 10000)) ?>
                                             </ul>
                                         </div>
                                     <?php endif ?>
@@ -350,6 +396,16 @@ $totems = [];
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
     <script type="text/javascript">
+        function shuffle(a) {
+            var j, x, i;
+            for (i = a.length - 1; i > 0; i--) {
+                j = Math.floor(Math.random() * (i + 1));
+                x = a[i];
+                a[i] = a[j];
+                a[j] = x;
+            }
+            return a;
+        }
         $('document').ready(function(){
             $('.bar').each(function(){
                 var self = $(this);
@@ -374,6 +430,7 @@ $totems = [];
                         scales: {
                             yAxes:[{
                                 ticks:{
+                                    max: self.data('max'),
                                     beginAtZero:true
                                 }
                             }]
