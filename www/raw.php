@@ -228,6 +228,45 @@ $totems = [];
                                             <?php endif ?>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col col-md-6">
+                                            <?php $weeks = $compteur->get('weeks') ?>
+                                            <?php if(count($weeks) > 0): ?>
+                                                <b>Chiffres par semaine (en <?php echo date('Y') ?>)</b>
+                                                <table class="text-center table table-striped align-middle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>N° semaine</th>
+                                                            <th>Total</th>
+                                                            <th>Moyenne</th>
+                                                            <th>Record</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach($weeks as $week => $values): ?>
+                                                            <tr>
+                                                                <th>
+                                                                    <?php echo $week ?>
+                                                                </th>
+                                                                <td>
+                                                                    <?php echo $values['sum'] ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php echo $values['avg'] ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php echo $values['value'] ?><br>
+                                                                    (<?php echo $values['date'] ?>)
+                                                                </td>
+                                                            </tr>
+                                                        <?php endforeach ?>
+                                                </table>
+                                                <div>
+                                                    <canvas id="bar-week-<?php echo $k ?>" class="bar bar-weeks" data-label="par semaine" data-labels='<?php echo json_encode(array_keys($weeks)) ?>' data-values='<?php echo json_encode(array_column($weeks, 'avg')) ?>' <?php /* data-global-avg="<?php echo $compteur->get('avgCurYear') ?>" /* */ ?>></canvas>
+                                                </div>
+                                            <?php endif ?>
+                                        </div>
+                                    </div>
                                     <?php if(is_array($data) && count($data) > 0): ?>
                                         <div class="raw-data-group">
                                             <strong>Données brutes</strong>

@@ -68,6 +68,7 @@ class Compteur
             'monthes'           => [],
             'days'              => [],
             'days-by-year'      => [],
+            'weeks'              => [],
         ];
         $daysTotal = 0;
         $daysCurYear = 0;
@@ -87,6 +88,7 @@ class Compteur
                     $cpt = $val->intensity;
                     // --- gestion de l'année courante
                     if($year == _YEAR_){
+                        $week = $date->format('W');
                         if($cpt >= $compteur['recordYear']){
                             $compteur['recordYear'] = $cpt;
                             $compteur['recordYearDate'] = $fDate;
@@ -112,6 +114,22 @@ class Compteur
                         }
                         $compteur['monthes'][$month]['cpt']++;
                         $compteur['monthes'][$month]['sum'] += $cpt;
+                        // --- gestion des semaines
+                        if(!isset($compteur['weeks'][$week])){
+                            $compteur['weeks'][$week] = [
+                                'value' => 0,
+                                'date'  => null,
+                                'cpt'   => 0,
+                                'sum'   => 0,
+                                'avg'   => 0,
+                            ];
+                        }
+                        if($cpt > $compteur['weeks'][$week]['value']){
+                            $compteur['weeks'][$week]['value'] = $cpt;
+                            $compteur['weeks'][$week]['date'] = $fDate;
+                        }
+                        $compteur['weeks'][$week]['cpt']++;
+                        $compteur['weeks'][$week]['sum'] += $cpt;
                     }
                     // --- gestion du jour de la semaine par années
                     if(!isset($compteur['days-by-year'][$year])){
@@ -195,6 +213,22 @@ class Compteur
                     ksort($compteur['days-by-year'][$year]);
                 }
             }
+        }
+        if(count($compteur['weeks']) > 0){
+            if(count($compteur['weeks']) < 50){
+                if(isset($compteur['weeks'][52])){
+                    unset($compteur['weeks'][52]);
+                }
+                if(isset($compteur['weeks'][53])){
+                    unset($compteur['weeks'][53]);
+                }
+            }
+            foreach($compteur['weeks'] as $week => $val){
+                if($val['cpt'] > 0){
+                    $compteur['weeks'][$week]['avg'] = intval($val['sum'] / $val['cpt']);
+                }
+            }
+            ksort($compteur['weeks']);
         }
         $file = fopen($this->file, 'w+');
         fwrite($file, json_encode($compteur, true));
