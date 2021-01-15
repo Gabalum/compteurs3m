@@ -67,6 +67,7 @@ class Compteur
             'lastDate'          => '',
             'monthes'           => [],
             'days'              => [],
+            'days-by-year'      => [],
         ];
         $daysTotal = 0;
         $daysCurYear = 0;
@@ -112,6 +113,25 @@ class Compteur
                         $compteur['monthes'][$month]['cpt']++;
                         $compteur['monthes'][$month]['sum'] += $cpt;
                     }
+                    // --- gestion du jour de la semaine par années
+                    if(!isset($compteur['days-by-year'][$year])){
+                        $compteur['days-by-year'][$year] = [];
+                    }
+                    if(!isset($compteur['days-by-year'][$year][$dayOfTheWeek])){
+                        $compteur['days-by-year'][$year][$dayOfTheWeek] = [
+                            'value' => 0,
+                            'date'  => null,
+                            'cpt'   => 0,
+                            'sum'   => 0,
+                            'avg'   => 0,
+                        ];
+                    }
+                    if($cpt > $compteur['days-by-year'][$year][$dayOfTheWeek]['value']){
+                        $compteur['days-by-year'][$year][$dayOfTheWeek]['value'] = $cpt;
+                        $compteur['days-by-year'][$year][$dayOfTheWeek]['date'] = $fDate;
+                    }
+                    $compteur['days-by-year'][$year][$dayOfTheWeek]['cpt']++;
+                    $compteur['days-by-year'][$year][$dayOfTheWeek]['sum'] += $cpt;
                     // --- gestion du jour de la semaine
                     if(!isset($compteur['days'][$dayOfTheWeek])){
                         $compteur['days'][$dayOfTheWeek] = [
@@ -163,6 +183,18 @@ class Compteur
                 }
             }
             ksort($compteur['days']);
+        }
+        if(count($compteur['days-by-year']) > 0){
+            foreach($compteur['days-by-year'] as $year => $cptY){
+                if(count($cptY) > 0){
+                    foreach($cptY as $dow => $val){
+                        if($val['cpt'] > 0){
+                            $compteur['days-by-year'][$year][$dow]['avg'] = intval($val['sum'] / $val['cpt']);
+                        }
+                    }
+                    ksort($compteur['days-by-year'][$year]);
+                }
+            }
         }
         $file = fopen($this->file, 'w+');
         fwrite($file, json_encode($compteur, true));
