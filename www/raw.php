@@ -53,6 +53,9 @@ $totems = [];
             border-radius: .25rem;
             border: thin solid #dee2e6;
         }
+        #menu-tab{
+            background: white;
+        }
     </style>
 </head>
 <body>
@@ -65,22 +68,26 @@ $totems = [];
             </a>
         </div>
     </section>
+    <?php if(count($compteurs) > 0): ?>
+        <section id="menu-tab" class="sticky-top">
+            <?php $first = true ?>
+            <div class="bd-example">
+                <ul class="nav nav-pills" role="tablist">
+                    <?php foreach($compteurs as $k => $compteur): ?>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link <?php echo ($first ? 'active' :'') ?>" id="link-tab-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-<?php echo $k ?>" role="tab" aria-controls="tab-<?php echo $k ?>" aria-selected="true">
+                                <?php echo $compteur->get('labelHTML') ?>
+                            </a>
+                        </li>
+                    <?php $first = false ?>
+                    <?php endforeach ?>
+                </ul>
+            </div>
+        </section>
+    <?php endif ?>
     <section id="main" class="container">
         <div class="row">
             <?php if(count($compteurs) > 0): ?>
-                <?php $first = true ?>
-                <div class="bd-example">
-                    <ul class="nav nav-pills" role="tablist">
-                        <?php foreach($compteurs as $k => $compteur): ?>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link <?php echo ($first ? 'active' :'') ?>" id="link-tab-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-<?php echo $k ?>" role="tab" aria-controls="tab-<?php echo $k ?>" aria-selected="true">
-                                    <?php echo $compteur->get('labelHTML') ?>
-                                </a>
-                            </li>
-                        <?php $first = false ?>
-                        <?php endforeach ?>
-                    </ul>
-                </div>
                 <div class="tab-content">
                     <?php $first = true ?>
                     <?php foreach($compteurs as $k => $compteur): ?>
