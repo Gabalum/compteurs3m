@@ -5,3 +5,4 @@ data/*
 .gitignore
 README.md
 
+.DS_STORE

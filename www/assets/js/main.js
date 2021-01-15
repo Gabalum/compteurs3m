@@ -4,7 +4,7 @@ $(document).ready(function(){
         var self = $(this);
         var id = self.data('id');
         var latlng = [self.data('lat'), self.data('lng')];
-        self.height(self.closest('.compteur-data').find('.col-8').height());
+        self.height(self.closest('.compteur-data').find('.data-col-2').height());
         maps[id] = L.map('map-'+id).setView(latlng, 17);
         var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -20,6 +20,15 @@ $(document).ready(function(){
             var ctx = document.getElementById(self.find('canvas').attr('id')).getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'line',
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                },
                 data: {
                     labels: self.data('dates'),
                     datasets: [
@@ -30,7 +39,7 @@ $(document).ready(function(){
                             borderColor: "white",
                         },
                     ]
-                }
+                },
             });
         }
     });
@@ -46,7 +55,7 @@ $(document).ready(function(){
         $('#menuToggler').prop('checked', false);
         $('.map').css('visibility', 'visible');
     });
-    
+
     $('#menuToggler').prop('checked', false);
     $('.map').css('visibility', 'visible');
 });

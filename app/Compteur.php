@@ -65,6 +65,8 @@ class Compteur
             'recordTotalDate'   => '',
             'lastValue'         => 0,
             'lastDate'          => '',
+            'monthes'           => [],
+            'days'              => [],
         ];
         $daysTotal = 0;
         $daysCurYear = 0;
@@ -76,33 +78,68 @@ class Compteur
             $values = json_decode($data);
             if(count($values) > 0){
                 foreach($values as $val){
-                    $year = Helper::extractDate($val->dateObserved, true);
-                    $date = Helper::extractDate($val->dateObserved);
+                    $date = new CptDate($val->dateObserved);
+                    $year = $date->format('Y');
+                    $month = $date->format('m');
+                    $fDate = $date->format('d-m-Y');
+                    $dayOfTheWeek = $date->format('N');
                     $cpt = $val->intensity;
                     // --- gestion de l'année courante
                     if($year == _YEAR_){
                         if($cpt >= $compteur['recordYear']){
                             $compteur['recordYear'] = $cpt;
-                            $compteur['recordYearDate'] = $date;
+                            $compteur['recordYearDate'] = $fDate;
                         }
                         $compteur['sumCurYear'] += $cpt;
                         $daysCurYear++;
-                        $compteur['dataCurYear'][$date] = $cpt;
-                        $compteur['dataCurYearDates'][] = $date;
+                        $compteur['dataCurYear'][$fDate] = $cpt;
+                        $compteur['dataCurYearDates'][] = $fDate;
                         $compteur['dataCurYearValues'][] = $cpt;
+                        // --- gestion par mois
+                        if(!isset($compteur["monthes"][$month])){
+                            $compteur['monthes'][$month] = [
+                                'value'    => 0,
+                                'date'      => null,
+                                'cpt'       => 0,
+                                'sum'       => 0,
+                                'avg'       => 0,
+                            ];
+                        }
+                        if($cpt > $compteur['monthes'][$month]['value']){
+                            $compteur['monthes'][$month]['value'] = $cpt;
+                            $compteur['monthes'][$month]['date'] = $fDate;
+                        }
+                        $compteur['monthes'][$month]['cpt']++;
+                        $compteur['monthes'][$month]['sum'] += $cpt;
                     }
+                    // --- gestion du jour de la semaine
+                    if(!isset($compteur['days'][$dayOfTheWeek])){
+                        $compteur['days'][$dayOfTheWeek] = [
+                            'value' => 0,
+                            'date'  => null,
+                            'cpt'   => 0,
+                            'sum'   => 0,
+                            'avg'   => 0,
+                        ];
+                    }
+                    if($cpt > $compteur['days'][$dayOfTheWeek]['value']){
+                        $compteur['days'][$dayOfTheWeek]['value'] = $cpt;
+                        $compteur['days'][$dayOfTheWeek]['date'] = $fDate;
+                    }
+                    $compteur['days'][$dayOfTheWeek]['cpt']++;
+                    $compteur['days'][$dayOfTheWeek]['sum'] += $cpt;
                     // --- gestion depuis le début
                     if($cpt >= $compteur['recordTotal']){
                         $compteur['recordTotal'] = $cpt;
-                        $compteur['recordTotalDate'] = $date;
+                        $compteur['recordTotalDate'] = $fDate;
                     }
                     $compteur['sumTotal'] += $cpt;
                     $daysTotal++;
-                    $compteur['dataTotal'][$date] = $cpt;
-                    $compteur['dataTotalDates'][] = $date;
+                    $compteur['dataTotal'][$fDate] = $cpt;
+                    $compteur['dataTotalDates'][] = $fDate;
                     $compteur['dataTotalValues'][] = $cpt;
                 }
-                $compteur['lastDate'] = $date;
+                $compteur['lastDate'] = $fDate;
                 $compteur['lastValue'] = $cpt;
                 if(isset($val->location) && is_object($val->location) && isset($val->location->coordinates) && is_array($val->location->coordinates)){
                     $compteur['lat'] = $val->location->coordinates[1];
@@ -111,6 +148,21 @@ class Compteur
                 $compteur['avgCurYear']  = ($daysCurYear > 0 ? intval($compteur['sumCurYear'] / $daysCurYear) : 0);
                 $compteur['avgTotal']  = ($daysTotal > 0 ? intval($compteur['sumTotal'] / $daysTotal) : 0);
             }
+        }
+        if(count($compteur['monthes']) > 0){
+            foreach($compteur['monthes'] as $month => $val){
+                if($val['cpt'] > 0){
+                    $compteur['monthes'][$month]['avg'] = intval($val['sum'] / $val['cpt']);
+                }
+            }
+        }
+        if(count($compteur['days']) > 0){
+            foreach($compteur['days'] as $dow => $val){
+                if($val['cpt'] > 0){
+                    $compteur['days'][$dow]['avg'] = intval($val['sum'] / $val['cpt']);
+                }
+            }
+            ksort($compteur['days']);
         }
         $file = fopen($this->file, 'w+');
         fwrite($file, json_encode($compteur, true));
@@ -157,6 +209,20 @@ class Compteur
         return $retour;
     }
 
+    private function monthRecord()
+    {
+        $month = date('m');
+        if(intval($month) == 1){
+            return null;
+        }
+        $retour = null;
+        $records = $this->get('monthes');
+        if(isset($records[$month])){
+            $retour = $records[$month];
+        }
+        return $retour;
+    }
+
     public function get($item, $days = 14)
     {
         if(is_null($this->data)){
@@ -167,6 +233,8 @@ class Compteur
             $retour = $this->getChartDates($days);
         }elseif($item == 'chartData'){
             $retour = $this->getChartData($days);
+        }elseif($item == 'monthRecord'){
+            $retour = $this->monthRecord();
         }
         else{
             if(isset($this->data[$item])){
