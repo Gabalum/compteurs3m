@@ -3,6 +3,7 @@ namespace App;
 require_once('../bootstrap.php');
 $compteurs = (Compteurs::getInstance())->getCompteurs();
 $totems = [];
+$yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
 ?>
 <!doctype html>
 <html lang="fr">
@@ -97,6 +98,7 @@ $totems = [];
                                 $totems[$k] = $compteur->get('label');
                                 $monthes = $compteur->get('monthes');
                                 $currentMonth = (is_array($monthes) && isset($monthes[date('m')]) ? $monthes[date('m')] : null);
+                                $latestColor = ($compteur->get('lastDate') == $yesterday ? 'success' : 'danger');
                             ?>
                             <div class="row">
                                 <section class="compteur" id="compteur-<?php echo $compteur->get('slug') ?>">
@@ -105,6 +107,7 @@ $totems = [];
                                             <?php echo $compteur->get('labelHTML') ?>
                                         </a>
                                     </h2>
+                                    <p class="text-center">ID : <?php echo $compteur->get('id') ?> | <span class="text-<?php echo $latestColor ?>">Dernier relevé : <?php echo $compteur->get('lastDate') ?></span></p>
                                     <div class="row row-cards">
                                         <div class="col">
                                             <div class="card bg-info">
@@ -169,7 +172,7 @@ $totems = [];
                                             <?php $days = $compteur->get('days') ?>
                                             <?php if(count($days) > 0): ?>
                                                 <b>Par jour de la semaine (toutes les données)</b>
-                                                <table class="text-center table table-striped align-middle">
+                                                <table class="text-center table table-striped table-hover align-middle">
                                                     <thead>
                                                         <tr>
                                                             <th>Jour</th>
@@ -179,17 +182,18 @@ $totems = [];
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php $aDays = [] ?>
                                                         <?php foreach($days as $dow => $values): ?>
                                                             <tr>
                                                                 <th>
                                                                     <?php echo Helper::frenchDayOfTheWeek($dow) ?>
                                                                 </th>
                                                                 <td>
-                                                                    <?php echo $values['sum'] ?>
+                                                                    <?php echo $values['sum'] ?><br>
+                                                                    (<?php echo $values['cpt'] ?> jours)
                                                                 </td>
                                                                 <td>
-                                                                    <?php echo $values['avg'] ?>
+                                                                    <?php echo $values['avg'] ?><br>
+                                                                    &nbsp;
                                                                 </td>
                                                                 <td>
                                                                     <?php echo $values['value'] ?><br>
@@ -208,7 +212,7 @@ $totems = [];
                                             <?php if(count($days) > 0 && isset($days[date('Y')]) && count($days[date('Y')]) > 0): ?>
                                                 <?php $days = $days[date('Y')] ?>
                                                 <b>Par jour de la semaine (en <?php echo date('Y') ?>)</b>
-                                                <table class="text-center table table-striped align-middle">
+                                                <table class="text-center table table-striped table-hover align-middle">
                                                     <thead>
                                                         <tr>
                                                             <th>Jour</th>
@@ -218,17 +222,17 @@ $totems = [];
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php $aDays = [] ?>
                                                         <?php foreach($days as $dow => $values): ?>
                                                             <tr>
                                                                 <th>
                                                                     <?php echo Helper::frenchDayOfTheWeek($dow) ?>
                                                                 </th>
                                                                 <td>
-                                                                    <?php echo $values['sum'] ?>
+                                                                    <?php echo $values['sum'] ?><br>
+                                                                    (<?php echo $values['cpt'] ?> jours)
                                                                 </td>
                                                                 <td>
-                                                                    <?php echo $values['avg'] ?>
+                                                                    <?php echo $values['avg'] ?><br>&nbsp;
                                                                 </td>
                                                                 <td>
                                                                     <?php echo $values['value'] ?><br>
@@ -247,8 +251,8 @@ $totems = [];
                                     <div class="row">
                                         <div class="col">
                                             <?php if(count($monthes) > 0): ?>
-                                                <b>Chiffres par mois en <?php echo date('Y') ?></b>
-                                                <table class="table table-striped text-center align-middle">
+                                                <b>Chiffres par mois (en <?php echo date('Y') ?>)</b>
+                                                <table class="table table-striped table-hover text-center align-middle">
                                                     <thead>
                                                         <tr>
                                                             <th>Mois</th>
@@ -264,10 +268,12 @@ $totems = [];
                                                                     <?php echo Helper::frenchMonth($month, false) ?>
                                                                 </th>
                                                                 <td>
-                                                                    <?php echo $values['sum'] ?>
+                                                                    <?php echo $values['sum'] ?><br>
+                                                                    (<?php echo $values['cpt'] ?> jours)
                                                                 </td>
                                                                 <td>
-                                                                    <?php echo $values['avg'] ?>
+                                                                    <?php echo $values['avg'] ?><br>
+                                                                    &nbsp;
                                                                 </td>
                                                                 <td>
                                                                     <?php echo $values['value'] ?><br>
@@ -286,7 +292,7 @@ $totems = [];
                                             <?php $weeks = $compteur->get('weeks') ?>
                                             <?php if(count($weeks) > 0): ?>
                                                 <b>Chiffres par semaine (en <?php echo date('Y') ?>)</b>
-                                                <table class="text-center table table-striped align-middle">
+                                                <table class="text-center table table-striped table-hover align-middle">
                                                     <thead>
                                                         <tr>
                                                             <th>N° semaine</th>
@@ -302,10 +308,12 @@ $totems = [];
                                                                     <?php echo $week ?>
                                                                 </th>
                                                                 <td>
-                                                                    <?php echo $values['sum'] ?>
+                                                                    <?php echo $values['sum'] ?><br>
+                                                                    (<?php echo $values['cpt'] ?> jours)
                                                                 </td>
                                                                 <td>
-                                                                    <?php echo $values['avg'] ?>
+                                                                    <?php echo $values['avg'] ?><br>
+                                                                    &nbsp;
                                                                 </td>
                                                                 <td>
                                                                     <?php echo $values['value'] ?><br>

@@ -3,14 +3,29 @@ body{
     font-family: 'Roboto Mono', monospace;
     color: #eef;
 }
+.btn-totem{
+    background: #1da1f2;
+    border-color: #1da1f2;
+    color: var(--bg-light);
+}
+.btn-totem:hover{
+    color: #eceadc;
+    background: rgb(26, 145, 218);
+}
+.bg-totem{
+    background: #1da1f2
+    color: var(--bg-light);
+}
 h1{
-    text-align: center;
     padding-top: 20px;
-    margin-bottom: 80px;
+    margin-bottom: 30px;
 }
 h2 a, h2 a:hover, h2 a:visited, h2 a:active{
     color: #eef;
     text-decoration: none;
+}
+.compteur-head{
+    margin-bottom: 20px;
 }
 .compteur-data{
     border-radius: .8rem;
@@ -217,6 +232,62 @@ section.meteo .legend a{
   transform: translate(-100%, 0);
 }
 
+#main-404 p a{
+    color: #fff;
+}
+#main-404 h1{
+    margin-bottom: 5px;
+}
+#main-404 .retour{
+    margin-top: 10px;
+}
+
+body.detail h1{
+    margin-bottom: 0px;
+}
+body.detail section#head{
+    margin-bottom: 30px
+}
+body.detail .map, body.detail img.photo-detail{
+    width: 100%;
+    margin-bottom: 5px;
+}
+body.detail h6{
+    color: #111;
+    margin-bottom: 0;
+}
+body.detail address{
+    font-size: 0.8em;
+    font-style: italic;
+    color: #111;
+}
+.detail-data-col .card{
+    margin-bottom: 10px;
+}
+body.detail .card-init{
+    margin-bottom: 10px;
+}
+body.detail .card-title em{
+    font-size: 0.6em;
+    color: var(--bs-secondary);
+}
+body.detail .ring{
+    margin-bottom: 10px;
+}
+body.detail .ring ul{
+    background: var(--bs-light);
+    list-style-type: none;
+}
+body.detail .ring li.active{
+    background: var(--bs-gray-dark) !important;
+}
+body.detail .ring li.list-group-item-light a{
+    color: var(--bs-gray);
+    width: 100%;
+}
+body.detail .ring li.list-group-item-light.active a{
+    color: var(--bs-light);
+}
 @media screen and (max-width: 768px) {
     h1{
         margin-bottom: 0;

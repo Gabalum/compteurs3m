@@ -12,6 +12,7 @@ class Compteur
     private $archiveLink = null;
     private $file = null;
     private $data = null;
+    private $addess = '';
 
     public function __construct($id, $name = '')
     {
@@ -25,6 +26,21 @@ class Compteur
     public function getName(bool $stripTags = false) : string
     {
         return ($stripTags ? strip_tags($this->name) : $this->name);
+    }
+
+    public function getId() : string
+    {
+        return $this->id;
+    }
+
+    public function getAddress() : string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address = '')
+    {
+        return $this->address = $address;
     }
 
     public function getData()
@@ -174,8 +190,8 @@ class Compteur
                     $compteur['sumTotal'] += $cpt;
                     $daysTotal++;
                     $compteur['dataTotal'][$fDate] = $cpt;
-                    $compteur['dataTotalDates'][] = $fDate;
-                    $compteur['dataTotalValues'][] = $cpt;
+                    $compteur['dataTotalDates'][$date->format('Ymd')] = $fDate;
+                    $compteur['dataTotalValues'][$date->format('Ymd')] = $cpt;
                 }
                 $compteur['lastDate'] = $fDate;
                 $compteur['lastValue'] = $cpt;
@@ -187,6 +203,8 @@ class Compteur
                 $compteur['avgTotal']  = ($daysTotal > 0 ? intval($compteur['sumTotal'] / $daysTotal) : 0);
             }
         }
+        ksort($compteur['dataTotalDates']);
+        ksort($compteur['dataTotalValues']);
         if(count($compteur['monthes']) > 0){
             foreach($compteur['monthes'] as $month => $val){
                 if($val['cpt'] > 0){
@@ -301,6 +319,10 @@ class Compteur
             $retour = $this->getChartData($days);
         }elseif($item == 'monthRecord'){
             $retour = $this->monthRecord();
+        }elseif($item == 'id'){
+            $retour = $this->getId();
+        }elseif($item == 'address'){
+            $retour = $this->getAddress();
         }
         else{
             if(isset($this->data[$item])){

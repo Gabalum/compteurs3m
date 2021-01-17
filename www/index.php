@@ -65,17 +65,24 @@ $weatherData = (new Meteo())->getWeather($days);
             </ul>
         </div>
     </nav>
-    <div class="container">
-        <h1>Les compteurs vélos de Montpellier 3M</h1>
+    <div class="container-lg">
+        <h1 class="text-center">Les compteurs vélos de Montpellier 3M</h1>
         <?php if(count($compteurs) > 0): ?>
             <?php foreach($compteurs as $k => $compteur): ?>
                 <?php $monthRecord = $compteur->get('monthRecord') ?>
                 <section class="compteur" id="compteur-<?php echo $compteur->get('slug') ?>">
-                    <h2>
-                        <a href="#compteur-<?php echo $compteur->get('slug') ?>">
-                            <?php echo $compteur->get('labelHTML') ?>
-                        </a>
-                    </h2>
+                    <div class="compteur-head">
+                        <div class="float-end">
+                            <a class="btn btn-totem" href="<?php echo _BASE_URL_.'detail/'.$compteur->get('slug') ?>">
+                                Voir les stats
+                            </a>
+                        </div>
+                        <h2>
+                            <a href="#compteur-<?php echo $compteur->get('slug') ?>">
+                                <?php echo $compteur->get('labelHTML') ?>
+                            </a>
+                        </h2>
+                    </div>
                     <div class="row compteur-data">
                         <div class="col-5 col-sm-4 data-col <?php if(file_exists(__DIR__.'/assets/img/'.$k.'.jpg')): ?>with-photo<?php endif ?>">
                             <?php if(file_exists(__DIR__.'/assets/img/'.$k.'.jpg')): ?>
@@ -202,7 +209,7 @@ $weatherData = (new Meteo())->getWeather($days);
                             </div>
                         </div>
                     </div>
-                    <?php /* */ ?>
+                    <?php /*  ?>
                     <div class="chart-data js-chart-data text-center" data-dates='<?php echo json_encode($compteur->get('chartDates', $days)) ?>' data-label="<?php echo $compteur->get('label') ?>" data-data="<?php echo json_encode($compteur->get('chartData', $days)) ?>">
                         <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapse-<?php echo $k ?>" role="button" aria-expanded="false" aria-controls="collapse-<?php echo $k ?>">
                             Voir le graphique sur <?php echo $days ?> jours

@@ -5,6 +5,18 @@ class Compteurs
 {
     private static $_instance = null;
     private $compteurs = [];
+    private $addresses = [
+        'XTH19101158'   => "Place Albert 1<sup>er</sup>, Montpellier",
+        'X2H19070220'   => "Allée Alegria Berracasa, Montpellier",
+        'X2H20042633'   => "137 avenue de Lodève, Montpellier",
+        'X2H20063163'   => "73 Avenue François Delmas, Montpellier",
+        'X2H20063164'   => "73 Avenue François Delmas, Montpellier",
+        'X2H20063162'   => "1 rue Gerhardt, Montpellier",
+        'X2H20042635'   => "Avenue Georges Frêche, Pérols",
+        'X2H20042634'   => "Avenue Georges Frêche, Pérols",
+        'X2H20042632'   => "D5E1, Lavérune",
+        'X2H20063161'   => "1211 rue de la Vieille-Poste, Montpellier",
+    ];
 
     private function __construct()
     {
@@ -30,6 +42,37 @@ class Compteurs
         if(count($this->compteurs) > 0){
             foreach($this->compteurs as $id => $label){
                 $retour[$id] = new Compteur($id, $label);
+                $retour[$id]->setAddress($this->addresses[$id]);
+            }
+        }
+        return $retour;
+    }
+
+    public function getCompteurBySlug($slug = null)
+    {
+        $retour = null;
+        if(count($this->compteurs) > 0){
+            foreach($this->compteurs as $id => $label){
+                if(Helper::slugify(strip_tags($label), '-') == $slug){
+                    $retour = new Compteur($id, $label);
+                    $retour->setAddress($this->addresses[$id]);
+                    break;
+                }
+            }
+        }
+        return $retour;
+    }
+
+    public function getCompteurId($id = '')
+    {
+        $retour = null;
+        if(count($this->compteurs) > 0){
+            foreach($this->compteurs as $k => $label){
+                if($id == $k){
+                    $retour = new Compteur($id, $label);
+                    $retour->setAddress($this->addresses[$id]);
+                    break;
+                }
             }
         }
         return $retour;

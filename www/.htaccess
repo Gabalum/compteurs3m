@@ -1,0 +1,5 @@
+ErrorDocument 404 /404.php
+Options +FollowSymlinks
+RewriteEngine on
+RewriteRule ^detail/$ /detail.php [L]
+RewriteRule ^detail/(.*)$ /detail.php?cpt=$1 [L]
