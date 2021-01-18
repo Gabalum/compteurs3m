@@ -85,4 +85,62 @@ class Compteurs
         }
         return self::$_instance;
     }
+
+    public function getAllByDates()
+    {
+        $retour = [
+            'dates' => [],
+            'data'  => [],
+        ];
+        $dataTmp = [];
+        $compteurs = $this->getCompteurs();
+        $year = date('Y');
+        if(count($compteurs) > 0){
+            foreach($compteurs as $k => $compteur){
+                $data = $compteur->get('dataTotal');
+                if(count($data) > 0){
+                    if(!isset($retour['data'][$k])){
+                        $dataTmp[$k] = [];
+                        $retour['data'][$k] = [];
+                    }
+                    foreach($data as $date => $value){
+                        $date = new \DateTime($date);
+                        if($date->format('Y') == $year){
+                            $retour['dates'][$date->format('U')] = $date->format('d-m-Y');
+                            $dataTmp[$k][$date->format('U')] = $value;
+                        }
+                    }
+                }
+            }
+        }
+        ksort($retour['dates']);
+        if(count($dataTmp)){
+            foreach($dataTmp as $k => $v){
+                foreach($retour['dates'] as $u => $d){
+                    if(!isset($dataTmp[$k][$u])){
+                        $dataTmp[$k][$u] = null;
+                    }
+                }
+                ksort($dataTmp[$k]);
+            }
+            foreach($dataTmp as $k => $v){
+                $retour['data'][$k] = array_values($v);
+            }
+        }
+        return $retour;
+    }
+
+    public function getLabels()
+    {
+        $retour = [];
+        if(count($this->compteurs) > 0){
+            foreach($this->compteurs as $k => $v){
+                $retour[$k] = [
+                    'name' => strip_tags($v),
+                    'color' => Helper::colorGenerator(),
+                ];
+            }
+        }
+        return $retour;
+    }
 }

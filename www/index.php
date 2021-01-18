@@ -5,6 +5,7 @@ $compteurs = (Compteurs::getInstance())->getCompteurs();
 $title = 'Les compteurs vélos de Montpellier 3M';
 $desc = 'Découvrez les compteurs vélos grâce aux données en Open Data de Montpellier 3M';
 $days = 14;
+$yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
 $meteoData = (new Meteo())->getData($days);
 $weatherData = (new Meteo())->getWeather($days);
 ?>
@@ -113,7 +114,7 @@ $weatherData = (new Meteo())->getWeather($days);
                                         <div class="card-body">
                                             <h5 class="card-title">Dernier relevé</h5>
                                             <p class="card-text cpt"><?php echo $compteur->get('lastValue') ?></p>
-                                            <h6 class="card-subtitle mb-2 text-muted">Le <?php echo $compteur->get('lastDate') ?></h6>
+                                            <h6 class="card-subtitle mb-2 text-muted"><span class="<?php echo ($compteur->get('lastDate') == $yesterday ? '' : 'text-danger') ?>">Le <?php echo $compteur->get('lastDate') ?></span></h6>
                                         </div>
                                     </div>
                                 </div>

@@ -126,4 +126,13 @@ class Helper
         }
         return $retour;
     }
+
+    public static function colorGenerator()
+    {
+        $retour = '#';
+        for($i = 1; $i <= 3 ; $i++){
+            $retour .= str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+        }
+        return $retour;
+    }
 }

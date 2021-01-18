@@ -4,6 +4,8 @@ require_once('../bootstrap.php');
 $compteurs = (Compteurs::getInstance())->getCompteurs();
 $totems = [];
 $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
+$rowData = (Compteurs::getInstance())->getAllByDates();
+$cptLabels = (Compteurs::getInstance())->getLabels();
 ?>
 <!doctype html>
 <html lang="fr">
@@ -57,6 +59,9 @@ $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
         #menu-tab{
             background: white;
         }
+        .linechart{
+            margin: 50px 0;
+        }
     </style>
 </head>
 <body>
@@ -80,8 +85,13 @@ $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
                                 <?php echo $compteur->get('labelHTML') ?>
                             </a>
                         </li>
-                    <?php $first = false ?>
+                        <?php $first = false ?>
                     <?php endforeach ?>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link bg-info" id="link-tab-general" data-bs-toggle="tab" href="#tab-general" role="tab" aria-controls="tab-general" aria-selected="true">
+                            Général
+                        </a>
+                    </li>
                 </ul>
             </div>
         </section>
@@ -347,6 +357,17 @@ $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
                         </div>
                         <?php $first = false ?>
                     <?php endforeach ?>
+                    <div class="tab-pane fade" id="tab-general" role="tabpanel" aria-labelledby="tab-general">
+                        <div class="row">
+                            <canvas id="linechart-general" class="linechart"
+                                data-label="par semaine"
+                                data-labels='<?php echo json_encode(array_values($rowData['dates'])) ?>'
+                                data-values='<?php echo json_encode($rowData['data']) ?>'
+                                data-cpts='<?php echo json_encode($cptLabels) ?>'
+                            >
+                            </canvas>
+                        </div>
+                    </div>
                 </div>
             <?php endif ?>
         </div>
@@ -422,6 +443,27 @@ $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
             return a;
         }
         $('document').ready(function(){
+            $('.linechart').each(function(){
+                var self = $(this);
+                var cpts = self.data('cpts');
+                var dataset = [];
+                $.each(self.data('values'), function(k, v){
+                    dataset.push({
+        				label: cpts[k].name,
+        				borderColor: cpts[k].color,
+        				backgroundColor: cpts[k].color,
+        				fill: false,
+        				data: v,
+                    });
+                });
+                var ctx = document.getElementById(self.attr('id')).getContext('2d');
+                var myBarChart = new Chart.Line(ctx, {
+                    data: {
+                        labels: self.data('labels'),
+                        datasets: dataset
+                    }
+                });
+            });
             $('.bar').each(function(){
                 var self = $(this);
                 var ctx = document.getElementById(self.attr('id')).getContext('2d');

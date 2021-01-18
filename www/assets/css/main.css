@@ -268,7 +268,7 @@ body.detail .card-init{
     margin-bottom: 10px;
 }
 body.detail .card-title em{
-    font-size: 0.6em;
+    font-size: 0.6rem;
     color: var(--bs-secondary);
 }
 body.detail .ring{

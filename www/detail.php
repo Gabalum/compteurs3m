@@ -109,10 +109,23 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
-                                <h6>Records par jour</h6>
+                                <h6>Records par jour de la semaine</h6>
                                 <em>En <?php echo date('Y') ?></em>
                             </div>
                             <canvas id="bar-day2-<?php echo $compteur->get('id') ?>" class="bar-detail bar-days2 records" data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'value')) ?>'></canvas>
+                        </div>
+                    </div>
+                <?php endif ?>
+                <?php $days = $compteur->get('days-by-year') ?>
+                <?php if(count($days) > 0 && isset($days[date('Y')]) && count($days[date('Y')]) > 0): ?>
+                    <?php $days = $days[date('Y')] ?>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h6>Moyennes par jour de la semaine</h6>
+                                <em>En <?php echo date('Y') ?>, calculées en fonction des données disponibles (certains jours peuvent être manquants)</em>
+                            </div>
+                            <canvas id="bar-day3-<?php echo $compteur->get('id') ?>" class="bar-detail bar-days3 records" data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>'></canvas>
                         </div>
                     </div>
                 <?php endif ?>
