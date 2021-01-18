@@ -12,15 +12,21 @@ class Compteur
     private $archiveLink = null;
     private $file = null;
     private $data = null;
-    private $addess = '';
+    private $address = '';
 
-    public function __construct($id, $name = '')
+    public function __construct($id, $name = '', $address = '', $color = '')
     {
         $this->id = $id;
         $this->name = $name;
         $this->archiveLink = 'http://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_'.$id.'_archive.json';
         $this->link = 'http://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_'.$id.'.json';
         $this->file = dirname(__DIR__).'/data/'.$id.'.json';
+        $this->address = $address;
+        if(strlen($color) === 0){
+            $this->color = Helper::colorGenerator();
+        }else{
+            $this->color = $color;
+        }
     }
 
     public function getName(bool $stripTags = false) : string
@@ -36,6 +42,11 @@ class Compteur
     public function getAddress() : string
     {
         return $this->address;
+    }
+
+    public function getColor() : string
+    {
+        return $this->color;
     }
 
     public function setAddress(string $address = '')
@@ -323,8 +334,9 @@ class Compteur
             $retour = $this->getId();
         }elseif($item == 'address'){
             $retour = $this->getAddress();
-        }
-        else{
+        }elseif($item == 'color'){
+            $retour = $this->getColor();
+        }else{
             if(isset($this->data[$item])){
                 $retour = $this->data[$item];
             }

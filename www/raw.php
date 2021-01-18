@@ -453,6 +453,7 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
         				borderColor: cpts[k].color,
         				backgroundColor: cpts[k].color,
         				fill: false,
+                        borderWidth: 5,
         				data: v,
                     });
                 });

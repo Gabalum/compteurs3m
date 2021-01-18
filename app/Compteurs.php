@@ -4,45 +4,65 @@ namespace App;
 class Compteurs
 {
     private static $_instance = null;
-    private $compteurs = [];
-    private $addresses = [
-        'XTH19101158'   => "Place Albert 1<sup>er</sup>, Montpellier",
-        'X2H19070220'   => "Allée Alegria Berracasa, Montpellier",
-        'X2H20042633'   => "137 avenue de Lodève, Montpellier",
-        'X2H20063163'   => "73 Avenue François Delmas, Montpellier",
-        'X2H20063164'   => "73 Avenue François Delmas, Montpellier",
-        'X2H20063162'   => "1 rue Gerhardt, Montpellier",
-        'X2H20042635'   => "Avenue Georges Frêche, Pérols",
-        'X2H20042634'   => "Avenue Georges Frêche, Pérols",
-        'X2H20042632'   => "D5E1, Lavérune",
-        'X2H20063161'   => "1211 rue de la Vieille-Poste, Montpellier",
+    private $compteurs = [
+        'XTH19101158'   => [
+            'label'     => 'Albert 1<sup>er</sup>',
+            'address'   => "Place Albert 1<sup>er</sup>, Montpellier",
+            'color'     => '#8540f5',
+        ],
+        'X2H19070220'   => [
+            'label'     => 'Berracasa',
+            'address'   => 'Allée Alegria Berracasa, Montpellier',
+            'color'     => '#3d8bfd',
+        ],
+        'X2H20042633'   => [
+            'label'     => 'Celleneuve',
+            'address'   => '137 avenue de Lodève, Montpellier',
+            'color'     => '#de5c9d',
+        ],
+        'X2H20063163'   => [
+            'label'     => 'Delmas 1',
+            'address'   => '73 Avenue François Delmas, Montpellier',
+            'color'     => '#fd9843',
+        ],
+        'X2H20063164'   => [
+            'label'     => 'Delmas 2',
+            'address'   => '73 Avenue François Delmas, Montpellier',
+            'color'     => '#ffcd39',
+        ],
+        'X2H20063162'   => [
+            'label'     => 'Gerhardt',
+            'address'   => '1 rue Gerhardt, Montpellier',
+            'color'     => '#479f76',
+        ],
+        'X2H20042635'   => [
+            'label'     => 'Lattes 1',
+            'address'   => 'Avenue Georges Frêche, Pérols',
+            'color'     => '#4dd4ac',
+        ],
+        'X2H20042634'   => [
+            'label'     => 'Lattes 2',
+            'address'   => 'Avenue Georges Frêche, Pérols',
+            'color'     => '#3dd5f3',
+        ],
+        'X2H20042632'   => [
+            'label'     => 'Lavérune',
+            'address'   => 'D5E1, Lavérune',
+            'color'     => '#6c757d',
+        ],
+        'X2H20063161'   => [
+            'label'     => 'Vieille-Poste',
+            'address'   => '1211 rue de la Vieille-Poste, Montpellier',
+            'color'     => '#031633',
+        ],
     ];
-
-    private function __construct()
-    {
-        $this->compteurs = [
-            'XTH19101158'   => "Albert 1<sup>er</sup>",
-            /* */
-            'X2H19070220'   => "Berracasa",
-            'X2H20042633'   => "Celleneuve",
-            'X2H20063163'   => "Delmas 1",
-            'X2H20063164'   => "Delmas 2",
-            'X2H20063162'   => "Gerhardt",
-            'X2H20042635'   => "Lattes 1",
-            'X2H20042634'   => "Lattes 2",
-            'X2H20042632'   => "Lavérune",
-            'X2H20063161'   => "Vieille-Poste",
-            /* */
-        ];
-    }
 
     public function getCompteurs()
     {
         $retour = [];
         if(count($this->compteurs) > 0){
-            foreach($this->compteurs as $id => $label){
-                $retour[$id] = new Compteur($id, $label);
-                $retour[$id]->setAddress($this->addresses[$id]);
+            foreach($this->compteurs as $id => $cpt){
+                $retour[$id] = new Compteur($id, $cpt['label'], $cpt['address'], $cpt['color']);
             }
         }
         return $retour;
@@ -52,10 +72,9 @@ class Compteurs
     {
         $retour = null;
         if(count($this->compteurs) > 0){
-            foreach($this->compteurs as $id => $label){
-                if(Helper::slugify(strip_tags($label), '-') == $slug){
-                    $retour = new Compteur($id, $label);
-                    $retour->setAddress($this->addresses[$id]);
+            foreach($this->compteurs as $id => $cpt){
+                if(Helper::slugify(strip_tags($cpt['label']), '-') == $slug){
+                    $retour = new Compteur($id, $cpt['label'], $cpt['address'], $cpt['color']);
                     break;
                 }
             }
@@ -67,10 +86,9 @@ class Compteurs
     {
         $retour = null;
         if(count($this->compteurs) > 0){
-            foreach($this->compteurs as $k => $label){
+            foreach($this->compteurs as $k => $cpt){
                 if($id == $k){
-                    $retour = new Compteur($id, $label);
-                    $retour->setAddress($this->addresses[$id]);
+                    $retour = new Compteur($id, $cpt['label'], $cpt['address'], $cpt['color']);
                     break;
                 }
             }
@@ -134,10 +152,10 @@ class Compteurs
     {
         $retour = [];
         if(count($this->compteurs) > 0){
-            foreach($this->compteurs as $k => $v){
+            foreach($this->compteurs as $k => $cpt){
                 $retour[$k] = [
-                    'name' => strip_tags($v),
-                    'color' => Helper::colorGenerator(),
+                    'name'  => strip_tags($cpt['label']),
+                    'color' => $cpt['color'],
                 ];
             }
         }
