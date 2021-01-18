@@ -6,8 +6,7 @@ $totems = [];
 $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
 $rowData = (Compteurs::getInstance())->getAllByDates();
 $cptLabels = (Compteurs::getInstance())->getLabels();
-?>
-<!doctype html>
+?><!doctype html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
@@ -257,6 +256,21 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
                                             <?php endif ?>
                                         </div>
                                     </div>
+                                    <h3>Semaine vs week-end</h3>
+                                    <div class="row">
+                                        <div class="col">
+                                            <b>Toutes les données</b>
+                                            <div>
+                                                <canvas id="pie-day-<?php echo $k ?>" class="pie pie-days" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values($compteur->getWeekWeekend())) ?>'></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <b>En <?php echo date('Y') ?></b>
+                                            <div>
+                                                <canvas id="pie-day2-<?php echo $k ?>" class="pie pie-days2" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values($compteur->getWeekWeekend(date('Y')))) ?>'></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <h3>Autres statistiques</h3>
                                     <div class="row">
                                         <div class="col">
@@ -367,6 +381,21 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
                             >
                             </canvas>
                         </div>
+                        <h3>Semaine vs week-end</h3>
+                        <div class="row">
+                            <div class="col">
+                                <b>Toutes les données</b>
+                                <div>
+                                    <canvas id="pie-day-general" class="pie pie-days" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values((Compteurs::getInstance())->getWeekWeekend())) ?>'></canvas>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <b>En <?php echo date('Y') ?></b>
+                                <div>
+                                    <canvas id="pie-day2-general" class="pie pie-days2" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values((Compteurs::getInstance())->getWeekWeekend(date('Y')))) ?>'></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <?php endif ?>
@@ -427,10 +456,12 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
             </div>
         </div>
     </div>
+    <div id="chartjs-tooltip"><table></table></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
     <script type="text/javascript">
         function shuffle(a) {
             var j, x, i;
@@ -443,6 +474,40 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
             return a;
         }
         $('document').ready(function(){
+            //var colors = ['#3d0a91', '#ab296a', '#146c43', '#0dcaf0', '#ffc107'];
+            var colors = ['#75cbb7', '#cae26e'];
+            $('.pie').each(function(){
+                var self = $(this);
+                var ctx = document.getElementById(self.attr('id')).getContext('2d');
+                var myPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: self.data('labels'),
+                        datasets: [{
+                            data: self.data('values'),
+                            backgroundColor: colors //shuffle(colors)
+                        }],
+                    },
+        			options: {
+        				responsive: true,
+                        tooltips: {
+                            enabled: false,
+                        },
+                        plugins: {
+                            datalabels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                formatter: (value, ctx) => {
+                                    return value+'%';
+                                },
+                                color: '#fff',
+                            }
+                        }
+                    }
+                });
+            });
             $('.linechart').each(function(){
                 var self = $(this);
                 var cpts = self.data('cpts');
@@ -458,10 +523,15 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
                     });
                 });
                 var ctx = document.getElementById(self.attr('id')).getContext('2d');
-                var myBarChart = new Chart.Line(ctx, {
+                var myLineChart = new Chart.Line(ctx, {
                     data: {
                         labels: self.data('labels'),
-                        datasets: dataset
+                        datasets: dataset,
+                    },
+                    options:{
+                        plugins: {
+                            datalabels: false
+                        }
                     }
                 });
             });
@@ -492,6 +562,9 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
                                     beginAtZero:true
                                 }
                             }]
+                        },
+                        plugins: {
+                            datalabels: false
                         },
                         annotation: {
                             annotations: [{

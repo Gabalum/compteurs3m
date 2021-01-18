@@ -161,4 +161,24 @@ class Compteurs
         }
         return $retour;
     }
+
+    public function getWeekWeekend($year = null, $item = 'avg')
+    {
+        $retour = [
+            'week'      => 0,
+            'weekend'   => 0,
+        ];
+        $count = count($this->compteurs);
+        if($count){
+            $compteurs = $this->getCompteurs();
+            foreach($compteurs as $k => $cpt){
+                $tmp = $cpt->getWeekWeekend($year, $item, true);
+                $retour['week'] += $tmp['week'];
+                $retour['weekend'] += $tmp['weekend'];
+            }
+            $retour['week'] = number_format($retour['week'] / $count, 2);
+            $retour['weekend'] = number_format($retour['weekend'] / $count, 2);
+        }
+        return $retour;
+    }
 }

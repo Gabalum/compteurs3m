@@ -9,6 +9,7 @@ if(count($compteurs) > 0){
         $coords[] = [$c->get('lat'), $c->get('lng')];
     }
 }
+$desc = '';
 ?><!doctype html>
 <html lang="fr">
 <head>

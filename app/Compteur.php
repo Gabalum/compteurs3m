@@ -95,7 +95,7 @@ class Compteur
             'monthes'           => [],
             'days'              => [],
             'days-by-year'      => [],
-            'weeks'              => [],
+            'weeks'             => [],
         ];
         $daysTotal = 0;
         $daysCurYear = 0;
@@ -314,6 +314,44 @@ class Compteur
         $records = $this->get('monthes');
         if(isset($records[$month])){
             $retour = $records[$month];
+        }
+        return $retour;
+    }
+
+    public function getWeekWeekend($year = null, $item = 'avg', $raw = false)
+    {
+        $retour = [
+            'week'      => 0,
+            'weekend'   => 0,
+        ];
+        if(!in_array($item, ['sum', 'avg', 'value'])){
+            return $retour;
+        }
+        $data = [];
+        if(is_null($year)){
+            $data = $this->get('days');
+        }else{
+            $tmpData = $this->get('days-by-year');
+            if($tmpData[$year]){
+                $data = $tmpData[$year];
+            }
+        }
+        if(count($data) > 0){
+            foreach($data as $day => $value){
+                $type = ($day < 6 ? 'week' : 'weekend');
+                $retour[$type] += $value[$item];
+            }
+            $retour['week'] = ($retour['week'] / 5);
+            $retour['weekend'] = ($retour['weekend'] / 2);
+            $x = $retour['week']+$retour['weekend'];
+            if($x > 0){
+                $retour['week'] = ($retour['week'] / $x)*100;
+                $retour['weekend'] = ($retour['weekend'] / $x)*100;
+                if(!$raw){
+                    $retour['week'] = number_format($retour['week'], 2);
+                    $retour['weekend'] = number_format($retour['weekend'], 2);
+                }
+            }
         }
         return $retour;
     }
