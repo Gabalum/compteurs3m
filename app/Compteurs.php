@@ -57,6 +57,8 @@ class Compteurs
         ],
     ];
 
+    private function __construct(){}
+
     public function getCompteurs()
     {
         $retour = [];
@@ -176,8 +178,8 @@ class Compteurs
                 $retour['week'] += $tmp['week'];
                 $retour['weekend'] += $tmp['weekend'];
             }
-            $retour['week'] = number_format($retour['week'] / $count, 2);
-            $retour['weekend'] = number_format($retour['weekend'] / $count, 2);
+            $retour['week'] = intval($retour['week'] / $count);
+            $retour['weekend'] = intval($retour['weekend'] / $count);
         }
         return $retour;
     }

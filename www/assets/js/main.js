@@ -88,6 +88,9 @@ $(document).ready(function(){
                 }]
             },
             options: {
+                plugins: {
+                    datalabels: false
+                },
                 legend: {
                     display: false,
                 },

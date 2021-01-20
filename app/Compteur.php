@@ -343,14 +343,9 @@ class Compteur
             }
             $retour['week'] = ($retour['week'] / 5);
             $retour['weekend'] = ($retour['weekend'] / 2);
-            $x = $retour['week']+$retour['weekend'];
-            if($x > 0){
-                $retour['week'] = ($retour['week'] / $x)*100;
-                $retour['weekend'] = ($retour['weekend'] / $x)*100;
-                if(!$raw){
-                    $retour['week'] = number_format($retour['week'], 2);
-                    $retour['weekend'] = number_format($retour['weekend'], 2);
-                }
+            if(!$raw){
+                $retour['week'] = intval($retour['week']);
+                $retour['weekend'] = intval($retour['weekend']);
             }
         }
         return $retour;

@@ -6,6 +6,7 @@ $totems = [];
 $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
 $rowData = (Compteurs::getInstance())->getAllByDates();
 $cptLabels = (Compteurs::getInstance())->getLabels();
+$tomtom = (Tomtom::getInstance())->getData();
 ?><!doctype html>
 <html lang="fr">
 <head>
@@ -396,6 +397,12 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
                                 </div>
                             </div>
                         </div>
+                        <?php if(is_array($tomtom) && count($tomtom) > 0): ?>
+                            <h3>Congestion automobile (données Tomtom)</h3>
+                            <div class="row" id="tomtom">
+                                <canvas id="tomtom-day" class="bar-tomtom" data-labels='<?php echo json_encode(array_column($tomtom, 'date')) ?>' data-values='<?php echo json_encode(array_column($tomtom, 'congestion')) ?>'></canvas>
+                            </div>
+                        <?php endif ?>
                     </div>
                 </div>
             <?php endif ?>
@@ -500,7 +507,7 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
                                     weight: 'bold'
                                 },
                                 formatter: (value, ctx) => {
-                                    return value+'%';
+                                    return value+' par jour';
                                 },
                                 color: '#fff',
                             }
@@ -532,6 +539,34 @@ $cptLabels = (Compteurs::getInstance())->getLabels();
                         plugins: {
                             datalabels: false
                         }
+                    }
+                });
+            });
+            $('.bar-tomtom').each(function(){
+                var self = $(this);
+                var ctx = document.getElementById(self.attr('id')).getContext('2d');
+                var bg1 = "#842029";
+                var bg2 = "#58151c";
+                var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: self.data('labels'),
+                        datasets: [{
+                            label: self.data('label'),
+                            backgroundColor: bg1,
+                            hoverBackgroundColor: bg2,
+                            borderWidth:1,
+                            borderSkipped: 'right',
+                            data: self.data('values'),
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false,
+                        },
+                        plugins: {
+                            datalabels: false
+                        },
                     }
                 });
             });
