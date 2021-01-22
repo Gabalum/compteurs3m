@@ -166,7 +166,7 @@ class Compteurs
 
     public function getWeekWeekend($year = null, $item = 'avg')
     {
-        $retour = [
+        $retour = [
             'week'      => 0,
             'weekend'   => 0,
         ];

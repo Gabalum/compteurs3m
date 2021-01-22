@@ -62,6 +62,12 @@ $tomtom = (Tomtom::getInstance())->getData();
         .linechart{
             margin: 50px 0;
         }
+        .bg-mid-success{
+            background: #d1e7dd;
+        }
+        .bg-success{
+            background: #479f76;
+        }
     </style>
 </head>
 <body>
@@ -117,12 +123,12 @@ $tomtom = (Tomtom::getInstance())->getData();
                                             <?php echo $compteur->get('labelHTML') ?>
                                         </a>
                                     </h2>
-                                    <p class="text-center">ID : <?php echo $compteur->get('id') ?> | <span class="text-<?php echo $latestColor ?>">Dernier relevé : <?php echo $compteur->get('lastDate') ?></span></p>
+                                    <p class="text-center">ID : <?php echo $compteur->get('id') ?> | <span class="text-<?php echo $latestColor ?>">Dernier relevé : <b><?php echo $compteur->get('lastValue') ?></b> le <?php echo $compteur->get('lastDate') ?></span></p>
                                     <div class="row row-cards">
                                         <div class="col">
                                             <div class="card bg-info">
                                                 <div class="card-body">
-                                                    <div class="card-title">Cette année <?php echo date('Y') ?></div>
+                                                    <div class="card-title"><b>Cette année <?php echo date('Y') ?></b></div>
                                                     <ul class="card-text">
                                                         <li>
                                                             Total : <?php echo $compteur->get('sumCurYear') ?>
@@ -141,7 +147,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                                             <div class="col">
                                                 <div class="card bg-light">
                                                     <div class="card-body">
-                                                        <div class="card-title">Ce mois-ci <?php echo Helper::frenchMonth(date('m')) ?> <?php echo date('Y') ?></div>
+                                                        <div class="card-title"><b>Ce mois-ci <?php echo Helper::frenchMonth(date('m')) ?> <?php echo date('Y') ?></b></div>
                                                         <ul class="card-text">
                                                             <li>
                                                                 Total : <?php echo $currentMonth['sum'] ?>
@@ -160,7 +166,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                                         <div class="col">
                                             <div class="card bg-warning">
                                                 <div class="card-body">
-                                                    <div class="card-title">Toutes les données</div>
+                                                    <div class="card-title"><b>Toutes les données</b></div>
                                                     <ul class="card-text">
                                                         <li>
                                                             Total : <?php echo $compteur->get('sumTotal') ?>
@@ -352,19 +358,31 @@ $tomtom = (Tomtom::getInstance())->getData();
                                                 </div>
                                             <?php endif ?>
                                         </div>
-
                                     </div>
                                     <?php if(is_array($data) && count($data) > 0): ?>
-                                        <div class="raw-data-group">
-                                            <strong>Données brutes</strong>
-                                            <em>(Scroll au sein du tableau)</em>
-                                            <ul class="list-group raw-data">
-                                                <?php foreach($data as $date => $val): ?>
-                                                    <li class="list-group-item <?php echo ($compteur->get('recordTotal') == $val ? 'bg-success bg-gradient' : '') ?>">
-                                                        <?php echo $date ?> : <b><?php echo $val ?></b>
-                                                    </li>
-                                                <?php endforeach ?>
-                                            </ul>
+                                        <div class="row raw-data-group">
+                                            <div class="col-12 col-sm-6">
+                                                <div class="">
+                                                    <strong>Données brutes</strong>
+                                                    <em>(Scroll au sein du tableau)</em>
+                                                    <?php $max = 0 ?>
+                                                    <ul class="list-group raw-data">
+                                                        <?php foreach($data as $date => $val): ?>
+                                                            <?php if($val > $max){ $class = 'bg-mid-success'; $max = $val; }else{ $class = '';} ?>
+                                                            <li class="list-group-item <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val ? 'bg-success bg-gradient' : '') ?>">
+                                                                <?php echo $date ?> : <b><?php echo $val ?></b>
+                                                            </li>
+                                                        <?php endforeach ?>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <?php $stack = $compteur->getSumStack() ?>
+                                            <div class="col-12 col-sm-6">
+                                                <b>Valeurs incrémentales</b>
+                                                <div>
+                                                    <canvas id="stack-<?php echo $k ?>" class="bar-stack" data-labels='<?php echo json_encode(array_keys($stack)) ?>' data-values='<?php echo json_encode(array_values($stack)) ?>' data-max="<?php echo max($stack) ?>"></canvas>
+                                                </div>
+                                            </div>
                                         </div>
                                     <?php endif ?>
                                 </section>
@@ -399,6 +417,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                         </div>
                         <?php if(is_array($tomtom) && count($tomtom) > 0): ?>
                             <h3>Congestion automobile (données Tomtom)</h3>
+                            <em>%age de <a href="https://www.tomtom.com/blog/road-traffic/urban-traffic-congestion/" target="_blank">congestion automobile</a> à l'échelle de la ville</em>
                             <div class="row" id="tomtom">
                                 <canvas id="tomtom-day" class="bar-tomtom" data-labels='<?php echo json_encode(array_column($tomtom, 'date')) ?>' data-values='<?php echo json_encode(array_column($tomtom, 'congestion')) ?>'></canvas>
                             </div>
@@ -561,12 +580,61 @@ $tomtom = (Tomtom::getInstance())->getData();
                         }]
                     },
                     options: {
+                        scales: {
+                            yAxes:[{
+                                ticks:{
+                                    max: 100,
+                                    beginAtZero:true
+                                }
+                            }]
+                        },
                         legend: {
                             display: false,
                         },
                         plugins: {
                             datalabels: false
                         },
+                    }
+                });
+            });
+            $('.bar-stack').each(function(){
+                var self = $(this);
+                var ctx = document.getElementById(self.attr('id')).getContext('2d');
+                var bg1 = "#cae26e";
+                var bg2 = "#75cbb7";
+                var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: self.data('labels'),
+                        datasets: [{
+                            label: self.data('label'),
+                            backgroundColor: bg1,
+                            hoverBackgroundColor: bg2,
+                            borderWidth:1,
+                            borderSkipped: 'right',
+                            data: self.data('values'),
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false,
+                        },
+                        plugins: {
+                            datalabels: false
+                        },
+                        annotation: {
+                            annotations: [{
+                                type: 'line',
+                                mode: 'horizontal',
+                                scaleID: 'y-axis-0',
+                                value: 0,
+                                endValue: self.data('max'),
+                                borderColor: 'gray',
+                                borderWidth: 3,
+                                borderDash: [2, 2],
+                            }],
+                            drawTime: "afterDraw" // (default)
+                        }
                     }
                 });
             });
@@ -626,5 +694,6 @@ $tomtom = (Tomtom::getInstance())->getData();
             });
         })
     </script>
+    <?php require_once('./parts/matomo.php') ?>
 </body>
 </html>

@@ -181,5 +181,6 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <?php /* ?><script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@0.1.3"></script><?php /* */ ?>
     <script src="<?php echo _BASE_URL_.Helper::noCache('./assets/js/main.js') ?>"></script>
+    <?php require_once('./parts/matomo.php') ?>
 </body>
 </html>

@@ -318,6 +318,21 @@ class Compteur
         return $retour;
     }
 
+    public function getSumStack()
+    {
+        $retour = [];
+        $data = [];
+        $sum = 0;
+        $data = $this->get('dataCurYear');
+        if(count($data) > 0){
+            foreach($data as $day => $value){
+                $sum += $value;
+                $retour[$day] = $sum;
+            }
+        }
+        return $retour;
+    }
+
     public function getWeekWeekend($year = null, $item = 'avg', $raw = false)
     {
         $retour = [

@@ -56,6 +56,9 @@ $.fn.storymap = function(options) {
         var paragraphs = element.find(searchfor);
         highlightTopPara(paragraphs, top);
         $(window).scroll(function () {
+            if($(window).scrollTop() > 0.3 * $(window).height()){
+                $('#mouseScroller').fadeOut();
+            }
             highlightTopPara(paragraphs, top);
         });
     }
@@ -83,11 +86,11 @@ $.fn.storymap = function(options) {
             if (key === 'overview') {
                 map.setView(initPoint, initZoom, true);
                 for (const [key, marker] of Object.entries(markers)) {
-                    fg.addLayer(L.marker([marker.lat, marker.lon]));
+                    fg.addLayer(L.marker([marker.lat, marker.lon], {icon: marker.icon}));
                 }
             } else if (markers[key]) {
                 var marker = markers[key];
-                fg.addLayer(L.marker([marker.lat, marker.lon]));
+                fg.addLayer(L.marker([marker.lat, marker.lon], {icon: marker.icon}));
                 map.setView([marker.lat, marker.lon], marker.zoom, 1);
             }
         }
@@ -106,9 +109,15 @@ $('document').ready(function(){
     var markers = [];
     $('.compteur').each(function(){
         var self = $(this);
+        var icon = L.icon({
+            iconUrl: '/assets/img/markers/'+self.data('color').replace('#', '')+'.png',
+            iconSize: [22, 28],
+            iconAnchor: [18, 35],
+        });
         markers[self.data('place')] = {
             'lat': self.data('lat'),
             'lon': self.data('lng'),
+            'icon': icon,
             'zoom': self.data('zoom'),
         };
     });

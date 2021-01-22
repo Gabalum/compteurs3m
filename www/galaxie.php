@@ -43,7 +43,7 @@ $maxDays = date('z')+1;
 </head>
 <body>
     <div class="row">
-        <div class="col-12 col-sm-9 col-md-7 main" id="scroll">
+        <div class="col-12 col-sm-6 col-md-7 main" id="scroll">
             <section data-place="overview" class="overview">
                 <h1 class="page-header">Montpellier</h1>
                 <div class="content">
@@ -67,10 +67,18 @@ $maxDays = date('z')+1;
                         Et si on allait regarder d'un peu plus près tout ça ? Suivez-le guide !
                     </p>
                 </div>
+                <div class="mouseContainer" id="mouseScroller">
+                    <div class="mouse">
+                        <div class="wheel"></div>
+                    </div>
+                </div>
             </section>
             <?php if(count($compteurs) > 0): ?>
                 <?php foreach($compteurs as $k => $compteur): ?>
-                    <section data-place="<?php echo $compteur->get('slug') ?>" class="compteur" data-lat="<?php echo $compteur->get('lat') ?>" data-lng="<?php echo $compteur->get('lng') ?>" data-zoom="17">
+                    <section data-place="<?php echo $compteur->get('slug') ?>" class="compteur" data-lat="<?php echo $compteur->get('lat') ?>" data-lng="<?php echo $compteur->get('lng') ?>" data-zoom="17" data-color="<?php echo $compteur->get('color') ?>">
+                        <div class="float-end">
+                            <span class="sq-color" style="background:<?php echo $compteur->get('color') ?>"></span>
+                        </div>
                         <h2><?php echo $compteur->get('labelHTML') ?></h2>
                         <?php if($compteur->get('slug') == 'albert-1er'): ?>
                             <p>
@@ -159,7 +167,11 @@ $maxDays = date('z')+1;
                                 Son voisin, Delmas 2, dans le sens ouest-est, est le plus mal loti. En effet, depuis avril 2020 une piste transitoire a élargie la mini bande cyclable où il est installé, permettant de franchir le Lez de manière plus sécurisée.<br>
                                 Du coup, sur tous les cyclistes qui se dirigent vers Castelnau-le-Lez, peu posent leurs roues sur le bas-côté pour être comptés.
                             </p>
-                            <img src="<?php echo _BASE_URL_ ?>/assets/img/X2H20063164.jpg">
+                            <div class="card">
+                                <div class="card-body">
+                                    <img src="<?php echo _BASE_URL_ ?>assets/img/X2H20063164.jpg">
+                                </div>
+                            </div>
                         <?php elseif($compteur->get('slug') == 'gerhardt'): ?>
                             <p>
                                 Non loin de la maison natale de Juliette Greco, la couleur orangée de la piste de la rue Gerhardt vous donnera peut-être envie de chantonner Jolie Môme ou La Javanaise tout en pédalant.
@@ -266,7 +278,7 @@ $maxDays = date('z')+1;
                 <?php endforeach ?>
             <?php endif ?>
         </div>
-        <div id="map" class="d-none d-sm-block col-sm-3 col-md-5 sidebar"></div>
+        <div id="map" class="d-none d-sm-block col-sm-6 col-md-5 sidebar"></div>
     </div>
     <div class="modal" tabindex="-1" id="theModal">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -289,5 +301,6 @@ $maxDays = date('z')+1;
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <script src="<?php echo _BASE_URL_.Helper::noCache('./assets/js/main.js') ?>"></script>
     <script src="<?php echo _BASE_URL_.Helper::noCache('./assets/js/galaxie.js') ?>"></script>
+    <?php require_once('./parts/matomo.php') ?>
 </body>
 </html>
