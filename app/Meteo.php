@@ -93,7 +93,7 @@ class Meteo
                     $values[$date->format('Ymd')][$h] = (strlen($record->fields->tc) > 0 ? str_replace('.', ',', number_format($record->fields->tc, 2)).' °C' : '-');
                     $values[$date->format('Ymd')][$h.'_raw'] = (strlen($record->fields->tc) > 0 ? number_format($record->fields->tc, 2) : '-');
                     foreach($items as $it){
-                        $values[$date->format('Ymd')][$h.'_'.$it] =  (strlen($record->fields->$it) > 0 ? $record->fields->$it : '-');
+                        $values[$date->format('Ymd')][$h.'_'.$it] =  (isset($record->fields->$it) && (strlen($record->fields->$it) > 0) ? $record->fields->$it : '-');
                     }
                 }
             }

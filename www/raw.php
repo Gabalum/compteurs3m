@@ -102,7 +102,7 @@ $tomtom = (Tomtom::getInstance())->getData();
             </div>
         </section>
     <?php endif ?>
-    <section id="main" class="container">
+    <section id="main" class="container-lg">
         <div class="row">
             <?php if(count($compteurs) > 0): ?>
                 <div class="tab-content">
@@ -184,7 +184,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                                     </div>
                                     <h3>Statistiques par jours</h3>
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col-12 col-md-6">
                                             <?php $days = $compteur->get('days') ?>
                                             <?php if(count($days) > 0): ?>
                                                 <b>Par jour de la semaine (toutes les données)</b>
@@ -223,7 +223,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                                                 </div>
                                             <?php endif ?>
                                         </div>
-                                        <div class="col">
+                                        <div class="col-12 col-md-6">
                                             <?php $days = $compteur->get('days-by-year') ?>
                                             <?php if(count($days) > 0 && isset($days[date('Y')]) && count($days[date('Y')]) > 0): ?>
                                                 <?php $days = $days[date('Y')] ?>
@@ -265,16 +265,33 @@ $tomtom = (Tomtom::getInstance())->getData();
                                     </div>
                                     <h3>Semaine vs week-end</h3>
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col-12 col-md-6">
                                             <b>Toutes les données</b>
                                             <div>
                                                 <canvas id="pie-day-<?php echo $k ?>" class="pie pie-days" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values($compteur->getWeekWeekend())) ?>'></canvas>
                                             </div>
                                         </div>
-                                        <div class="col">
+                                        <div class="col-12 col-md-6">
                                             <b>En <?php echo date('Y') ?></b>
                                             <div>
                                                 <canvas id="pie-day2-<?php echo $k ?>" class="pie pie-days2" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values($compteur->getWeekWeekend(date('Y')))) ?>'></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <h3>Jours ouvrés vs jours chomés, week-end, fériés</h3>
+                                        <em>Sont considérés comme jours ouvrés les lundi, mardi, mercredi, jeudi, vendredi, hors jours fériés.</em>
+                                        <?php list($jo, $jc) = $compteur->getDayByType() ?>
+                                        <div class="col-12 col-md-6">
+                                            <b>Jours ouvrés</b>
+                                            <div>
+                                                <canvas id="line-jo-<?php echo $k ?>" class="line" data-labels='<?php echo json_encode(array_column($jo, 'date')) ?>' data-values='<?php echo json_encode(array_column($jo, 'value')) ?>' data-max="<?php echo $compteur->get('recordTotal') ?>"></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <b>Jours chomés, week-end, fériés</b>
+                                            <div>
+                                                <canvas id="line-jc-<?php echo $k ?>" class="line" data-labels='<?php echo json_encode(array_column($jc, 'date')) ?>' data-values='<?php echo json_encode(array_column($jc, 'value')) ?>' data-max="<?php echo $compteur->get('recordTotal') ?>"></canvas>
                                             </div>
                                         </div>
                                     </div>
@@ -530,6 +547,37 @@ $tomtom = (Tomtom::getInstance())->getData();
                                 },
                                 color: '#fff',
                             }
+                        }
+                    }
+                });
+            });
+            $('.line').each(function(){
+                var self = $(this);
+                var ctx = document.getElementById(self.attr('id')).getContext('2d');
+                var myLineChart = new Chart.Line(ctx, {
+                    data: {
+                        labels: self.data('labels'),
+                        datasets: [{
+                            data: self.data('values'),
+                            backgroundColor: '#fff3cd',
+                            borderColor: '#ffda6a',
+                        }],
+                    },
+                    options:{
+                        legend: {
+                            display: false,
+                        },
+                        scales: {
+                            yAxes:[{
+                                ticks:{
+                                    max: self.data('max')+200,
+                                    beginAtZero:true,
+                                    stepSize: 200,
+                                }
+                            }],
+                        },
+                        plugins: {
+                            datalabels: false
                         }
                     }
                 });

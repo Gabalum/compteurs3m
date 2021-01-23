@@ -77,8 +77,8 @@ class Compteur
             'lat'               => '',
             'lng'               => '',
             'dataCurYear'       => [],
-            'dataCurYearDates'  => [],
-            'dataCurYearValues' => [],
+            //'dataCurYearDates'  => [],
+            //'dataCurYearValues' => [],
             'dataTotal'         => [],
             'dataTotalDates'    => [],
             'dataTotalValues'   => [],
@@ -111,6 +111,7 @@ class Compteur
                     $year = $date->format('Y');
                     $month = $date->format('m');
                     $fDate = $date->format('d-m-Y');
+                    $tsDate = $date->format('U');
                     $dayOfTheWeek = $date->format('N');
                     $cpt = $val->intensity;
                     // --- gestion de l'année courante
@@ -122,9 +123,14 @@ class Compteur
                         }
                         $compteur['sumCurYear'] += $cpt;
                         $daysCurYear++;
-                        $compteur['dataCurYear'][$fDate] = $cpt;
-                        $compteur['dataCurYearDates'][] = $fDate;
-                        $compteur['dataCurYearValues'][] = $cpt;
+                        $compteur['dataCurYear'][$tsDate] = [
+                            'date'      => $fDate,
+                            'day'       => $dayOfTheWeek,
+                            'isFerie'   => Helper::isFerie($date),
+                            'value'     => $cpt,
+                        ];
+                        //$compteur['dataCurYearDates'][] = $fDate;
+                        //$compteur['dataCurYearValues'][] = $cpt;
                         // --- gestion par mois
                         if(!isset($compteur["monthes"][$month])){
                             $compteur['monthes'][$month] = [
@@ -325,9 +331,9 @@ class Compteur
         $sum = 0;
         $data = $this->get('dataCurYear');
         if(count($data) > 0){
-            foreach($data as $day => $value){
-                $sum += $value;
-                $retour[$day] = $sum;
+            foreach($data as $ts => $value){
+                $sum += $value["value"];
+                $retour[$value["date"]] = $sum;
             }
         }
         return $retour;
@@ -364,6 +370,23 @@ class Compteur
             }
         }
         return $retour;
+    }
+
+    public function getDayByType()
+    {
+        $retourJo = [];
+        $retourJc = [];
+        $data = $this->get('dataCurYear');
+        if(count($data) > 0){
+            foreach($data as $k => $v){
+                if($v['day'] < 6 && !$v['isFerie']){
+                    $retourJo[] = $v;
+                }else{
+                    $retourJc[] = $v;
+                }
+            }
+        }
+        return [$retourJo, $retourJc];
     }
 
     public function get($item, $days = 14)

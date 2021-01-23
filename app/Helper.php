@@ -135,4 +135,10 @@ class Helper
         }
         return $retour;
     }
+
+    public static function isFerie($date)
+    {
+        $feries = DaysHoliday::getInstance()->getData();
+        return (isset($feries[$date->format('Y')]) && is_array($feries[$date->format('Y')]) && isset($feries[$date->format('Y')][$date->format('Y-m-d')]));
+    }
 }
