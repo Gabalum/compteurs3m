@@ -11,8 +11,8 @@ class Compteurs
             'color'     => '#8540f5',
         ],
         'X2H19070220'   => [
-            'label'     => 'Berracasa',
-            'address'   => 'Allée Alegria Berracasa, Montpellier',
+            'label'     => 'Beracasa',
+            'address'   => 'Allée Alegria Beracasa, Montpellier',
             'color'     => '#3d8bfd',
         ],
         'X2H20042633'   => [
