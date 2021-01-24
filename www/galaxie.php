@@ -21,15 +21,15 @@ $maxDays = date('z')+1;
     <meta property="og:description" content="<?php echo $desc ?>" />
     <meta property="og:url" content="<?php echo _BASE_URL_ ?>" />
     <meta property="og:site_name" content="<?php echo $title ?>" />
-    <meta property="og:image" content="<?php echo _BASE_URL_ ?>/assets/img/albert-fb.jpg" />
-    <meta property="og:image:secure_url" content="<?php echo _BASE_URL_ ?>/assets/img/albert-fb.jpg" />
+    <meta property="og:image" content="<?php echo _BASE_URL_ ?>/assets/img/galaxie.png" />
+    <meta property="og:image:secure_url" content="<?php echo _BASE_URL_ ?>/assets/img/galaxie.png" />
     <meta property="og:image:width" content="1000" />
     <meta property="og:image:height" content="500" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="<?php echo _BASE_URL_ ?>" />
     <meta name="twitter:description" content="<?php echo $desc ?>" />
     <meta name="twitter:title" content="<?php echo $title ?>" />
-    <meta name="twitter:image" content="<?php echo _BASE_URL_ ?>/assets/img/albert-fb.jpg" />
+    <meta name="twitter:image" content="<?php echo _BASE_URL_ ?>/assets/img/galaxie.png" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
@@ -277,6 +277,9 @@ $maxDays = date('z')+1;
                     </section>
                 <?php endforeach ?>
             <?php endif ?>
+            <footer>
+                <?php require_once('./parts/note-footer.php') ?>
+            </footer>
         </div>
         <div id="map" class="d-none d-sm-block col-sm-6 col-md-5 sidebar"></div>
     </div>
