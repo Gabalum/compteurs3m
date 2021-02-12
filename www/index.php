@@ -70,7 +70,17 @@ $weatherData = (new Meteo())->getWeather($days);
         <h1 class="text-center">Les compteurs vélos de Montpellier 3M</h1>
         <?php if(count($compteurs) > 0): ?>
             <?php foreach($compteurs as $k => $compteur): ?>
-                <?php $monthRecord = $compteur->get('monthRecord') ?>
+                <?php
+                    $monthRecord = $compteur->get('monthRecord');
+                    $classM = $classY = $classT = $class = '';
+                    if($compteur->get('lastValue') == $compteur->get('recordTotal')){
+                        $class = 'light';
+                        $classM = $classY = $classT = $class;
+                    }elseif($compteur->get('lastValue') >= $monthRecord['value']){
+                        $class = 'light2';
+                        $classM = $classY = $class;
+                    }
+                ?>
                 <section class="compteur" id="compteur-<?php echo $compteur->get('slug') ?>">
                     <div class="compteur-head">
                         <div class="float-end">
@@ -110,20 +120,58 @@ $weatherData = (new Meteo())->getWeather($days);
                         <div class="col-7 col-sm-8 data-col data-col-2">
                             <div class="row">
                                 <div class="col col-12 col-md-6">
-                                    <div class="card card-last <?php echo ($compteur->get('lastValue') == $compteur->get('recordTotal')?'light':'') ?>">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Dernier relevé</h5>
-                                            <p class="card-text cpt"><?php echo $compteur->get('lastValue') ?></p>
-                                            <h6 class="card-subtitle mb-2 text-muted"><span class="<?php echo ($compteur->get('lastDate') == $yesterday ? '' : 'text-danger') ?>">Le <?php echo $compteur->get('lastDate') ?></span></h6>
+                                    <ul class="nav nav-tabs nav-tabs-pm" id="tabs-latest-<?php echo $k ?>" role="tablist">
+                                        &nbsp;
+                                    </ul>
+                                    <div class="tab-content" id="tab-latest-<?php echo $k ?>">
+                                        <div class="card card-last <?php echo $class ?>">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Dernier relevé</h5>
+                                                <p class="card-text cpt"><?php echo $compteur->get('lastValue') ?></p>
+                                                <h6 class="card-subtitle mb-2 text-muted"><span class="<?php echo ($compteur->get('lastDate') == $yesterday ? '' : 'text-danger') ?>">Le <?php echo $compteur->get('lastDate') ?></span></h6>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col col-12 col-md-6">
-                                    <div class="card card-record <?php echo ($compteur->get('lastValue') == $compteur->get('recordTotal')?'light':'') ?>">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Record</h5>
-                                            <p class="card-text cpt"><?php echo $compteur->get('recordTotal') ?></p>
-                                            <h6 class="card-subtitle mb-2 text-muted">Le <?php echo $compteur->get('recordTotalDate') ?></h6>
+                                    <ul class="nav nav-tabs nav-tabs-pm" id="tabs-records-<?php echo $k ?>" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link active" id="link-recordsmonth-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-recordsmonth-<?php echo $k ?>" role="tab" aria-controls="tab-avgmonth-<?php echo $k ?>" aria-selected="false">Mois</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="link-recordsyear-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-recordsyear-<?php echo $k ?>" role="tab" aria-controls="tab-avgyear-<?php echo $k ?>" aria-selected="true">Année</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="link-recordstotal-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-recordstotal-<?php echo $k ?>" role="tab" aria-controls="tab-avgtotal-<?php echo $k ?>" aria-selected="false">Total</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="tab-records-<?php echo $k ?>">
+                                        <div class="tab-pane fade show active" id="tab-recordsmonth-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-recordsmonth-<?php echo $k ?>">
+                                            <div class="card card-record <?php echo $classM ?>">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Record du mois</h5>
+                                                    <p class="card-text cpt"><?php echo $monthRecord['value'] ?></p>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Le <?php echo $monthRecord['date'] ?></h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tab-recordsyear-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-recordsyear-<?php echo $k ?>">
+                                            <div class="card card-record <?php echo $classY ?>">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Record de l'année</h5>
+                                                    <p class="card-text cpt"><?php echo $compteur->get('recordYear') ?></p>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Le <?php echo $compteur->get('recordYearDate') ?></h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="tab-recordstotal-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-recordstotal-<?php echo $k ?>">
+                                            <div class="card card-record <?php echo $classT ?>">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Record total</h5>
+                                                    <p class="card-text cpt"><?php echo $compteur->get('recordTotal') ?></p>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Le <?php echo $compteur->get('recordTotalDate') ?></h6>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -131,14 +179,26 @@ $weatherData = (new Meteo())->getWeather($days);
                                     <?php if($monthRecord['value'] > 0): ?>
                                         <ul class="nav nav-tabs nav-tabs-pm" id="tabs-avgmonthyear-<?php echo $k ?>" role="tablist">
                                             <li class="nav-item" role="presentation">
-                                                <a class="nav-link active" id="link-avgyear-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-avgyear-<?php echo $k ?>" role="tab" aria-controls="tab-avgyear-<?php echo $k ?>" aria-selected="true">Année</a>
+                                                <a class="nav-link active" id="link-avgmonth-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-avgmonth-<?php echo $k ?>" role="tab" aria-controls="tab-avgmonth-<?php echo $k ?>" aria-selected="false">Mois</a>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="link-avgmonth-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-avgmonth-<?php echo $k ?>" role="tab" aria-controls="tab-avgmonth-<?php echo $k ?>" aria-selected="false">Mois</a>
+                                                <a class="nav-link" id="link-avgyear-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-avgyear-<?php echo $k ?>" role="tab" aria-controls="tab-avgyear-<?php echo $k ?>" aria-selected="true">Année</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="link-avgtotal-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-avgtotal-<?php echo $k ?>" role="tab" aria-controls="tab-avgtotal-<?php echo $k ?>" aria-selected="false">Total</a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="tab-avgmonthyearcontent-<?php echo $k ?>">
-                                            <div class="tab-pane fade show active" id="tab-avgyear-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-avgyear-<?php echo $k ?>">
+                                        <div class="tab-pane fade show active" id="tab-avgmonth-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-avgmonth-<?php echo $k ?>">
+                                            <div class="card card-moy">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Moyenne</h5>
+                                                    <p class="card-text cpt"><?php echo $monthRecord['avg'] ?></p>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Pour le mois <?php echo Helper::frenchMonth(date('m')) ?></h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div class="tab-pane fade" id="tab-avgyear-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-avgyear-<?php echo $k ?>">
                                                 <div class="card card-moy">
                                                     <div class="card-body">
                                                         <h5 class="card-title">Moyenne</h5>
@@ -147,12 +207,12 @@ $weatherData = (new Meteo())->getWeather($days);
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane fade" id="tab-avgmonth-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-avgmonth-<?php echo $k ?>">
+                                            <div class="tab-pane fade" id="tab-avgtotal-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-avgtotal-<?php echo $k ?>">
                                                 <div class="card card-moy">
                                                     <div class="card-body">
                                                         <h5 class="card-title">Moyenne</h5>
-                                                        <p class="card-text cpt"><?php echo $monthRecord['avg'] ?></p>
-                                                        <h6 class="card-subtitle mb-2 text-muted">Pour le mois <?php echo Helper::frenchMonth(date('m')) ?></h6>
+                                                        <p class="card-text cpt"><?php echo $compteur->get('avgTotal') ?></p>
+                                                        <h6 class="card-subtitle mb-2 text-muted">Depuis le <?php echo $compteur->get('firstDate') ?></h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -171,14 +231,26 @@ $weatherData = (new Meteo())->getWeather($days);
                                     <?php if($monthRecord['value'] > 0): ?>
                                         <ul class="nav nav-tabs nav-tabs-pm" id="tabs-summonthyear-<?php echo $k ?>" role="tablist">
                                             <li class="nav-item" role="presentation">
-                                                <a class="nav-link active" id="link-sumyear-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-sumyear-<?php echo $k ?>" role="tab" aria-controls="tab-sumyear-<?php echo $k ?>" aria-selected="true">Année</a>
+                                                <a class="nav-link active" id="link-summonth-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-summonth-<?php echo $k ?>" role="tab" aria-controls="tab-summonth-<?php echo $k ?>" aria-selected="false">Mois</a>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="link-summonth-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-summonth-<?php echo $k ?>" role="tab" aria-controls="tab-summonth-<?php echo $k ?>" aria-selected="false">Mois</a>
+                                                <a class="nav-link" id="link-sumyear-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-sumyear-<?php echo $k ?>" role="tab" aria-controls="tab-sumyear-<?php echo $k ?>" aria-selected="true">Année</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="link-sumtotal-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-sumtotal-<?php echo $k ?>" role="tab" aria-controls="tab-sumtotal-<?php echo $k ?>" aria-selected="true">Total</a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="tab-content-summonthyear-<?php echo $k ?>">
-                                            <div class="tab-pane fade show active" id="tab-sumyear-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-sumyear-<?php echo $k ?>">
+                                            <div class="tab-pane fade show active" id="tab-summonth-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-summonth-<?php echo $k ?>">
+                                                <div class="card card-total">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Total</h5>
+                                                        <p class="card-text cpt"><?php echo $monthRecord['sum'] ?></p>
+                                                        <h6 class="card-subtitle mb-2 text-muted">Pour le mois <?php echo Helper::frenchMonth(date('m')) ?></h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="tab-sumyear-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-sumyear-<?php echo $k ?>">
                                                 <div class="card card-total">
                                                     <div class="card-body">
                                                         <h5 class="card-title">Total</h5>
@@ -187,12 +259,12 @@ $weatherData = (new Meteo())->getWeather($days);
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane fade" id="tab-summonth-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-summonth-<?php echo $k ?>">
+                                            <div class="tab-pane fade" id="tab-sumtotal-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-sumtotal-<?php echo $k ?>">
                                                 <div class="card card-total">
                                                     <div class="card-body">
                                                         <h5 class="card-title">Total</h5>
-                                                        <p class="card-text cpt"><?php echo $monthRecord['sum'] ?></p>
-                                                        <h6 class="card-subtitle mb-2 text-muted">Pour le mois <?php echo Helper::frenchMonth(date('m')) ?></h6>
+                                                        <p class="card-text cpt"><?php echo $compteur->get('sumTotal') ?></p>
+                                                        <h6 class="card-subtitle mb-2 text-muted">Depuis le <?php echo $compteur->get('firstDate') ?></h6>
                                                     </div>
                                                 </div>
                                             </div>

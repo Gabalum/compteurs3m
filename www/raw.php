@@ -219,7 +219,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                                                         <?php endforeach ?>
                                                 </table>
                                                 <div>
-                                                    <canvas id="bar-day-<?php echo $k ?>" class="bar bar-days" data-label="par jour " data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgTotal') ?>" data-max="<?php echo $compteur->get('recordTotal') ?>"></canvas>
+                                                    <canvas id="bar-day-<?php echo $k ?>" class="bar bar-days" data-label="par jour " data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgTotal') ?>" data-max="<?php echo $compteur->get('recordYear') ?>"></canvas>
                                                 </div>
                                             <?php endif ?>
                                         </div>
@@ -258,7 +258,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                                                         <?php endforeach ?>
                                                 </table>
                                                 <div>
-                                                    <canvas id="bar-day2-<?php echo $k ?>" class="bar bar-days2" data-label="par jour" data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgCurYear') ?>" data-max="<?php echo $compteur->get('recordTotal') ?>"></canvas>
+                                                    <canvas id="bar-day2-<?php echo $k ?>" class="bar bar-days2" data-label="par jour" data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgCurYear') ?>" data-max="<?php echo $compteur->get('recordYear') ?>"></canvas>
                                                 </div>
                                             <?php endif ?>
                                         </div>
@@ -285,13 +285,13 @@ $tomtom = (Tomtom::getInstance())->getData();
                                         <div class="col-12 col-md-6">
                                             <b>Jours ouvrés</b>
                                             <div>
-                                                <canvas id="line-jo-<?php echo $k ?>" class="line" data-labels='<?php echo json_encode(array_column($jo, 'date')) ?>' data-values='<?php echo json_encode(array_column($jo, 'value')) ?>' data-max="<?php echo $compteur->get('recordTotal') ?>"></canvas>
+                                                <canvas id="line-jo-<?php echo $k ?>" class="line" data-labels='<?php echo json_encode(array_column($jo, 'date')) ?>' data-values='<?php echo json_encode(array_column($jo, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <b>Jours chomés, week-end, fériés</b>
                                             <div>
-                                                <canvas id="line-jc-<?php echo $k ?>" class="line" data-labels='<?php echo json_encode(array_column($jc, 'date')) ?>' data-values='<?php echo json_encode(array_column($jc, 'value')) ?>' data-max="<?php echo $compteur->get('recordTotal') ?>"></canvas>
+                                                <canvas id="line-jc-<?php echo $k ?>" class="line" data-labels='<?php echo json_encode(array_column($jc, 'date')) ?>' data-values='<?php echo json_encode(array_column($jc, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
                                             </div>
                                         </div>
                                     </div>

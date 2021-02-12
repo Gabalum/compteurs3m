@@ -12,28 +12,30 @@ if(count($compteurs) > 0){
         $totems[$k] = $compteur->get('label');
         $data = $compteur->get('dataTotal');
         foreach($data as $date => $val){
-            $dates[] = $date;
-            $values[$date][$k] = $val;
+            $x = explode('-', $date);
+            $dateKey = $x[2].$x[1].$x[0];
+            $values[$dateKey]['date'] = $date;
+            if(!isset($values[$dateKey])){
+                $values[$dateKey] = [];
+            }
+            $values[$dateKey][$k] = $val;
         }
     }
     $last = $k;
 }
-$dates = array_unique($dates);
+ksort($values);
 $handler = fopen("php://output", 'w');
 $data = [];
-if(count($dates) > 0){
+if(count($values) > 0){
     fputcsv($handler, array_merge(['date'], $totems));
-    //$data[] = 'date,'.implode(',', $totems);
-    foreach($dates as $date){
+    foreach($values as $val){
         $item = [];
-        if(isset($values[$date])){
-            $item[] = $date;
-            foreach($totems as $k => $v){
-                if(isset($values[$date][$k])){
-                    $item[] = $values[$date][$k];
-                }else{
-                    $item[] = '-';
-                }
+        $item[] = $val['date'];
+        foreach($totems as $k => $v){
+            if(isset($val[$k])){
+                $item[] = $val[$k];
+            }else{
+                $item[] = '-';
             }
         }
         fputcsv($handler, $item);

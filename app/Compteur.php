@@ -92,6 +92,7 @@ class Compteur
             'recordTotalDate'   => '',
             'lastValue'         => 0,
             'lastDate'          => '',
+            'firstDate'         => null,
             'monthes'           => [],
             'days'              => [],
             'days-by-year'      => [],
@@ -102,11 +103,28 @@ class Compteur
         $data = @file_get_contents($this->archiveLink);
         $data = trim($data);
         $data = str_replace('{"int', ',{"int', $data);
-        $data = '['.substr($data, 1).']';
+        $data = substr($data, 1);
+        if(file_exists(dirname(__DIR__).'/dataarchive/MMM_EcoCompt_'.$this->id.'_Archive2020.json')){
+            $dataArchive2020 = @file_get_contents(dirname(__DIR__).'/dataarchive/MMM_EcoCompt_'.$this->id.'_Archive2020.json');
+            $dataArchive2020 = trim($dataArchive2020);
+            $dataArchive2020 = str_replace('{"int', ',{"int', $dataArchive2020);
+            $dataArchive2020 = substr($dataArchive2020, 1);
+            $data = $dataArchive2020.','.$data;
+        }
+        $data = '['.$data.']';
+        $doubles = []; // éviter les valeurs en double avec l'ajout des données 2020 en archive
         if($data && strlen($data) > 0){
             $values = json_decode($data);
             if(count($values) > 0){
                 foreach($values as $val){
+                    if(intval($val->intensity) < 8){
+                        continue; // garde fou contre les erreurs de relevé
+                    }
+                    if(in_array($val->id, $doubles)){
+                        continue; // éviter les valeurs en double avec l'ajout des données 2020 en archive
+                    }
+                    $doubles[] = $val->id;
+                    $cpt = intval($val->intensity);
                     $date = new CptDate($val->dateObserved);
                     $year = $date->format('Y');
                     $month = $date->format('m');
@@ -114,6 +132,9 @@ class Compteur
                     $tsDate = $date->format('U');
                     $dayOfTheWeek = $date->format('N');
                     $cpt = $val->intensity;
+                    if(is_null($compteur['firstDate'])){
+                        $compteur['firstDate'] = $fDate;
+                    }
                     // --- gestion de l'année courante
                     if($year == _YEAR_){
                         $week = $date->format('W');
