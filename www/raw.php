@@ -44,7 +44,7 @@ $tomtom = (Tomtom::getInstance())->getData();
         .raw-data-group em{
             font-size: 0.7em;
         }
-        .raw-data{
+        .raw-data, .row-week{
             max-height: 400px;
             overflow-y: scroll;
         }
@@ -65,8 +65,14 @@ $tomtom = (Tomtom::getInstance())->getData();
         .bg-mid-success{
             background: #d1e7dd;
         }
+        .bg-mid-success2{
+            background: #B0E0E6;
+        }
         .bg-success{
             background: #479f76;
+        }
+        .bg-success2{
+            background: #4169E1;
         }
     </style>
 </head>
@@ -113,6 +119,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                                 $data = $compteur->get('dataTotal');
                                 $totems[$k] = $compteur->get('label');
                                 $monthes = $compteur->get('monthes');
+                                $monthesY = $compteur->get('monthesY');
                                 $currentMonth = (is_array($monthes) && isset($monthes[date('m')]) ? $monthes[date('m')] : null);
                                 $latestColor = ($compteur->get('lastDate') == $yesterday ? 'success' : 'danger');
                             ?>
@@ -296,84 +303,103 @@ $tomtom = (Tomtom::getInstance())->getData();
                                         </div>
                                     </div>
                                     <h3>Autres statistiques</h3>
+                                    <h4>Chiffres par mois</h4>
                                     <div class="row">
-                                        <div class="col">
-                                            <?php if(count($monthes) > 0): ?>
-                                                <b>Chiffres par mois (en <?php echo date('Y') ?>)</b>
-                                                <table class="table table-striped table-hover text-center align-middle">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Mois</th>
-                                                            <th>Total</th>
-                                                            <th>Moyenne</th>
-                                                            <th>Record</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php foreach($monthes as $month => $values): ?>
+                                        <?php for($year = date('Y')-1 ; $year <= date('Y') ; $year++): ?>
+                                            <div class="col">
+                                                <?php if(isset($monthesY[$year]) && count($monthesY[$year]) > 0): ?>
+                                                    <b>En <?php echo $year ?></b>
+                                                    <table class="table table-striped table-hover text-center align-middle">
+                                                        <thead>
                                                             <tr>
-                                                                <th>
-                                                                    <?php echo Helper::frenchMonth($month, false) ?>
-                                                                </th>
-                                                                <td>
-                                                                    <?php echo $values['sum'] ?><br>
-                                                                    (<?php echo $values['cpt'] ?> jours)
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $values['avg'] ?><br>
-                                                                    &nbsp;
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $values['value'] ?><br>
-                                                                    (<?php echo $values['date'] ?>)
-                                                                </td>
+                                                                <th>Mois</th>
+                                                                <th>Total</th>
+                                                                <th>Moyenne</th>
+                                                                <th>Record</th>
                                                             </tr>
-                                                        <?php endforeach ?>
-                                                    </tbody>
-                                                </table>
-                                                <div>
-                                                    <canvas id="bar-month-<?php echo $k ?>" class="bar bar-monthes" data-label="par mois " data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchMonthWithoutPrefix', array_keys($monthes))) ?>' data-values='<?php echo json_encode(array_column($monthes, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgCurYear') ?>"></canvas>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach($monthesY[$year] as $month => $values): ?>
+                                                                <tr>
+                                                                    <th>
+                                                                        <?php echo Helper::frenchMonth($month, false) ?>
+                                                                    </th>
+                                                                    <?php if($values['cpt'] == 0): ?>
+                                                                        <td colspan="3" class="text-center">-<br>&nbsp;</td>
+                                                                    <?php else: ?>
+                                                                        <td>
+                                                                            <?php echo $values['sum'] ?><br>
+                                                                            (<?php echo $values['cpt'] ?> jours)
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php echo $values['avg'] ?><br>
+                                                                            &nbsp;
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php echo $values['value'] ?><br>
+                                                                            (<?php echo $values['date'] ?>)
+                                                                        </td>
+                                                                    <?php endif ?>
+                                                                </tr>
+                                                            <?php endforeach ?>
+                                                        </tbody>
+                                                    </table>
+                                                    <div>
+                                                        <canvas id="bar-month-<?php echo $year.'-'.$k ?>" class="bar bar-monthes" data-label="par mois " data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchMonthWithoutPrefix', array_keys($monthesY[$year]))) ?>' data-values='<?php echo json_encode(array_column($monthesY[$year], 'avg')) ?>' <?php if($year==date('Y')): ?>data-global-avg="<?php echo $compteur->get('avgCurYear') ?>"<?php endif ?> data-max="<?php echo intval($compteur->get('maxAvgMonthY')*1.1) ?>"></canvas>
+                                                    </div>
+                                                <?php endif ?>
+                                            </div>
+                                        <?php endfor ?>
+                                    </div>
+                                    <div class="clearfix">
+                                        <h4>Chiffres par semaine</h4>
+                                        <em>(Scroller pour tout voir)</em>
+                                        <div class="row row-week">
+                                            <?php $weeksY = $compteur->get('weeksY') ?>
+                                            <?php for($year = date('Y')-1 ; $year <= date('Y') ; $year++): ?>
+                                                <div class="col">
+                                                    <?php if(isset($weeksY[$year]) && count($weeksY[$year]) > 0): ?>
+                                                        <b>Chiffres par semaine (en <?php echo date('Y') ?>)</b>
+                                                        <table class="text-center table table-striped table-hover align-middle">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>N° semaine</th>
+                                                                    <th>Total</th>
+                                                                    <th>Moyenne</th>
+                                                                    <th>Record</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php foreach($weeksY[$year] as $week => $values): ?>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <?php echo $week ?>
+                                                                        </th>
+                                                                        <?php if($values['cpt'] == 0): ?>
+                                                                            <td colspan="3" class="text-center">-<br>&nbsp;</td>
+                                                                        <?php else: ?>
+                                                                            <td>
+                                                                                <?php echo $values['sum'] ?><br>
+                                                                                (<?php echo $values['cpt'] ?> jours)
+                                                                            </td>
+                                                                            <td>
+                                                                                <?php echo $values['avg'] ?><br>
+                                                                                &nbsp;
+                                                                            </td>
+                                                                            <td>
+                                                                                <?php echo $values['value'] ?><br>
+                                                                                (<?php echo $values['date'] ?>)
+                                                                            </td>
+                                                                        <?php endif ?>
+                                                                    </tr>
+                                                                <?php endforeach ?>
+                                                        </table>
+                                                        <div>
+                                                            <canvas id="bar-week-<?php echo $year.'-'.$k ?>" class="bar bar-weeks" data-label="par semaine" data-labels='<?php echo json_encode(array_keys($weeksY[$year])) ?>' data-values='<?php echo json_encode(array_column($weeksY[$year], 'avg')) ?>' <?php if($year==_YEAR_): ?>data-global-avg="<?php echo $compteur->get('avgCurYear') ?>"<?php endif ?>  data-max="<?php echo intval($compteur->get('maxAvgWeeksY')*1.1) ?>"></canvas>
+                                                        </div>
+                                                    <?php endif ?>
                                                 </div>
-                                            <?php endif ?>
-                                        </div>
-                                        <div class="col">
-                                            <?php $weeks = $compteur->get('weeks') ?>
-                                            <?php if(count($weeks) > 0): ?>
-                                                <b>Chiffres par semaine (en <?php echo date('Y') ?>)</b>
-                                                <table class="text-center table table-striped table-hover align-middle">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>N° semaine</th>
-                                                            <th>Total</th>
-                                                            <th>Moyenne</th>
-                                                            <th>Record</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php foreach($weeks as $week => $values): ?>
-                                                            <tr>
-                                                                <th>
-                                                                    <?php echo $week ?>
-                                                                </th>
-                                                                <td>
-                                                                    <?php echo $values['sum'] ?><br>
-                                                                    (<?php echo $values['cpt'] ?> jours)
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $values['avg'] ?><br>
-                                                                    &nbsp;
-                                                                </td>
-                                                                <td>
-                                                                    <?php echo $values['value'] ?><br>
-                                                                    (<?php echo $values['date'] ?>)
-                                                                </td>
-                                                            </tr>
-                                                        <?php endforeach ?>
-                                                </table>
-                                                <div>
-                                                    <canvas id="bar-week-<?php echo $k ?>" class="bar bar-weeks" data-label="par semaine" data-labels='<?php echo json_encode(array_keys($weeks)) ?>' data-values='<?php echo json_encode(array_column($weeks, 'avg')) ?>' <?php /* data-global-avg="<?php echo $compteur->get('avgCurYear') ?>" /* */ ?>></canvas>
-                                                </div>
-                                            <?php endif ?>
+                                            <?php endfor ?>
                                         </div>
                                     </div>
                                     <?php if(is_array($data) && count($data) > 0): ?>
@@ -383,10 +409,20 @@ $tomtom = (Tomtom::getInstance())->getData();
                                                     <strong>Données brutes</strong>
                                                     <em>(Scroll au sein du tableau)</em>
                                                     <?php $max = 0 ?>
+                                                    <?php $maxY = 0 ?>
                                                     <ul class="list-group raw-data">
                                                         <?php foreach($data as $date => $val): ?>
-                                                            <?php if($val > $max){ $class = 'bg-mid-success'; $max = $val; }else{ $class = '';} ?>
-                                                            <li class="list-group-item <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val ? 'bg-success bg-gradient' : '') ?>">
+                                                            <?php
+                                                                if($val > $max){
+                                                                    $class = 'bg-mid-success'; $max = $val;
+                                                                }elseif(substr($date, -4) == _YEAR_ && $val > $maxY){
+                                                                    $class = 'bg-mid-success2';
+                                                                    $maxY = $val;
+                                                                }else{
+                                                                    $class = '';
+                                                                }
+                                                            ?>
+                                                            <li class="list-group-item <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val ? 'bg-success bg-gradient' : '') ?> <?php echo ($compteur->get('recordYear') == $val ? 'bg-success2 bg-gradient' : '') ?>">
                                                                 <?php echo $date ?> : <b><?php echo $val ?></b>
                                                             </li>
                                                         <?php endforeach ?>
@@ -400,6 +436,14 @@ $tomtom = (Tomtom::getInstance())->getData();
                                                     <canvas id="stack-<?php echo $k ?>" class="bar-stack" data-labels='<?php echo json_encode(array_keys($stack)) ?>' data-values='<?php echo json_encode(array_values($stack)) ?>' data-max="<?php echo max($stack) ?>"></canvas>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
+                                            <ul class="list-unstyled">
+                                                <li><span class="badge bg-success">&nbsp;</span> Record absolu</li>
+                                                <li><span class="badge bg-mid-success">&nbsp;</span> Record absolu jusque là</li>
+                                                <li><span class="badge bg-success2">&nbsp;</span> Record en <?php echo _YEAR_ ?></li>
+                                                <li><span class="badge bg-mid-success2">&nbsp;</span> Record en <?php echo _YEAR_ ?> jusque là</li>
+                                            </ul>
                                         </div>
                                     <?php endif ?>
                                 </section>
@@ -689,6 +733,11 @@ $tomtom = (Tomtom::getInstance())->getData();
             $('.bar').each(function(){
                 var self = $(this);
                 var ctx = document.getElementById(self.attr('id')).getContext('2d');
+                var colors = ["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"];
+                var bgColors = [];
+                for (var i = 0; i < self.data('values').length; i++) {
+                  bgColors.push(colors[i % colors.length]);
+                }
                 var myBarChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -699,7 +748,7 @@ $tomtom = (Tomtom::getInstance())->getData();
                             barThickness: 6,
                             maxBarThickness: 8,
                             minBarLength: 2,
-                            backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)","rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],
+                            backgroundColor:bgColors,
                             borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)","rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
                             borderWidth:1,
                             data: self.data('values'),

@@ -69,6 +69,13 @@ class Compteur
 
     private function retrieveData()
     {
+        $emptyArray = [
+            'value'    => 0,
+            'date'      => null,
+            'cpt'       => 0,
+            'sum'       => 0,
+            'avg'       => 0,
+        ];
         $compteur = [
             'labelHTML'         => $this->getName(),
             'label'             => $this->getName(true),
@@ -128,7 +135,11 @@ class Compteur
                     $date = new CptDate($val->dateObserved);
                     $year = $date->format('Y');
                     $month = $date->format('m');
+                    $week = $date->format('W');
                     $fDate = $date->format('d-m-Y');
+                    if($fDate == '11-05-2020'){
+                        continue; // élimination donnée eronnée
+                    }
                     $tsDate = $date->format('U');
                     $dayOfTheWeek = $date->format('N');
                     $cpt = $val->intensity;
@@ -137,7 +148,6 @@ class Compteur
                     }
                     // --- gestion de l'année courante
                     if($year == _YEAR_){
-                        $week = $date->format('W');
                         if($cpt >= $compteur['recordYear']){
                             $compteur['recordYear'] = $cpt;
                             $compteur['recordYearDate'] = $fDate;
@@ -150,53 +160,39 @@ class Compteur
                             'isFerie'   => Helper::isFerie($date),
                             'value'     => $cpt,
                         ];
-                        //$compteur['dataCurYearDates'][] = $fDate;
-                        //$compteur['dataCurYearValues'][] = $cpt;
-                        // --- gestion par mois
-                        if(!isset($compteur["monthes"][$month])){
-                            $compteur['monthes'][$month] = [
-                                'value'    => 0,
-                                'date'      => null,
-                                'cpt'       => 0,
-                                'sum'       => 0,
-                                'avg'       => 0,
-                            ];
-                        }
-                        if($cpt > $compteur['monthes'][$month]['value']){
-                            $compteur['monthes'][$month]['value'] = $cpt;
-                            $compteur['monthes'][$month]['date'] = $fDate;
-                        }
-                        $compteur['monthes'][$month]['cpt']++;
-                        $compteur['monthes'][$month]['sum'] += $cpt;
-                        // --- gestion des semaines
-                        if(!isset($compteur['weeks'][$week])){
-                            $compteur['weeks'][$week] = [
-                                'value' => 0,
-                                'date'  => null,
-                                'cpt'   => 0,
-                                'sum'   => 0,
-                                'avg'   => 0,
-                            ];
-                        }
-                        if($cpt > $compteur['weeks'][$week]['value']){
-                            $compteur['weeks'][$week]['value'] = $cpt;
-                            $compteur['weeks'][$week]['date'] = $fDate;
-                        }
-                        $compteur['weeks'][$week]['cpt']++;
-                        $compteur['weeks'][$week]['sum'] += $cpt;
                     }
+                    // --- gestion par mois
+                    if(!isset($compteur["monthesY"][$year])){
+                        $compteur["monthesY"][$year] = [];
+                    }
+                    if(!isset($compteur["monthesY"][$year][$month])){
+                        $compteur['monthesY'][$year][$month] = $emptyArray;
+                    }
+                    if($cpt > $compteur['monthesY'][$year][$month]['value']){
+                        $compteur['monthesY'][$year][$month]['value'] = $cpt;
+                        $compteur['monthesY'][$year][$month]['date'] = $fDate;
+                    }
+                    $compteur['monthesY'][$year][$month]['cpt']++;
+                    $compteur['monthesY'][$year][$month]['sum'] += $cpt;
+                    // --- gestion des semaines
+                    if(!isset($compteur["weeksY"][$year])){
+                        $compteur["weeksY"][$year] = [];
+                    }
+                    if(!isset($compteur['weeksY'][$year][$week])){
+                        $compteur['weeksY'][$year][$week] = $emptyArray;
+                    }
+                    if($cpt > $compteur['weeksY'][$year][$week]['value']){
+                        $compteur['weeksY'][$year][$week]['value'] = $cpt;
+                        $compteur['weeksY'][$year][$week]['date'] = $fDate;
+                    }
+                    $compteur['weeksY'][$year][$week]['cpt']++;
+                    $compteur['weeksY'][$year][$week]['sum'] += $cpt;
                     // --- gestion du jour de la semaine par années
                     if(!isset($compteur['days-by-year'][$year])){
                         $compteur['days-by-year'][$year] = [];
                     }
                     if(!isset($compteur['days-by-year'][$year][$dayOfTheWeek])){
-                        $compteur['days-by-year'][$year][$dayOfTheWeek] = [
-                            'value' => 0,
-                            'date'  => null,
-                            'cpt'   => 0,
-                            'sum'   => 0,
-                            'avg'   => 0,
-                        ];
+                        $compteur['days-by-year'][$year][$dayOfTheWeek] = $emptyArray;
                     }
                     if($cpt > $compteur['days-by-year'][$year][$dayOfTheWeek]['value']){
                         $compteur['days-by-year'][$year][$dayOfTheWeek]['value'] = $cpt;
@@ -206,13 +202,7 @@ class Compteur
                     $compteur['days-by-year'][$year][$dayOfTheWeek]['sum'] += $cpt;
                     // --- gestion du jour de la semaine
                     if(!isset($compteur['days'][$dayOfTheWeek])){
-                        $compteur['days'][$dayOfTheWeek] = [
-                            'value' => 0,
-                            'date'  => null,
-                            'cpt'   => 0,
-                            'sum'   => 0,
-                            'avg'   => 0,
-                        ];
+                        $compteur['days'][$dayOfTheWeek] = $emptyArray;
                     }
                     if($cpt > $compteur['days'][$dayOfTheWeek]['value']){
                         $compteur['days'][$dayOfTheWeek]['value'] = $cpt;
@@ -243,12 +233,32 @@ class Compteur
         }
         ksort($compteur['dataTotalDates']);
         ksort($compteur['dataTotalValues']);
-        if(count($compteur['monthes']) > 0){
-            foreach($compteur['monthes'] as $month => $val){
-                if($val['cpt'] > 0){
-                    $compteur['monthes'][$month]['avg'] = intval($val['sum'] / $val['cpt']);
+        $compteur['maxAvgMonthY'] = 0;
+        if(count($compteur['monthesY']) > 0){
+            foreach($compteur['monthesY'] as $year=> $monthes){
+                if(count($monthes) > 0){
+                    for($month = 1; $month <= 12; $month++){
+                        if($month < 10){
+                            $month = '0'.$month;
+                        }
+                        if(!isset($monthes[$month])){
+                            $compteur['monthesY'][$year][$month] = $emptyArray;
+                        }else{
+                            $val = $monthes[$month];
+                            if($val['cpt'] > 0){
+                                $compteur['monthesY'][$year][$month]['avg'] = intval($val['sum'] / $val['cpt']);
+                                if($compteur['monthesY'][$year][$month]['avg'] > $compteur['maxAvgMonthY']){
+                                    $compteur['maxAvgMonthY'] = $compteur['monthesY'][$year][$month]['avg'];
+                                }
+                            }
+                        }
+                    }
+                    ksort($compteur['monthesY'][$year]);
                 }
             }
+        }
+        if(isset($compteur['monthesY'][_YEAR_])){
+            $compteur['monthes'] = $compteur['monthesY'][_YEAR_];
         }
         if(count($compteur['days']) > 0){
             foreach($compteur['days'] as $dow => $val){
@@ -270,21 +280,32 @@ class Compteur
                 }
             }
         }
-        if(count($compteur['weeks']) > 0){
-            if(count($compteur['weeks']) < 50){
-                if(isset($compteur['weeks'][52])){
-                    unset($compteur['weeks'][52]);
+        $compteur['maxAvgWeeksY'] = 0;
+        if(count($compteur['weeksY']) > 0){
+            foreach($compteur['weeksY'] as $year => $weeks){
+                for($week = 1; $week <= 53; $week++){
+                    if($week < 10){
+                        $week = '0'.$week;
+                    }
+                    if($week == 53 && $year == date('Y')){
+                        $compteur['weeksY'][$year][$week] = $emptyArray;
+                    }
+                    if(!isset($compteur['weeksY'][$year][$week])){
+                        $compteur['weeksY'][$year][$week] = $emptyArray;
+                    }
+                    $val = $compteur['weeksY'][$year][$week];
+                    if($val['cpt'] > 0){
+                        $compteur['weeksY'][$year][$week]['avg'] = intval($val['sum'] / $val['cpt']);
+                        if($compteur['weeksY'][$year][$week]['avg'] > $compteur['maxAvgWeeksY']){
+                            $compteur['maxAvgWeeksY'] = $compteur['weeksY'][$year][$week]['avg'];
+                        }
+                    }
                 }
-                if(isset($compteur['weeks'][53])){
-                    unset($compteur['weeks'][53]);
-                }
+                ksort($compteur['weeksY'][$year]);
             }
-            foreach($compteur['weeks'] as $week => $val){
-                if($val['cpt'] > 0){
-                    $compteur['weeks'][$week]['avg'] = intval($val['sum'] / $val['cpt']);
-                }
-            }
-            ksort($compteur['weeks']);
+        }
+        if(isset($compteur['weeksY'][_YEAR_])){
+            $compteur['weeks'] = $compteur['weeksY'][_YEAR_];
         }
         $file = fopen($this->file, 'w+');
         fwrite($file, json_encode($compteur, true));
