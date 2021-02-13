@@ -134,7 +134,22 @@ section.meteo .legend a{
 .nav-tabs.nav-tabs-pm .nav-item:last-child{
     border-right: none;
 }
-
+body.albert .nav-item{
+    font-size: 1.3rem;
+}
+.table-oddeven tr.odd td,
+.table-oddeven tr.odd th
+{
+    color: var(--bs-table-striped-color);
+    background: var(--bs-table-striped-bg);
+}
+.table-oddeven tr:hover td,
+.table-oddeven tr:hover th,
+.table-oddeven tr th.thover
+{
+    color: var(--bs-table-hover-color);
+    background: var(--bs-table-hover-bg);
+}
 /* @see https://codepen.io/erikterwan/pen/EVzeRP */
 #bugerNav{
     position: absolute;

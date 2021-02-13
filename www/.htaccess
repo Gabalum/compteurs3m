@@ -4,3 +4,4 @@ RewriteEngine on
 RewriteRule ^detail/$ /detail.php [L]
 RewriteRule ^galaxie/$ /galaxie.php [L]
 RewriteRule ^detail/(.*)$ /detail.php?cpt=$1 [L]
+RewriteRule ^communautaire/albert$ /albert.php [L]
