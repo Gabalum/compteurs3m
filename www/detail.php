@@ -52,8 +52,13 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
     <section id="head" class="container-lg">
         <h1><?php echo $compteur->get('labelHTML') ?></h1>
         <div class="float-end">
+            <?php if($slug == 'albert-1er'): ?>
+                <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>/communautaire/albert">
+                    Les données communautaires
+                </a>
+            <?php endif ?>
             <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>">
-                retour
+                Tous les compteurs
             </a>
         </div>
         <p>Dernier relevé : <?php echo str_replace('-', '/', $compteur->get('lastDate')) ?></p>

@@ -11,75 +11,6 @@ if(is_null($albert)){
 $title = "Relevés Albert 1er par la communauté | Les compteurs de Montpellier 3M";
 $desc = 'Les relevés des données du compteur Albert 1er effectués par la communauté des cyclistes montpelliérains';
 $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
-$monthes = [];
-if(count($albert) > 0){
-    foreach($albert as $year => $values){
-        if(!isset($monthes[$year])){
-            $monthes[$year] = [];
-        }
-        if(count($values) > 0){
-            foreach($values as $dates){
-                if(count($dates) > 0){
-                    $prev = 0;
-                    foreach($dates as $k => $item){
-                        $date = new AlbertDate($item['dateOrig']);
-                        $month = $date->format('m');
-                        if(!isset($monthes[$year][$month])){
-                            $monthes[$year][$month] = [
-                                '10'    => [
-                                    'cpt'   => 0,
-                                    'total' => 0,
-                                    'avg'   => 0,
-                                ],
-                                '14'    => [
-                                    'cpt'   => 0,
-                                    'total' => 0,
-                                    'avg'   => 0,
-                                ],
-                                '18'    => [
-                                    'cpt'   => 0,
-                                    'total' => 0,
-                                    'avg'   => 0,
-                                ],
-                                'total'    => [
-                                    'cpt'   => 0,
-                                    'total' => 0,
-                                    'avg'   => 0,
-                                ],
-                            ];
-                        }
-                        $h = str_replace(':', '', $item['heure']);
-                        $key = null;
-                        if($h <= 100000){
-                            $key = '10';
-                        }elseif($h <= 140000){
-                            $key = '14';
-                        }elseif($h <= 180000){
-                            $key = '18';
-                        }
-                        if(!is_null($key)){
-                            $monthes[$year][$month][$key]['cpt']++;
-                            $monthes[$year][$month][$key]['total'] += $item['instant'];
-                        }
-                        if($prev != $date->format('Ymd')){
-                            $monthes[$year][$month]['total']['cpt']++;
-                            $monthes[$year][$month]['total']['total'] += $item['totalJour'];
-                            $prev = $date->format('Ymd');
-                        }
-                    }
-                }
-            }
-        }
-    }
-    foreach($monthes as $year => $mm){
-        foreach($mm as $month => $values){
-            foreach($values as $key => $val){
-                $monthes[$year][$month][$key]['avg'] = intval($val["total"] / $val['cpt']);
-            }
-            $monthes[$year][$month]['name'] = Helper::frenchMonth($month, false);
-        }
-    }
-}
 ?><!doctype html>
 <html lang="fr">
 <head>
@@ -112,8 +43,16 @@ if(count($albert) > 0){
 	<link rel="icon" type="image/x-icon" sizes="90x90" href="<?php echo _BASE_URL_ ?>assets/img/favicons/favicon.png">
 </head>
 <body class="albert">
-    <section id="head" class="container-lg">
-        <h1>Relevés communautaire du totem Albert 1<sup>er</sup></h1>
+    <section id="head" class="container-lg clearfix">
+        <h1>Relevés communautaires du totem Albert 1<sup>er</sup></h1>
+        <div class="float-end">
+            <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>/detail/albert-1er">
+                Retour au totem
+            </a>
+            <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>">
+                Tous les compteurs
+            </a>
+        </div>
     </section>
     <section id="main" class="container-lg">
         <div class="row">
@@ -130,6 +69,7 @@ if(count($albert) > 0){
                     </ul>
                     <div class="tab-content" id="tabs-albert">
                         <?php foreach($albert as $year => $values): ?>
+                            <?php krsort($values) ?>
                             <div class="tab-pane fade <?php if($year === _YEAR_): ?>show active<?php endif ?>" id="tab-<?php echo $year ?>" role="tabpanel" aria-labelledby="tab-<?php echo $year ?>">
                                 <table class="text-center table table-light table-oddeven align-middle">
                                     <thead class="table-dark">
@@ -164,11 +104,24 @@ if(count($albert) > 0){
                                         <?php endforeach ?>
                                     </tbody>
                                 </table>
+                                <?php /* ?>
+                                <div class="charts">
+                                    <canvas id="bar-monthes-<?php echo $year ?>"
+                                        class="bar bar-monthes"
+                                        data-year="<?php echo $year ?>"
+                                        data-labels='<?php echo json_encode(array_column($monthes[$year], 'name')) ?>'
+                                        data-values='<?php echo json_encode($monthes[$year]) ?>'
+                                    ></canvas>
+                                </div>
+                                <?php /* */ ?>
                             </div>
                         <?php endforeach ?>
                     </div>
                 <?php endif ?>
             </div>
+        </div>
+        <div class="row text-center">
+            <p>Ces données ont été saisies manuellement par les cyclistes de Montpellier et alentours.</p>
         </div>
     </section>
     <footer>
@@ -188,6 +141,67 @@ if(count($albert) > 0){
             $('.table-oddeven').find('td').mouseout(function(){
                 $('.thover').removeClass('thover');
             });
+<?php /*  ?>
+            $('.bar').each(function(){
+                var self = $(this);
+                var ctx = document.getElementById(self.attr('id')).getContext('2d');
+                var data10 = [];
+                var data14 = [];
+                var data18 = [];
+                var dataTot = [];
+                var values = self.data('values');
+                $.each(values, function(k, v){
+                    data10.push(v[10].avg),
+                    data14.push(v[14].avg),
+                    data18.push(v[18].avg),
+                    dataTot.push(v.total.avg)
+                });
+                console.log(self.data('labels'));
+                var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: self.data('labels'),
+                        datasets: [{
+                            label: 'avant 10h',
+                            backgroundColor: '#336699',
+                            data: data10
+                        },{
+                            label: 'avant 14h',
+                            backgroundColor: '#FF8800',
+                            data: data14
+                        },{
+                            label: 'avant 18h',
+                            backgroundColor: '#0088FF',
+                            data: data18
+                        },{
+                            label: 'après 18h',
+                            backgroundColor: '#FF0000',
+                            data: dataTot
+                        },
+                        ]
+                    },
+    				options: {
+    					title: {
+    						display: true,
+    						text: 'Moyenne quotidienne, par mois, en '+self.data('year')
+    					},
+    					tooltips: {
+    						mode: 'index',
+    						intersect: false
+    					},
+    					responsive: true,
+    					scales: {
+    						xAxes: [{
+    							stacked: true,
+    						}],
+    						yAxes: [{
+    							stacked: true
+    						}]
+    					}
+    				}
+                });
+            });
+<?php /* */ ?>
         });
     </script>
 </body>

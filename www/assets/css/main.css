@@ -137,6 +137,9 @@ section.meteo .legend a{
 body.albert .nav-item{
     font-size: 1.3rem;
 }
+body.albert .charts{
+    background: var(--bs-light);
+}
 .table-oddeven tr.odd td,
 .table-oddeven tr.odd th
 {
