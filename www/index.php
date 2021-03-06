@@ -76,7 +76,10 @@ $weatherData = (new Meteo())->getWeather($days);
                     if($compteur->get('lastValue') == $compteur->get('recordTotal')){
                         $class = 'light';
                         $classM = $classY = $classT = $class;
-                    }elseif($compteur->get('lastValue') >= $monthRecord['value']){
+                    }elseif($monthRecord['value'] > 0 && $compteur->get('lastValue') >= $monthRecord['value']){
+                        $class = 'light2';
+                        $classM = $classY = $class;
+                    }elseif($compteur->get('lastValue') >= $compteur->get('recordYear')){
                         $class = 'light2';
                         $classM = $classY = $class;
                     }
@@ -135,27 +138,31 @@ $weatherData = (new Meteo())->getWeather($days);
                                 </div>
                                 <div class="col col-12 col-md-6">
                                     <ul class="nav nav-tabs nav-tabs-pm" id="tabs-records-<?php echo $k ?>" role="tablist">
+                                        <?php if($monthRecord['value'] > 0): ?>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link active" id="link-recordsmonth-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-recordsmonth-<?php echo $k ?>" role="tab" aria-controls="tab-avgmonth-<?php echo $k ?>" aria-selected="false">Mois</a>
+                                            </li>
+                                        <?php endif ?>
                                         <li class="nav-item" role="presentation">
-                                            <a class="nav-link active" id="link-recordsmonth-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-recordsmonth-<?php echo $k ?>" role="tab" aria-controls="tab-avgmonth-<?php echo $k ?>" aria-selected="false">Mois</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="link-recordsyear-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-recordsyear-<?php echo $k ?>" role="tab" aria-controls="tab-avgyear-<?php echo $k ?>" aria-selected="true">Année</a>
+                                            <a class="nav-link <?php if($monthRecord['value'] == 0): ?>active<?php endif ?>" id="link-recordsyear-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-recordsyear-<?php echo $k ?>" role="tab" aria-controls="tab-avgyear-<?php echo $k ?>" aria-selected="true">Année</a>
                                         </li>
                                         <li class="nav-item" role="presentation">
                                             <a class="nav-link" id="link-recordstotal-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-recordstotal-<?php echo $k ?>" role="tab" aria-controls="tab-avgtotal-<?php echo $k ?>" aria-selected="false">Total</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="tab-records-<?php echo $k ?>">
-                                        <div class="tab-pane fade show active" id="tab-recordsmonth-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-recordsmonth-<?php echo $k ?>">
-                                            <div class="card card-record <?php echo $classM ?>">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Record du mois</h5>
-                                                    <p class="card-text cpt"><?php echo $monthRecord['value'] ?></p>
-                                                    <h6 class="card-subtitle mb-2 text-muted">Le <?php echo $monthRecord['date'] ?></h6>
+                                        <?php if($monthRecord['value'] > 0): ?>
+                                            <div class="tab-pane fade show active" id="tab-recordsmonth-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-recordsmonth-<?php echo $k ?>">
+                                                <div class="card card-record <?php echo $classM ?>">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Record du mois</h5>
+                                                        <p class="card-text cpt"><?php echo $monthRecord['value'] ?></p>
+                                                        <h6 class="card-subtitle mb-2 text-muted">Le <?php echo $monthRecord['date'] ?></h6>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="tab-recordsyear-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-recordsyear-<?php echo $k ?>">
+                                        <?php endif ?>
+                                        <div class="tab-pane fade <?php if($monthRecord['value'] == 0): ?>show active<?php endif ?>" id="tab-recordsyear-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-recordsyear-<?php echo $k ?>">
                                             <div class="card card-record <?php echo $classY ?>">
                                                 <div class="card-body">
                                                     <h5 class="card-title">Record de l'année</h5>

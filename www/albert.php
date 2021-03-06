@@ -46,7 +46,7 @@ $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
     <section id="head" class="container-lg clearfix">
         <h1>Relevés communautaires du totem Albert 1<sup>er</sup></h1>
         <div class="float-end">
-            <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>/detail/albert-1er">
+            <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>detail/albert-1er">
                 Retour au totem
             </a>
             <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>">
@@ -122,6 +122,17 @@ $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
         </div>
         <div class="row text-center">
             <p>Ces données ont été saisies manuellement par les cyclistes de Montpellier et alentours.</p>
+            <br>
+            <div class="col-2"></div>
+            <div class="col-8">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPHrWpHSj0A0VHzkaBlvSYCgUBQQyQOPOJ6lhq0dIDLvcDlg/viewform" target="_blank" class="btn btn-primary">
+                Ajouter une saisie
+            </a>
+            <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQVtdpXMHB4g9h75a0jw8CsrqSuQmP5eMIB2adpKR5hkRggwMwzFy5kB-AIThodhVHNLxlZYm8fuoWj/pub?gid=2105854808&single=true&output=csv" download class="btn btn-primary">
+                Télécharger les données
+            </a>
+            <div class="col-2"></div>
+        </div>
         </div>
     </section>
     <footer>
