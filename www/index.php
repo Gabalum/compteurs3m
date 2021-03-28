@@ -76,12 +76,12 @@ $weatherData = (new Meteo())->getWeather($days);
                     if($compteur->get('lastValue') == $compteur->get('recordTotal')){
                         $class = 'light';
                         $classM = $classY = $classT = $class;
-                    }elseif($monthRecord['value'] > 0 && $compteur->get('lastValue') >= $monthRecord['value']){
-                        $class = 'light2';
-                        $classM = $classY = $class;
                     }elseif($compteur->get('lastValue') >= $compteur->get('recordYear')){
                         $class = 'light2';
                         $classM = $classY = $class;
+                    }elseif($monthRecord['value'] > 0 && $compteur->get('lastValue') >= $monthRecord['value']){
+                        $class = 'light3';
+                        $classM = $class;
                     }
                 ?>
                 <section class="compteur" id="compteur-<?php echo $compteur->get('slug') ?>">

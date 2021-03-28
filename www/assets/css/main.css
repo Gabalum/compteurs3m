@@ -101,6 +101,9 @@ footer a:hover{
 .card.light2{
     box-shadow: 0px 0px 12px #336699
 }
+.card.light3{
+    box-shadow: 0px 0px 12px #ff8800
+}
 section.meteo{
     margin-top: 50px;
 }
