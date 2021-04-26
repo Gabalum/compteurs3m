@@ -50,6 +50,11 @@ class Compteurs
             'address'   => 'D5E1, Lavérune',
             'color'     => '#6c757d',
         ],
+        'X2H20104132'   => [
+            'label'     => 'Méric',
+            'address'   => 'Rue de la Draye, Montpellier',
+            'color'     => '#336600',
+        ],
         'X2H20063161'   => [
             'label'     => 'Vieille-Poste',
             'address'   => '1211 rue de la Vieille-Poste, Montpellier',
