@@ -1,5 +1,10 @@
 $(document).ready(function(){
     var maps = [];
+    $('.map-fh').each(function(){
+        var self = $(this);
+        self.height($(window).height());
+    });
+
     $('.map').each(function(){
         var self = $(this);
         var id = self.data('id');
@@ -24,15 +29,33 @@ $(document).ready(function(){
         var id = self.attr('id');
         var center = self.data('center');
         var data = self.data('pins');
-        self.height(self.width() / 2.5);
+        if(!self.hasClass('map-fh')){
+            self.height(self.width() / 2.5);
+        }
         map = L.map(id, {scrollWheelZoom: false}).setView(center, 12);
         var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
             maxZoom: 19,
         }).addTo(map);
+
+        var icon = L.icon({
+            iconUrl: '/assets/img/markers/8540f5.png',
+            iconSize: [22, 28],
+            iconAnchor: [18, 35],
+        });
+
+        var iconClassic = L.icon({
+            iconUrl: '/assets/img/markers/3d8bfd.png',
+            iconSize: [22, 28],
+            iconAnchor: [18, 35],
+        });
         $.each(data, function(k, v){
-            L.marker(v).addTo(map);
+            if(typeof v[2] != 'undefined') {
+                L.marker(v, {icon: icon}).addTo(map);
+            }else{
+                L.marker(v, {icon: iconClassic}).addTo(map);
+            }
         });
     });
 
