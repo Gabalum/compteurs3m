@@ -111,6 +111,13 @@ class Compteur
         $data = trim($data);
         $data = str_replace('{"int', ',{"int', $data);
         $data = substr($data, 1);
+// --- correction 17 mai
+        $dataToday = @file_get_contents($this->link);
+        $dataToday = trim($dataToday);
+        $dataToday = str_replace('{"int', ',{"int', $dataToday);
+        $dataToday = substr($dataToday, 1);
+        $data .= ','.$dataToday;
+// ! --- correction 17 mai
         if(file_exists(dirname(__DIR__).'/dataarchive/MMM_EcoCompt_'.$this->id.'_Archive2020.json')){
             $dataArchive2020 = @file_get_contents(dirname(__DIR__).'/dataarchive/MMM_EcoCompt_'.$this->id.'_Archive2020.json');
             $dataArchive2020 = trim($dataArchive2020);
