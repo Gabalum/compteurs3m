@@ -63,7 +63,7 @@ $(document).ready(function(){
         var self = $(this);
         if(self.data('dates').length > 0){
             var ctx = document.getElementById(self.find('canvas').attr('id')).getContext('2d');
-            var myChart = new Chart(ctx, {
+            const myChart = new Chart(ctx, {
                 type: 'line',
                 options: {
                     scales: {
@@ -97,7 +97,7 @@ $(document).ready(function(){
             bg1 = ["rgba(255, 99, 132, 0.5)","rgba(255, 159, 64, 0.5)","rgba(255, 205, 86, 0.5)","rgba(75, 192, 192, 0.5)","rgba(54, 162, 235, 0.5)","rgba(153, 102, 255, 0.5)","rgba(201, 203, 207, 0.5)","rgba(255, 99, 132, 0.5)","rgba(255, 159, 64, 0.5)","rgba(255, 205, 86, 0.5)","rgba(75, 192, 192, 0.5)","rgba(54, 162, 235, 0.5)","rgba(153, 102, 255, 0.5)","rgba(201, 203, 207, 0.5)"];
             bg2 = ["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)","rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"];
         };
-        var myBarChart = new Chart(ctx, {
+        const myBarChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: self.data('labels'),
@@ -112,10 +112,15 @@ $(document).ready(function(){
             },
             options: {
                 plugins: {
-                    datalabels: false
+                    legend: {
+                        display: false,
+                    },
                 },
-                legend: {
-                    display: false,
+                datasets:{
+                    bar:{
+                        categoryPercentage: 1,
+                        barPercentage: 1,
+                    }
                 },
                 scales: {
                     yAxes:[{
