@@ -144,6 +144,7 @@ $(document).ready(function(){
         $('#menuToggler').prop('checked', false);
         $('.map').css('visibility', 'visible');
     });
+    $('#menu').height($(window).height());
 
     $('#menuToggler').prop('checked', false);
     $('.map').css('visibility', 'visible');

@@ -12,9 +12,10 @@ class Compteur
     private $archiveLink = null;
     private $file = null;
     private $data = null;
+    private $totem = false;
     private $address = '';
 
-    public function __construct($id, $name = '', $address = '', $color = '')
+    public function __construct($id, $name = '', $address = '', $color = '', bool $totem = false)
     {
         $this->id = $id;
         $this->name = $name;
@@ -27,6 +28,7 @@ class Compteur
         }else{
             $this->color = $color;
         }
+        $this->totem = $totem;
     }
 
     public function getName(bool $stripTags = false) : string
@@ -52,6 +54,11 @@ class Compteur
     public function setAddress(string $address = '')
     {
         return $this->address = $address;
+    }
+
+    public function isTotem()
+    {
+        return $this->totem;
     }
 
     public function getData()

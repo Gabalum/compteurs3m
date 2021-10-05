@@ -240,7 +240,7 @@ body.albert .charts{
   width: 300px;
   margin: -100px 0 0 100px;
   padding: 50px;
-  padding-top: 100px;
+  padding-top: 60px;
   background: #ededed;
   list-style-type: none;
   -webkit-font-smoothing: antialiased;
@@ -250,8 +250,8 @@ body.albert .charts{
 }
 #menu li
 {
-  padding: 10px 0;
-  font-size: 22px;
+  padding: 5px 0;
+  font-size: 20px;
 }
 #menu li a{
     display: inline-block;
@@ -299,6 +299,10 @@ body.detail .card-init{
 }
 body.detail .card-title em{
     font-size: 0.6rem;
+    color: var(--bs-secondary);
+}
+body.detail .card-title li{
+    font-size: 0.7rem;
     color: var(--bs-secondary);
 }
 body.detail .ring{

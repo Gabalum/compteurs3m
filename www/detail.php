@@ -71,6 +71,10 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
                         <div class="card-title">
                             <h6><?php echo $compteur->get('labelHTML') ?></h6>
                             <address><?php echo $compteur->get('address') ?></address>
+                            <ul class="list-unstyled">
+                                <li>Type : <?php echo ($compteur->isTotem() ? 'Totem' : 'Capteur') ?></li>
+                                <li>Mise en service : <?php echo str_replace('-', '/', $compteur->get('firstDate')) ?></li>
+                            </ul>
                         </div>
                         <?php if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')): ?>
                             <img class="photo-detail" src="<?php echo _BASE_URL_.'assets/img/'.$compteur->get('id').'.jpg' ?>" />
