@@ -34,7 +34,7 @@ $weatherData = (new Meteo())->getWeather($days);
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <link type="text/css" rel="stylesheet" href="<?php echo Helper::noCache('./assets/css/main.css') ?>" media="all" />
     <link type="text/css" rel="stylesheet" href="<?php echo Helper::noCache('./assets/css/weather-icons.min.css') ?>" media="all" />
@@ -87,7 +87,7 @@ $weatherData = (new Meteo())->getWeather($days);
                 <section class="compteur" id="compteur-<?php echo $compteur->get('slug') ?>">
                     <div class="compteur-head">
                         <div class="float-end">
-                            <a class="btn btn-totem" href="<?php echo _BASE_URL_.'detail/'.$compteur->get('slug') ?>">
+                            <a class="btn btn-outline-info" href="<?php echo _BASE_URL_.'detail/'.$compteur->get('slug') ?>">
                                 Voir les stats
                             </a>
                         </div>

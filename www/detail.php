@@ -41,7 +41,7 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <link type="text/css" rel="stylesheet" href="<?php echo _BASE_URL_.Helper::noCache('assets/css/main.css') ?>" media="all" />
     <link type="text/css" rel="stylesheet" href="<?php echo _BASE_URL_.Helper::noCache('assets/css/weather-icons.min.css') ?>" media="all" />
@@ -53,11 +53,11 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
         <h1><?php echo $compteur->get('labelHTML') ?></h1>
         <div class="float-end">
             <?php if($slug == 'albert-1er'): ?>
-                <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>communautaire/albert">
+                <a class="btn btn-outline-success" href="<?php echo _BASE_URL_ ?>communautaire/albert">
                     Les données communautaires
                 </a>
             <?php endif ?>
-            <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>">
+            <a class="btn btn-outline-info" href="<?php echo _BASE_URL_ ?>">
                 Tous les compteurs
             </a>
         </div>
@@ -65,7 +65,7 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
     </section>
     <section id="main" class="container-lg">
         <div class="row">
-            <div class="col-12 col-sm-4">
+            <div class="col col-12 col-sm-4">
                 <div class="card card-init">
                     <div class="card-body">
                         <div class="card-title">
@@ -102,7 +102,7 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-8 detail-data-col">
+            <div class="col col-12 col-sm-8 detail-data-col">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">
