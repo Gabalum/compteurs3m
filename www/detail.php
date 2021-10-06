@@ -73,7 +73,7 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
                             <address><?php echo $compteur->get('address') ?></address>
                             <ul class="list-unstyled">
                                 <li>Type : <?php echo ($compteur->isTotem() ? 'Totem' : 'Capteur') ?></li>
-                                <li>Commune : <?php echo $compteur->getCommune() ?></li>
+                                <?php /* ?><li>Commune : <?php echo $compteur->getCommune() ?></li><?php /* */ ?>
                                 <li>Mise en service : <?php echo str_replace('-', '/', $compteur->get('firstDate')) ?></li>
                             </ul>
                         </div>
