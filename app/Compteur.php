@@ -13,9 +13,10 @@ class Compteur
     private $file = null;
     private $data = null;
     private $totem = false;
+    private $commune = '';
     private $address = '';
 
-    public function __construct($id, $name = '', $address = '', $color = '', bool $totem = false)
+    public function __construct($id, $name = '', $address = '', $color = '', bool $totem = false, string $commune = '')
     {
         $this->id = $id;
         $this->name = $name;
@@ -29,6 +30,7 @@ class Compteur
             $this->color = $color;
         }
         $this->totem = $totem;
+        $this->commune = $commune;
     }
 
     public function getName(bool $stripTags = false) : string
@@ -59,6 +61,11 @@ class Compteur
     public function isTotem()
     {
         return $this->totem;
+    }
+
+    public function getCommune()
+    {
+        return $this->commune;
     }
 
     public function getData()
