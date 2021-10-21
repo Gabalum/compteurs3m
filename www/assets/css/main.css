@@ -177,6 +177,10 @@ body.albert .charts{
   color: #232323;
   transition: color 0.3s ease;
 }
+#menu li b{
+    background: #232323;
+    margin-left: -5px;
+}
 
 #menuToggle a:hover
 {

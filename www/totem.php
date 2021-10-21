@@ -2,6 +2,20 @@
 namespace App;
 require_once('../bootstrap.php');
 $slug = (isset($_GET['totem']) ? strip_tags($_GET['totem']) : '');
+$links = [
+    [
+        'name'  => 'Albert 1<sup>er</sup>',
+        'url'   => '/communautaire/albert-1er',
+    ],
+    [
+        'name'  => 'Lavérune',
+        'url'   => '/communautaire/laverune',
+    ],
+    [
+        'name'  => 'Simone Veil',
+        'url'   => '/communautaire/simone-veil',
+    ],
+];
 if($slug == 'simone-veil'){
     $totem = TotemSisi::getInstance();
     $retour = null;
@@ -59,15 +73,35 @@ $desc = "Les relevés des données du compteur ".$totem->getName(true)." effectu
 	<link rel="icon" type="image/x-icon" sizes="90x90" href="<?php echo _BASE_URL_ ?>assets/img/favicons/favicon.png">
 </head>
 <body class="albert">
+    <nav role="navigation" id="bugerNav">
+        <div id="menuToggle">
+            <input type="checkbox" id="menuToggler" />
+            <span></span>
+            <span></span>
+            <span></span>
+            <ul id="menu">
+                <li><b>Les relevés&nbsp;</b></li>
+                <?php if(count($links) > 0): ?>
+                    <?php foreach($links as $k => $link): ?>
+                        <li>
+                            <a href="<?php echo $link['url'] ?>">
+                                <?php echo $link['name'] ?>
+                            </a>
+                        </li>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </ul>
+        </div>
+    </nav>
     <section id="head" class="container-lg clearfix">
         <h1>Relevés communautaires du totem <?php echo $totem->getName(false) ?></h1>
         <div class="float-end">
             <?php if(!is_null($retour)): ?>
-                <a class="btn btn-totem" href="<?php echo $retour ?>">
+                <a class="btn btn-outline-info" href="<?php echo $retour ?>">
                     Retour au totem
                 </a>
             <?php endif ?>
-            <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>">
+            <a class="btn btn-outline-info" href="<?php echo _BASE_URL_ ?>">
                 Tous les compteurs
             </a>
         </div>
