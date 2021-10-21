@@ -9,11 +9,46 @@ class TotemManager
     protected $file = null;
     protected $whichOne = 'toto';
     protected $startKeys = 0;
+    protected $launchYear = null;
 
     protected function __construct()
     {
         $this->link = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS3fug9izpwLOaNJRxRwXJk0v8ywkxM8ccrFqN7Bl1MpPtUAKkmxXHKfn3_3SiAknxhQWkaivXp680a/pub?gid=2104638138&single=true&output=csv';
         $this->file = dirname(__DIR__).'/data/totem-'.$this->whichOne.'.json';
+        $launch = $this->getFirstDay();
+        $exp = explode('/', $launch);
+        $this->launchYear = end($exp);
+    }
+
+    public function getName($stripTags = false)
+    {
+        return ($stripTags ? strip_tags($this->name) : $this->name);
+    }
+
+    public function getFirstDay()
+    {
+        return $this->firstDay;
+    }
+
+    public function getLaunchYear()
+    {
+        return $this->launchYear;
+    }
+
+    function daySince($now = null)
+    {
+        if(is_null($now)){
+            $now = time();
+        }
+        if(date('Y') == $this->launchYear){
+            $launch = $this->getFirstDay();
+            $exp = explode('/', $launch);
+            $start = strtotime($exp[2].'-'.$exp[1].'-'.$exp[0]);
+        }else{
+            $start = strtotime($this->launchYear.'-01-01');
+        }
+        $datediff = $now - $start;
+        return round($datediff / (60 * 60 * 24));
     }
 
     public function getData()

@@ -3,18 +3,15 @@ namespace App;
 require_once('../bootstrap.php');
 $slug = (isset($_GET['totem']) ? strip_tags($_GET['totem']) : '');
 if($slug == 'simone-veil'){
-    $totem = (TotemSisi::getInstance())->getData();
-    $name = 'Simone Veil';
+    $totem = TotemSisi::getInstance();
     $retour = null;
     $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
 }elseif($slug == 'laverune'){
-    $totem = (TotemLala::getInstance())->getData();
-    $name = 'Lavérune';
+    $totem = TotemLala::getInstance();
     $retour = null;
     $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
 }elseif($slug == 'albert' || $slug == 'albert-1er'){
-    $totem = (TotemAlbert::getInstance())->getData();
-    $name = 'Albert 1<sup>er</sup>';
+    $totem = TotemAlbert::getInstance();
     $retour = _BASE_URL_.'detail/albert-1er';
     $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
 }else{
@@ -27,8 +24,9 @@ if(is_null($totem)){
     require_once('./404.php');
     exit;
 }
-$title = "Relevés ".strip_tags($name)." par la communauté | Les compteurs de Montpellier 3M";
-$desc = "Les relevés des données du compteur ".strip_tags($name)." effectués par la communauté des cyclistes montpelliérains";
+$data = $totem->getData();
+$title = "Relevés ".$totem->getName(true)." par la communauté | Les compteurs de Montpellier 3M";
+$desc = "Les relevés des données du compteur ".$totem->getName(true)." effectués par la communauté des cyclistes montpelliérains";
 ?><!doctype html>
 <html lang="fr">
 <head>
@@ -62,7 +60,7 @@ $desc = "Les relevés des données du compteur ".strip_tags($name)." effectués 
 </head>
 <body class="albert">
     <section id="head" class="container-lg clearfix">
-        <h1>Relevés communautaires du totem <?php echo $name ?></h1>
+        <h1>Relevés communautaires du totem <?php echo $totem->getName(false) ?></h1>
         <div class="float-end">
             <?php if(!is_null($retour)): ?>
                 <a class="btn btn-totem" href="<?php echo $retour ?>">
@@ -77,9 +75,9 @@ $desc = "Les relevés des données du compteur ".strip_tags($name)." effectués 
     <section id="main" class="container-lg">
         <div class="row">
             <div class="col-12">
-                <?php if(count($totem) > 0): ?>
+                <?php if(count($data) > 0): ?>
                     <ul class="nav nav-tabs nav-tabs-pm" id="tabs-albert-controls" role="tablist">
-                        <?php foreach($totem as $year => $values): ?>
+                        <?php foreach($data as $year => $values): ?>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link <?php if($year === _YEAR_): ?>active<?php endif ?>" id="link-albert-<?php echo $year ?>" data-bs-toggle="tab" href="#tab-<?php echo $year ?>" role="tab" aria-controls="tab-<?php echo $year ?>" aria-selected="<?php echo ($year === _YEAR_ ? 'true' : 'false' ) ?>">
                                     <?php echo $year ?>
@@ -88,7 +86,7 @@ $desc = "Les relevés des données du compteur ".strip_tags($name)." effectués 
                         <?php endforeach ?>
                     </ul>
                     <div class="tab-content" id="tabs-albert">
-                        <?php foreach($totem as $year => $values): ?>
+                        <?php foreach($data as $year => $values): ?>
                             <?php krsort($values) ?>
                             <div class="tab-pane fade <?php if($year === _YEAR_): ?>show active<?php endif ?>" id="tab-<?php echo $year ?>" role="tabpanel" aria-labelledby="tab-<?php echo $year ?>">
                                 <table class="text-center table table-light table-oddeven align-middle">
@@ -135,7 +133,7 @@ $desc = "Les relevés des données du compteur ".strip_tags($name)." effectués 
             <br>
             <div class="col-2"></div>
             <div class="col-8">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPHrWpHSj0A0VHzkaBlvSYCgUBQQyQOPOJ6lhq0dIDLvcDlg/viewform" target="_blank" class="btn btn-primary">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScJ-D2j86llGWwe33igkMzxrDW44DEH6teLVb7FplDJGabFOA/viewform" target="_blank" class="btn btn-primary">
                 Ajouter une saisie
             </a>
             <?php /* ?>

@@ -3,6 +3,7 @@ Options +FollowSymlinks
 RewriteEngine on
 RewriteRule ^detail/$ /detail.php [L]
 RewriteRule ^galaxie/$ /galaxie.php [L]
+RewriteRule ^dashboard/$ /raw.php [L]
 RewriteRule ^suggestions$ /souhaits.php [L]
 RewriteRule ^suggestions/$ /souhaits.php [L]
 RewriteRule ^detail/(.*)$ /detail.php?cpt=$1 [L]
