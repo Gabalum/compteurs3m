@@ -53,7 +53,7 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
         <h1><?php echo $compteur->get('labelHTML') ?></h1>
         <div class="float-end">
             <?php if($slug == 'albert-1er'): ?>
-                <a class="btn btn-outline-success" href="<?php echo _BASE_URL_ ?>communautaire/albert">
+                <a class="btn btn-outline-success" href="<?php echo _BASE_URL_ ?>communautaire/albert-1er">
                     Les données communautaires
                 </a>
             <?php endif ?>

@@ -1,16 +1,34 @@
 <?php
 namespace App;
 require_once('../bootstrap.php');
-$albert = (Albert::getInstance())->getData();
-//var_dump($albert);die();
-if(is_null($albert)){
+$slug = (isset($_GET['totem']) ? strip_tags($_GET['totem']) : '');
+if($slug == 'simone-veil'){
+    $totem = (TotemSisi::getInstance())->getData();
+    $name = 'Simone Veil';
+    $retour = null;
+    $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
+}elseif($slug == 'laverune'){
+    $totem = (TotemLala::getInstance())->getData();
+    $name = 'Lavérune';
+    $retour = null;
+    $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
+}elseif($slug == 'albert' || $slug == 'albert-1er'){
+    $totem = (TotemAlbert::getInstance())->getData();
+    $name = 'Albert 1<sup>er</sup>';
+    $retour = _BASE_URL_.'detail/albert-1er';
+    $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
+}else{
     header('HTTP/1.0 404 Not Found');
     require_once('./404.php');
     exit;
 }
-$title = "Relevés Albert 1er par la communauté | Les compteurs de Montpellier 3M";
-$desc = 'Les relevés des données du compteur Albert 1er effectués par la communauté des cyclistes montpelliérains';
-$imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
+if(is_null($totem)){
+    header('HTTP/1.0 404 Not Found');
+    require_once('./404.php');
+    exit;
+}
+$title = "Relevés ".strip_tags($name)." par la communauté | Les compteurs de Montpellier 3M";
+$desc = "Les relevés des données du compteur ".strip_tags($name)." effectués par la communauté des cyclistes montpelliérains";
 ?><!doctype html>
 <html lang="fr">
 <head>
@@ -44,11 +62,13 @@ $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
 </head>
 <body class="albert">
     <section id="head" class="container-lg clearfix">
-        <h1>Relevés communautaires du totem Albert 1<sup>er</sup></h1>
+        <h1>Relevés communautaires du totem <?php echo $name ?></h1>
         <div class="float-end">
-            <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>detail/albert-1er">
-                Retour au totem
-            </a>
+            <?php if(!is_null($retour)): ?>
+                <a class="btn btn-totem" href="<?php echo $retour ?>">
+                    Retour au totem
+                </a>
+            <?php endif ?>
             <a class="btn btn-totem" href="<?php echo _BASE_URL_ ?>">
                 Tous les compteurs
             </a>
@@ -57,9 +77,9 @@ $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
     <section id="main" class="container-lg">
         <div class="row">
             <div class="col-12">
-                <?php if(count($albert) > 0): ?>
+                <?php if(count($totem) > 0): ?>
                     <ul class="nav nav-tabs nav-tabs-pm" id="tabs-albert-controls" role="tablist">
-                        <?php foreach($albert as $year => $values): ?>
+                        <?php foreach($totem as $year => $values): ?>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link <?php if($year === _YEAR_): ?>active<?php endif ?>" id="link-albert-<?php echo $year ?>" data-bs-toggle="tab" href="#tab-<?php echo $year ?>" role="tab" aria-controls="tab-<?php echo $year ?>" aria-selected="<?php echo ($year === _YEAR_ ? 'true' : 'false' ) ?>">
                                     <?php echo $year ?>
@@ -68,7 +88,7 @@ $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
                         <?php endforeach ?>
                     </ul>
                     <div class="tab-content" id="tabs-albert">
-                        <?php foreach($albert as $year => $values): ?>
+                        <?php foreach($totem as $year => $values): ?>
                             <?php krsort($values) ?>
                             <div class="tab-pane fade <?php if($year === _YEAR_): ?>show active<?php endif ?>" id="tab-<?php echo $year ?>" role="tabpanel" aria-labelledby="tab-<?php echo $year ?>">
                                 <table class="text-center table table-light table-oddeven align-middle">
@@ -104,16 +124,6 @@ $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
                                         <?php endforeach ?>
                                     </tbody>
                                 </table>
-                                <?php /* ?>
-                                <div class="charts">
-                                    <canvas id="bar-monthes-<?php echo $year ?>"
-                                        class="bar bar-monthes"
-                                        data-year="<?php echo $year ?>"
-                                        data-labels='<?php echo json_encode(array_column($monthes[$year], 'name')) ?>'
-                                        data-values='<?php echo json_encode($monthes[$year]) ?>'
-                                    ></canvas>
-                                </div>
-                                <?php /* */ ?>
                             </div>
                         <?php endforeach ?>
                     </div>
@@ -128,9 +138,11 @@ $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPHrWpHSj0A0VHzkaBlvSYCgUBQQyQOPOJ6lhq0dIDLvcDlg/viewform" target="_blank" class="btn btn-primary">
                 Ajouter une saisie
             </a>
+            <?php /* ?>
             <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQVtdpXMHB4g9h75a0jw8CsrqSuQmP5eMIB2adpKR5hkRggwMwzFy5kB-AIThodhVHNLxlZYm8fuoWj/pub?gid=2105854808&single=true&output=csv" download class="btn btn-primary">
                 Télécharger les données
             </a>
+            <?php /* */ ?>
             <div class="col-2"></div>
         </div>
         </div>
@@ -152,67 +164,6 @@ $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
             $('.table-oddeven').find('td').mouseout(function(){
                 $('.thover').removeClass('thover');
             });
-<?php /*  ?>
-            $('.bar').each(function(){
-                var self = $(this);
-                var ctx = document.getElementById(self.attr('id')).getContext('2d');
-                var data10 = [];
-                var data14 = [];
-                var data18 = [];
-                var dataTot = [];
-                var values = self.data('values');
-                $.each(values, function(k, v){
-                    data10.push(v[10].avg),
-                    data14.push(v[14].avg),
-                    data18.push(v[18].avg),
-                    dataTot.push(v.total.avg)
-                });
-                console.log(self.data('labels'));
-                var myBarChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: self.data('labels'),
-                        datasets: [{
-                            label: 'avant 10h',
-                            backgroundColor: '#336699',
-                            data: data10
-                        },{
-                            label: 'avant 14h',
-                            backgroundColor: '#FF8800',
-                            data: data14
-                        },{
-                            label: 'avant 18h',
-                            backgroundColor: '#0088FF',
-                            data: data18
-                        },{
-                            label: 'après 18h',
-                            backgroundColor: '#FF0000',
-                            data: dataTot
-                        },
-                        ]
-                    },
-    				options: {
-    					title: {
-    						display: true,
-    						text: 'Moyenne quotidienne, par mois, en '+self.data('year')
-    					},
-    					tooltips: {
-    						mode: 'index',
-    						intersect: false
-    					},
-    					responsive: true,
-    					scales: {
-    						xAxes: [{
-    							stacked: true,
-    						}],
-    						yAxes: [{
-    							stacked: true
-    						}]
-    					}
-    				}
-                });
-            });
-<?php /* */ ?>
         });
     </script>
 </body>

@@ -1,26 +1,19 @@
 <?php
 namespace App;
 
-class Albert
+class TotemManager
 {
-    private static $_instance = null;
-    private $data = null;
-    private $link = null;
-    private $file = null;
+    protected static $_instance = null;
+    protected $data = null;
+    protected $link = null;
+    protected $file = null;
+    protected $whichOne = 'toto';
+    protected $startKeys = 0;
 
-    private function __construct()
+    protected function __construct()
     {
-        $this->link = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVtdpXMHB4g9h75a0jw8CsrqSuQmP5eMIB2adpKR5hkRggwMwzFy5kB-AIThodhVHNLxlZYm8fuoWj/pub?gid=59478853&single=true&output=csv';
-        //$this->link = '../data/test2.csv';
-        $this->file = dirname(__DIR__).'/data/albert.json';
-    }
-
-    public static function getInstance()
-    {
-        if(is_null(self::$_instance)) {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
+        $this->link = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS3fug9izpwLOaNJRxRwXJk0v8ywkxM8ccrFqN7Bl1MpPtUAKkmxXHKfn3_3SiAknxhQWkaivXp680a/pub?gid=2104638138&single=true&output=csv';
+        $this->file = dirname(__DIR__).'/data/totem-'.$this->whichOne.'.json';
     }
 
     public function getData()
@@ -51,8 +44,14 @@ class Albert
                     $first = false;
                     continue;
                 }
-                if(isset($item[1]) && strlen($item[1]) === 10 && isset($item[2]) && strlen($item[2]) == 8){
-                    $date = new AlbertDate($item[1], $item[2]);
+                if(isset($item[1]) && strtolower(substr($item[1], 0, 4)) !== $this->whichOne){
+                    continue;
+                }
+                if(isset($item[$this->startKeys + 3])){
+                    $item[$this->startKeys + 3] = trim($item[$this->startKeys + 3]);
+                }
+                if(isset($item[$this->startKeys + 2]) && strlen($item[$this->startKeys + 2]) === 10 && isset($item[$this->startKeys + 3]) && (strlen($item[$this->startKeys + 3]) == 8 ||strlen($item[$this->startKeys + 3]) == 5)){
+                    $date = new AlbertDate($item[$this->startKeys + 2], $item[$this->startKeys + 3]);
                     $item['date'] = $date;
                     $data[$date->format('YmdHis')] = $item;
                 }
@@ -76,21 +75,21 @@ class Albert
                 if(!isset($values[$y][$d])){
                     $values[$y][$d] = [];
                 }
-                $instantTotal = (isset($item[3]) ? intval($item[3]) : 0);
-                $instant = (isset($item[4]) ? intval($item[4]) : 0);
+                $instantTotal = (isset($item[$this->startKeys + 4]) ? intval($item[$this->startKeys + 4]) : 0);
+                $instant = (isset($item[$this->startKeys + 5]) ? intval($item[$this->startKeys + 5]) : 0);
                 $values[$y][$d][] = [
                     'horodateur'    => (isset($item[0]) ? $item[0] : ''),
                     'jour'          => Helper::frenchDayOfTheWeek($date->format('N')),
                     'date'          => $date->format('d-m-Y'),
-                    'dateOrig'      => $item[1],
+                    'dateOrig'      => $item[$this->startKeys + 2],
                     'heure'         => $date->format('H:i:s'),
                     'total'         => $instantTotal,
                     'instant'       => $instant,
-                    'media'         => (isset($item[5]) ? $item[5] : ''),
-                    'comment'       => (isset($item[6]) ? $item[6] : ''),
-                    'date2'         => (isset($item[7]) ? $item[7] : ''),
-                    'xxx'           => (isset($item[8]) ? $item[8] : ''),
-                    'yyy'           => (isset($item[9]) ? $item[9] : ''),
+//                    'media'         => (isset($item[5]) ? $item[5] : ''),
+                    'comment'       => (isset($item[$this->startKeys + 6]) ? $item[$this->startKeys + 6] : ''),
+//                    'date2'         => (isset($item[7]) ? $item[7] : ''),
+//                    'xxx'           => (isset($item[8]) ? $item[8] : ''),
+//                    'yyy'           => (isset($item[9]) ? $item[9] : ''),
                     'totalJour'     => 0,
                     'isFerie'       => Helper::isFerie($date),
                 ];
