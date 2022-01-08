@@ -31,33 +31,38 @@
                         $monthes = $cpt->get('monthes');
                         $currentMonth = (is_array($monthes) && isset($monthes[date('m')]) ? $monthes[date('m')] : null);
                         $monthesRecord = $cpt->get('monthesRecord');
-                        $mr = (is_array($monthesRecord) && isset($monthesRecord[date('m')]) ? $monthesRecord[date('m')] : null);
+                        $mr = (is_array($monthesRecord) && isset($monthesRecord[date('m')]) ? $monthesRecord[date('m')] : ['value' => '-', 'date' => '-']);
                     ?>
                     <tr <?php echo ($foo ? 'class="bg-gray-200"' : '') ?>>
                         <th class="bg-gray-800 text-white"><?php echo $cpt->get('labelHTML') ?></th>
                         <td class="text-center">
-                            <?php echo $cpt->get('lastValue') ?>
+                            <span <?php echo (($cpt->get('lastValue') == $currentMonth['value']||$cpt->get('lastValue') == $mr['value']) ? 'class="font-bold"' : '') ?>>
+                                <?php echo $cpt->get('lastValue') ?>
+                            </span>
                             <div class="text-sm"><em>(<?php echo $cpt->get('lastDate') ?>)</em></div>
                         </td>
                         <td class="text-center">
-                            <?php echo $currentMonth['value'] ?>
+                            <span <?php echo ($currentMonth['value'] == $mr['value'] ? 'class="font-bold"' : '') ?>>
+                                <?php echo $currentMonth['value'] ?>
+                            </span>
                             <div class="text-sm"><em>(<?php echo $currentMonth['date'] ?>)</em></div>
                         </td>
                         <td class="text-center">
-                            <?php echo $cpt->get('recordYear') ?>
+                            <span <?php echo ($cpt->get('recordYear') == $cpt->get('recordTotal') ? 'class="font-bold"' : '') ?>>
+                                <?php echo $cpt->get('recordYear') ?>
+                            </span>
                             <div class="text-sm"><em>(<?php echo $cpt->get('recordYearDate') ?>)</em></div>
                         </td>
                         <td class="text-center <?php echo ($foo ? 'bg-gray-400' : 'bg-gray-300') ?>">
-                            <?php if(!is_null($mr)): ?>
+                            <span <?php echo ($currentMonth['value'] < $mr['value'] ? 'class="font-bold"' : '') ?>>
                                 <?php echo $mr['value'] ?>
-                                <div class="text-sm"><em>(<?php echo $mr['date'] ?>)</em></div>
-                            <?php else: ?>
-                                -
-                                <div class="text-sm"><em>(-)</em></div>
-                            <?php endif ?>
+                            </span>
+                            <div class="text-sm"><em>(<?php echo $mr['date'] ?>)</em></div>
                         </td>
                         <td class="text-center <?php echo ($foo ? 'bg-gray-400' : 'bg-gray-300') ?>">
-                            <?php echo $cpt->get('recordTotal') ?>
+                            <span <?php echo ($cpt->get('recordYear') < $cpt->get('recordTotal') ? 'class="font-bold"' : '') ?>>
+                                <?php echo $cpt->get('recordTotal') ?>
+                            </span>
                             <div class="text-sm"><em>(<?php echo $cpt->get('recordTotalDate') ?>)</em></div>
                         </td>
                     </tr>

@@ -280,7 +280,6 @@ class Compteur
                                 }
                             }
                             if($val['value'] >= $monthesRecord[$month]["value"]){
-                                echo $val['value'].'  '.$val['date'].'<br>';
                                 $monthesRecord[$month] = [
                                     "value" => $val['value'],
                                     'date'  => $val['date'],
