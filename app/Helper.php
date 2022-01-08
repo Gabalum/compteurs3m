@@ -141,4 +141,9 @@ class Helper
         $feries = DaysHoliday::getInstance()->getData();
         return (isset($feries[$date->format('Y')]) && is_array($feries[$date->format('Y')]) && isset($feries[$date->format('Y')][$date->format('Y-m-d')]));
     }
+
+    public static function nf($value)
+    {
+        return number_format($value, 0, ',', '&thinsp;');
+    }
 }

@@ -2,6 +2,7 @@
     namespace App;
     require_once(dirname(__DIR__, 2).'/bootstrap.php');
     $tomtom = (Tomtom::getInstance())->getData();
+    $title = 'Dashboard Compteurs 3M';
     require_once(dirname(__FILE__).'/parts/header.php');
     $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
 ?>
@@ -13,6 +14,7 @@
             <thead class="bg-gray-800 text-white">
                 <tr>
                     <th rowspan="2">Compteur</th>
+                    <th rowspan="2">Total</th>
                     <th rowspan="2">Dernier relevé</th>
                     <th colspan="2">Année <?php echo date('Y') ?></th>
                     <th colspan="2">Total</th>
@@ -36,6 +38,9 @@
                     ?>
                     <tr <?php echo ($foo ? 'class="bg-gray-200"' : '') ?>>
                         <th class="bg-gray-800 text-white"><?php echo $cpt->get('labelHTML') ?></th>
+                        <td class="text-center">
+                            <?php echo Helper::nf($cpt->get('sumTotal')) ?>
+                        </td>
                         <td class="text-center">
                             <span <?php echo (($cpt->get('lastValue') == $currentMonth['value']||$cpt->get('lastValue') == $mr['value']) ? 'class="font-bold"' : '') ?>>
                                 <?php echo $cpt->get('lastValue') ?>

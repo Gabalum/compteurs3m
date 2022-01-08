@@ -31,5 +31,5 @@
     </div>
 </div>
 <div class="mt-2">
-    <canvas id="bar-day-<?php echo uniqid() ?>" class="bar bar-days" data-label="par jour " data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($tmpDays))) ?>' data-values='<?php echo json_encode(array_column($tmpDays, 'avg')) ?>' data-global-avg="<?php echo $compteur->get('avgTotal') ?>" data-max="<?php echo $compteur->get('recordYear') ?>"></canvas>
+    <canvas id="bar-day-<?php echo uniqid() ?>" class="bar bar-days" data-label="par jour " data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($tmpDays))) ?>' data-values='<?php echo json_encode(array_column($tmpDays, 'avg')) ?>' data-global-avg="<?php echo $avg ?>" data-max="<?php echo $max ?>"></canvas>
 </div>

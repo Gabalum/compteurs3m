@@ -14,7 +14,7 @@
     $monthes = $compteur->get('monthes');
     $monthesY = $compteur->get('monthesY');
     $currentMonth = (is_array($monthes) && isset($monthes[date('m')]) ? $monthes[date('m')] : null);
-    $latestColor = ($compteur->get('lastDate') == $yesterday ? 'text-green-200' : 'text-red-200');
+    $latestColor = ($compteur->get('lastDate') == $yesterday ? 'text-green-600' : 'text-red-600');
     $days = $compteur->get('days-by-year');
     $weeksY = $compteur->get('weeksY');
     $stack = $compteur->getSumStack();
@@ -27,6 +27,7 @@
             }
         }
     }
+    $title = $compteur->get('label').' :: Dashboard Compteurs 3M';
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
 <header class="fixed bg-blue-900 text-white w-full flex pl-5 gap-3">
@@ -49,25 +50,31 @@
         <div class="bg-slate-900 text-white p-4 rounded-xl">
             <div class="text-center font-bold">Toutes les données</div>
             <ul>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo $compteur->get('sumTotal') ?> / <?php echo count($compteur->get('dataTotal')) ?> jours</li>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo $compteur->get('avgTotal') ?> / jour</li>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Record :</div> <?php echo $compteur->get('recordTotal') ?> le <?php echo $compteur->get('recordTotalDate') ?></li>
+                <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($cpt->get('sumTotal')) ?> / <?php echo count($compteur->get('dataTotal')) ?> jours</li>
+                <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($compteur->get('avgTotal')) ?> / jour</li>
+                <li class="flex <?php echo ($compteur->get('recordTotal') == $compteur->get('lastValue') ? 'text-green-600' : '') ?>">
+                    <div class="w-1/3 text-right pr-2">Record :</div> <?php echo Helper::nf($compteur->get('recordTotal')) ?> le <?php echo $compteur->get('recordTotalDate') ?>
+                </li>
             </ul>
         </div>
         <div class="bg-slate-900 text-white p-4 rounded-xl">
             <div class="text-center font-bold">Cette année <?php echo date('Y') ?></div>
             <ul>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo $compteur->get('sumCurYear') ?> / <?php echo count($compteur->get('dataCurYear')) ?> jour<?php echo ($compteur->get('dataCurYear') > 1 ? 's' : '') ?></li>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo $compteur->get('avgCurYear') ?> / jour</li>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Record :</div> <?php echo $compteur->get('recordYear') ?> le <?php echo $compteur->get('recordYearDate') ?></li>
+                <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($compteur->get('sumCurYear')) ?> / <?php echo count($compteur->get('dataCurYear')) ?> jour<?php echo ($compteur->get('dataCurYear') > 1 ? 's' : '') ?></li>
+                <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($compteur->get('avgCurYear')) ?> / jour</li>
+                <li class="flex <?php echo ($compteur->get('recordYear') == $compteur->get('lastValue') ? 'text-green-600' : '') ?>">
+                    <div class="w-1/3 text-right pr-2">Record :</div> <?php echo Helper::nf($compteur->get('recordYear')) ?> le <?php echo $compteur->get('recordYearDate') ?>
+                </li>
             </ul>
         </div>
         <div class="bg-slate-900 text-white p-4 rounded-xl">
             <div class="text-center font-bold">Ce mois-ci <?php echo date('Y') ?></div>
             <ul>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo $currentMonth['sum'] ?> / <?php echo $currentMonth['cpt'] ?> jour<?php echo ($currentMonth['cpt'] > 1 ? 's' : '') ?></li>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo $currentMonth['avg'] ?> / jour</li>
-                <li class="flex"><div class="w-1/3 text-right pr-2">Record :</div> <?php echo $currentMonth['value'] ?> le <?php echo $currentMonth['date'] ?></li>
+                <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($currentMonth['sum']) ?> / <?php echo $currentMonth['cpt'] ?> jour<?php echo ($currentMonth['cpt'] > 1 ? 's' : '') ?></li>
+                <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($currentMonth['avg']) ?> / jour</li>
+                <li class="flex <?php echo ($currentMonth['value'] == $compteur->get('lastValue') ? 'text-green-600' : '') ?>">
+                    <div class="w-1/3 text-right pr-2">Record :</div> <?php echo Helper::nf($currentMonth['value']) ?> le <?php echo $currentMonth['date'] ?>
+                </li>
             </ul>
         </div>
     </section>
@@ -107,15 +114,18 @@
         <h3 class="text-2xl text-black">
             Comparaison année en cours
         </h3>
+        <?php $max = max(array_merge(array_column($compteur->get('days'), 'avg'), array_column($days[date('Y')], 'avg'))) ?>
         <div class="flex">
             <div class="w-1/2 pr-3">
                 <div class="font-bold">Toutes les données</div>
                 <?php $tmpDays = $compteur->get('days'); ?>
+                <?php $avg = $compteur->get('avgTotal') ?>
                 <?php require(dirname(__FILE__).'/parts/table-day.php') ?>
             </div>
             <div class="w-1/2 pr-3">
                 <div class="font-bold">En <?php echo date('Y') ?></div>
                 <?php $tmpDays = $days[date('Y')] ?>
+                <?php $avg = $compteur->get('avgCurYear') ?>
                 <?php require(dirname(__FILE__).'/parts/table-day.php') ?>
             </div>
         </div>
