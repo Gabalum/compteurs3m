@@ -255,12 +255,19 @@ class Compteur
         ksort($compteur['dataTotalDates']);
         ksort($compteur['dataTotalValues']);
         $compteur['maxAvgMonthY'] = 0;
+        $monthesRecord = [];
         if(count($compteur['monthesY']) > 0){
             foreach($compteur['monthesY'] as $year=> $monthes){
                 if(count($monthes) > 0){
                     for($month = 1; $month <= 12; $month++){
                         if($month < 10){
                             $month = '0'.$month;
+                        }
+                        if(!isset($monthesRecord[$month])){
+                            $monthesRecord[$month] = [
+                                "value" => 0,
+                                'date'  => null,
+                            ];
                         }
                         if(!isset($monthes[$month])){
                             $compteur['monthesY'][$year][$month] = $emptyArray;
@@ -272,12 +279,20 @@ class Compteur
                                     $compteur['maxAvgMonthY'] = $compteur['monthesY'][$year][$month]['avg'];
                                 }
                             }
+                            if($val['value'] >= $monthesRecord[$month]["value"]){
+                                echo $val['value'].'  '.$val['date'].'<br>';
+                                $monthesRecord[$month] = [
+                                    "value" => $val['value'],
+                                    'date'  => $val['date'],
+                                ];
+                            }
                         }
                     }
                     ksort($compteur['monthesY'][$year]);
                 }
             }
         }
+        $compteur['monthesRecord'] = $monthesRecord;
         if(isset($compteur['monthesY'][_YEAR_])){
             $compteur['monthes'] = $compteur['monthesY'][_YEAR_];
         }
