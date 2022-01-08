@@ -22,7 +22,10 @@
 ?>
 <header class="fixed bg-blue-900 text-white w-full flex pl-5 gap-3">
     <div class="font-bold pb-2"><?php echo $compteur->get('labelHTML') ?></div>
-    <div class="">| ID : <?php echo $compteur->get('id') ?> | <span class="<?php echo $latestColor ?>">Dernier relevé : <b><?php echo $compteur->get('lastValue') ?></b> le <?php echo $compteur->get('lastDate') ?></span></div>
+    <div class="">
+        <span class="hidden lg:inline">| ID : <?php echo $compteur->get('id') ?></span>
+        | <span class="<?php echo $latestColor ?>">Dernier relevé : <b><?php echo $compteur->get('lastValue') ?></b> le <?php echo $compteur->get('lastDate') ?></span>
+    </div>
     <div class="">| Section :
         <a href="#a-summary">Records</a>&nbsp;•&nbsp;
         <a href="#a-jour">Par jour</a>&nbsp;•&nbsp;
@@ -210,7 +213,7 @@
                                     $class = '';
                                 }
                             ?>
-                            <li class="flex border border-dotted <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val ? 'bg-green-500' : '') ?> <?php echo ($compteur->get('recordYear') == $val ? 'bg-blue-500' : '') ?>">
+                            <li class="flex border hover:bg-gray-200 border-dotted <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val ? 'bg-green-500' : '') ?> <?php echo ($compteur->get('recordYear') == $val ? 'bg-blue-500' : '') ?>">
                                 <div class="font-bold w-1/3"><?php echo $date ?> : </div><div class="pl-1"><?php echo $val ?></div>
                             </li>
                         <?php endforeach ?>

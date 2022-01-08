@@ -3,6 +3,7 @@
     require_once(dirname(__DIR__, 2).'/bootstrap.php');
     $tomtom = (Tomtom::getInstance())->getData();
     require_once(dirname(__FILE__).'/parts/header.php');
+    $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
 ?>
 <main class="w-full flex-grow p-6 pb-20">
     <h1 class="text-3xl text-black pb-6 text-center">Dashboard des compteurs vélo 3M</h1>
@@ -39,7 +40,9 @@
                             <span <?php echo (($cpt->get('lastValue') == $currentMonth['value']||$cpt->get('lastValue') == $mr['value']) ? 'class="font-bold"' : '') ?>>
                                 <?php echo $cpt->get('lastValue') ?>
                             </span>
-                            <div class="text-sm"><em>(<?php echo $cpt->get('lastDate') ?>)</em></div>
+                            <div class="text-sm <?php echo ($yesterday !== $cpt->get('lastDate') ? 'text-red-500' : '') ?>">
+                                <em>(<?php echo $cpt->get('lastDate') ?>)</em>
+                            </div>
                         </td>
                         <td class="text-center">
                             <span <?php echo ($currentMonth['value'] == $mr['value'] ? 'class="font-bold"' : '') ?>>
