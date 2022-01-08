@@ -18,6 +18,15 @@
     $days = $compteur->get('days-by-year');
     $weeksY = $compteur->get('weeksY');
     $stack = $compteur->getSumStack();
+    $maxDay = [];
+    for($dow = 1 ; $dow <= 7 ; $dow++) {
+        $maxDay[$dow] = 0;
+        for($y = 2020 ; $y <= date('Y') ; $y++) {
+            if($days[$y][$dow]['value'] > $maxDay[$dow]) {
+                $maxDay[$dow] = $days[$y][$dow]['value'];
+            }
+        }
+    }
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
 <header class="fixed bg-blue-900 text-white w-full flex pl-5 gap-3">
@@ -85,7 +94,9 @@
                         <div class="table-cell text-left p-1 font-bold"><?php echo Helper::frenchDayOfTheWeek($dow) ?></div>
                         <?php for($y = 2020 ; $y <= date('Y') ; $y++): ?>
                             <div class="table-cell">
-                                <?php echo $days[$y][$dow]['value'] ?>
+                                <span <?php echo ($days[$y][$dow]['value'] === $maxDay[$dow] ? 'class="font-bold"' : '') ?>>
+                                    <?php echo $days[$y][$dow]['value'] ?>
+                                </span>
                                 <div class="text-sm"><em>(<?php echo $days[$y][$dow]['date'] ?>)</em></div>
                             </div>
                         <?php endfor ?>
