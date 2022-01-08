@@ -73,7 +73,7 @@ class Compteur
         if($this->data == null){
             if(!file_exists($this->file)){
                 $this->retrieveData();
-            }elseif(time() - filemtime($this->file) > 900){ // toutes les 15 minutes
+            }elseif((date('dmY', filemtime($this->file)) !== date('dmY') || date('Hi', filemtime($this->file)) < 1000) && time() - filemtime($this->file) > 900){ // Si le fichier date de la veille ou d'avant 10, on regarde toutes les 15 minutes
                 $this->retrieveData();
             }
             $this->data = json_decode(file_get_contents($this->file), true);
