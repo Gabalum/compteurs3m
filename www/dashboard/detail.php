@@ -39,14 +39,21 @@
     }
     $vals = $compteur->get('dataTotalValues');
     $items = [];
+    $curMonthVals = [];
     foreach($vals as $k => $v){
         if((int)substr($k, 0, 4) === (_YEAR_-1)){
             $items[$k] = $v;
         }
+        if((int)substr($k, 0, 4) === _YEAR_ && (int)substr($k, 4, 2) === (int)date('m')) {
+            $curMonthVals[] = $v;
+        }
+
     }
+    sort($curMonthVals);
+    $median = $curMonthVals[floor(count($curMonthVals) / 2)];
     ksort($items);
     $cumulPreviousYearRaw = array_sum(array_slice($items, 0, date('z')));
-    $maxP = max($cumulPreviousYear, $compteur->get('sumCurYear')) * 3;
+    $maxP = max($cumulPreviousYearRaw, $compteur->get('sumCurYear')) * 3;
     $cumulPreviousYear = intval($cumulPreviousYearRaw * 100 / $maxP);
     $cumulCurrentYear = intval($compteur->get('sumCurYear') * 100 / $maxP);
     $progress = min(100, intval($compteur->get('sumCurYear') * 100 / $compteur->get('sumByYear')[(_YEAR_-1)]));
@@ -104,7 +111,7 @@
                 <ul>
                     <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($currentMonth['sum']) ?> / <?php echo $currentMonth['cpt'] ?> jour<?php echo ($currentMonth['cpt'] > 1 ? 's' : '') ?></li>
                     <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($currentMonth['avg']) ?> / jour</li>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Médiane :</div> <?php echo Helper::nf($currentMonth['median']) ?> / jour</li>
+                    <li class="flex"><div class="w-1/3 text-right pr-2">Médiane :</div> <?php echo Helper::nf($median) ?> / jour</li>
                     <li class="flex <?php echo ($currentMonth['value'] == $compteur->get('lastValue') ? 'text-green-600' : '') ?>">
                         <div class="w-1/3 text-right pr-2">Record :</div> <?php echo Helper::nf($currentMonth['value']) ?> le <?php echo $currentMonth['date'] ?>
                     </li>

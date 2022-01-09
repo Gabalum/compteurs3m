@@ -331,7 +331,6 @@ class Compteur
                                 if($compteur['monthesY'][$year][$month]['avg'] > $compteur['maxAvgMonthY']){
                                     $compteur['maxAvgMonthY'] = $compteur['monthesY'][$year][$month]['avg'];
                                 }
-                                $compteur['monthesY'][$year][$month]['median'] = $this->getMedian($compteur['monthesY'][$year][$month]);
                             }
                             if($val['value'] >= $monthesRecord[$month]["value"]){
                                 $monthesRecord[$month] = [
