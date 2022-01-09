@@ -27,6 +27,16 @@
             }
         }
     }
+    $worstByYear = [];
+    foreach($monthesY as $y => $mm){
+        $vals = array_column($mm, 'worst');
+        foreach($vals as $k => $v){
+            if(is_null($v)){
+                unset($vals[$k]);
+            }
+        }
+        $worstByYear[$y] = min($vals);
+    }
     $title = $compteur->get('label').' :: Dashboard Compteurs 3M';
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
@@ -37,7 +47,7 @@
         | <span class="<?php echo $latestColor ?>">Dernier relevé : <b><?php echo $compteur->get('lastValue') ?></b> le <?php echo $compteur->get('lastDate') ?></span>
     </div>
     <div class="">| Section :
-        <a href="#a-summary">Records</a>&nbsp;•&nbsp;
+        <a href="#a-summary">Résumé</a>&nbsp;•&nbsp;
         <a href="#a-jour">Par jour</a>&nbsp;•&nbsp;
         <a href="#a-semaine">Par semaine</a>&nbsp;•&nbsp;
         <a href="#a-mois">Par mois</a>&nbsp;•&nbsp;
@@ -249,21 +259,26 @@
                     <ul class="list-group">
                         <?php foreach($data as $date => $val): ?>
                             <?php
+                                $y = substr($date, -4);
                                 if($val['value'] > $max){
                                     $class = 'bg-green-300';
                                     $max = $val['value'];
-                                }elseif(substr($date, -4) == _YEAR_ && $val['value'] > $maxY){
+                                }elseif($y == _YEAR_ && $val['value'] > $maxY){
                                     if($compteur->get('recordYear') == $val['value']){
                                         $class = 'bg-blue-500';
                                     }else{
                                         $class = 'bg-blue-300';
                                     }
                                     $maxY = $val['value'];
+                                }elseif($compteur->get('worstTotal') == $val['value']){
+                                    $class = 'bg-orange-500';
+                                }elseif($worstByYear[$y] == $val['value']){
+                                    $class = 'bg-orange-300';
                                 }else{
                                     $class = '';
                                 }
                             ?>
-                            <li class="flex border hover:bg-gray-200 border-dotted <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val['value'] ? 'bg-green-500' : '') ?> <?php echo ($compteur->get('recordYear') == $val['value'] ? 'bg-blue-500' : '') ?>">
+                            <li class="flex border hover:bg-gray-200 border-dotted <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val['value'] ? 'bg-green-500' : '') ?>">
                                 <div class="w-1/6"><?php echo Helper::frenchDayOfTheWeek($val['day'], true) ?></div>
                                 <div class="font-bold w-2/6"><?php echo $date ?></div>
                                 <div class="w-2/6"><?php echo $val['value'] ?></div>
@@ -272,11 +287,13 @@
                         <?php endforeach ?>
                     </ul>
                 </div>
-                <ul class="">
-                    <li><button class="rounded-xl w-5 bg-green-500">&nbsp;</button> Record absolu</li>
-                    <li><button class="rounded-xl w-5 bg-green-300">&nbsp;</button> Record absolu jusque là</li>
-                    <li><button class="rounded-xl w-5 bg-blue-500">&nbsp;</button> Record en <?php echo _YEAR_ ?></li>
-                    <li><button class="rounded-xl w-5 bg-blue-300">&nbsp;</button> Record en <?php echo _YEAR_ ?> jusque là</li>
+                <ul class="pt-2">
+                    <li class="pb-1"><button class="rounded-xl w-5 bg-green-500">&nbsp;</button> Record absolu</li>
+                    <li class="pb-1"><button class="rounded-xl w-5 bg-green-300">&nbsp;</button> Record absolu jusque là</li>
+                    <li class="pb-1"><button class="rounded-xl w-5 bg-blue-500">&nbsp;</button> Record en <?php echo _YEAR_ ?></li>
+                    <li class="pb-1"><button class="rounded-xl w-5 bg-blue-300">&nbsp;</button> Record en <?php echo _YEAR_ ?> jusque là</li>
+                    <li class="pb-1"><button class="rounded-xl w-5 bg-orange-500">&nbsp;</button> Pire scrore absolu</li>
+                    <li class="pb-1"><button class="rounded-xl w-5 bg-orange-300">&nbsp;</button> Pire score de l'année</li>
                 </ul>
             </div>
             <div class="w-full md:w-1/2">
