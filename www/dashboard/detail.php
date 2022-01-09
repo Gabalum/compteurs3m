@@ -100,7 +100,7 @@
                 </ul>
             </div>
             <div class="bg-slate-900 text-white p-4 rounded-xl">
-                <div class="text-center font-bold">Ce mois-ci <?php echo date('Y') ?></div>
+                <div class="text-center font-bold">Ce mois-ci <?php echo Helper::frenchMonth(date('m'), false).' '.date('Y') ?></div>
                 <ul>
                     <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($currentMonth['sum']) ?> / <?php echo $currentMonth['cpt'] ?> jour<?php echo ($currentMonth['cpt'] > 1 ? 's' : '') ?></li>
                     <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($currentMonth['avg']) ?> / jour</li>
