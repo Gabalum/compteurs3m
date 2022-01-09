@@ -138,6 +138,7 @@ class Compteur
             'days-by-year'      => [],
             'weeks'             => [],
             'medianByYear'      => [],
+            'sumByYear'         => [],
         ];
         $daysTotal = 0;
         $daysCurYear = 0;
@@ -367,6 +368,7 @@ class Compteur
                     ksort($compteur['days-by-year'][$year]);
                     // -- calcul de la médiane
                     $compteur['medianByYear'][$year] = $this->getMedian($compteur['days-by-year'][$year]);
+                    $compteur['sumByYear'][$year] = array_sum(array_column($compteur['days-by-year'][$year], 'sum'));
                 }
             }
         }

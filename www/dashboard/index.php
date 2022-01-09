@@ -14,7 +14,6 @@
             <thead class="bg-gray-800 text-white">
                 <tr>
                     <th rowspan="2">Compteur</th>
-                    <th rowspan="2">Total</th>
                     <th rowspan="2">Dernier relevé</th>
                     <th colspan="2">Année <?php echo date('Y') ?></th>
                     <th colspan="2">Total</th>
@@ -38,9 +37,6 @@
                     ?>
                     <tr <?php echo ($foo ? 'class="bg-gray-200"' : '') ?>>
                         <th class="bg-gray-800 text-white"><?php echo $cpt->get('labelHTML') ?></th>
-                        <td class="text-center">
-                            <?php echo Helper::nf($cpt->get('sumTotal')) ?>
-                        </td>
                         <td class="text-center">
                             <span <?php echo (($cpt->get('lastValue') == $currentMonth['value']||$cpt->get('lastValue') == $mr['value']) ? 'class="font-bold"' : '') ?>>
                                 <?php echo $cpt->get('lastValue') ?>
@@ -73,6 +69,37 @@
                             </span>
                             <div class="text-sm"><em>(<?php echo $cpt->get('recordTotalDate') ?>)</em></div>
                         </td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </section>
+    <section id="totaux" class="pt-10">
+        <h2 class="text-2xl text-black">Totaux par années</h2>
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th>Compteur</th>
+                    <?php for($i = 2020 ; $i <= _YEAR_ ; $i++): ?>
+                        <th><?php echo $i ?></th>
+                    <?php endfor ?>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700">
+                <?php $foo = true ?>
+                <?php foreach($compteurs as $i => $cpt): ?>
+                    <?php
+                        $foo = !$foo;
+                    ?>
+                    <tr <?php echo ($foo ? 'class="bg-gray-200"' : '') ?>>
+                        <th class="bg-gray-800 text-white text-left"><?php echo $cpt->get('labelHTML') ?></th>
+                        <?php for($i = 2020 ; $i <= _YEAR_ ; $i++): ?>
+                            <td class="text-right pr-3 <?php if($i === _YEAR_): ?><?php echo ($foo ? 'bg-gray-400' : 'bg-gray-300') ?><?php endif ?>">
+                                <?php echo Helper::nf($cpt->get('sumByYear')[$i]) ?>
+                            </td>
+                        <?php endfor ?>
+                        <th class="bg-gray-800 text-white text-right pr-3"><?php echo Helper::nf($cpt->get('sumTotal')) ?></th>
                     </tr>
                 <?php endforeach ?>
             </tbody>
