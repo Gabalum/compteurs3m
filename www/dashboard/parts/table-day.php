@@ -10,6 +10,17 @@
     </div>
     <div class="table-row-group">
         <?php foreach($tmpDays as $dow => $values): ?>
+            <?php
+                $css = '';
+                if($isCurrentY){
+                    if($tmpDays[$dow]['value'] === $maxDay[$dow]){
+                        $css .= ' font-bold';
+                    }
+                    if($tmpDays[$dow]['value'] === $compteur->get('lastValue')){
+                        $css .= 'text-green-600';
+                    }
+                }
+            ?>
             <div class="table-row flex text-center <?php echo ($dow%2==0 ? 'bg-gray-200' : '') ?>">
                 <div class="table-cell p-1 font-bold text-left">
                     <?php echo Helper::frenchDayOfTheWeek($dow) ?>
@@ -23,7 +34,7 @@
                     <div class="text-sm">&nbsp;</div>
                 </div>
                 <div class="table-cell ">
-                    <?php echo $values['value'] ?>
+                    <span class="<?php echo $css ?>"><?php echo $values['value'] ?></span>
                     <div class="text-sm"><em>(<?php echo $values['date'] ?>)</em></div>
                 </div>
             </div>

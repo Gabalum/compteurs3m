@@ -80,14 +80,14 @@
     </section>
     <section id="vs" class="pt-10">
         <h2 class="text-2xl text-black">Semaine vs week-end</h2>
-        <div class="flex">
-            <div class="w-1/2">
+        <div class="flex flex-col md:flex-row">
+            <div class="w-full md:w-1/2">
                 <b>Toutes les données</b>
                 <div>
                     <canvas id="pie-day-general" class="pie pie-days" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values((Compteurs::getInstance())->getWeekWeekend())) ?>'></canvas>
                 </div>
             </div>
-            <div class="w-1/2">
+            <div class="w-full md:w-1/2">
                 <b>En <?php echo date('Y') ?></b>
                 <div>
                     <canvas id="pie-day2-general" class="pie pie-days2" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values((Compteurs::getInstance())->getWeekWeekend(date('Y')))) ?>'></canvas>

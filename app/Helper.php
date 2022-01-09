@@ -109,18 +109,30 @@ class Helper
         return self::frenchMonth($num, false);
     }
 
-    public static function frenchDayOfTheWeek($dow)
+    public static function frenchDayOfTheWeek($dow, $mini = false)
     {
         $retour = '';
-        $days = [
-            1 => 'lundi',
-            2 => 'mardi',
-            3 => 'mercredi',
-            4 => 'jeudi',
-            5 => 'vendredi',
-            6 => 'samedi',
-            7 => 'dimanche',
-        ];
+        if($mini){
+            $days = [
+                1 => 'lun',
+                2 => 'mar',
+                3 => 'mer',
+                4 => 'jeu',
+                5 => 'ven',
+                6 => 'sam',
+                7 => 'dim',
+            ];
+        }else{
+            $days = [
+                1 => 'lundi',
+                2 => 'mardi',
+                3 => 'mercredi',
+                4 => 'jeudi',
+                5 => 'vendredi',
+                6 => 'samedi',
+                7 => 'dimanche',
+            ];
+        }
         if(isset($days[$dow])){
             $retour = $days[$dow];
         }

@@ -81,14 +81,27 @@ class Compteur
         return $this->data;
     }
 
+    private function getMedian($array)
+    {
+        sort($array);
+        $result = $array[floor(count($array) / 2)];
+        if(is_array($result) && isset($result['value'])){
+            $result = $result['value'];
+        }
+        return $result;
+    }
+
     private function retrieveData()
     {
         $emptyArray = [
-            'value'    => 0,
+            'value'     => 0,
             'date'      => null,
             'cpt'       => 0,
             'sum'       => 0,
             'avg'       => 0,
+            'median'    => 0,
+            'worst'     => null,
+            'worstDate' => null,
         ];
         $compteur = [
             'labelHTML'         => $this->getName(),
@@ -103,14 +116,20 @@ class Compteur
             'dataTotal'         => [],
             'dataTotalDates'    => [],
             'dataTotalValues'   => [],
+            'dataTotalWithCplt' => [],
             'sumCurYear'        => 0,
             'avgCurYear'        => 0,
             'sumTotal'          => 0,
             'avgTotal'          => 0,
+            'medianTotal'       => 0,
             'recordYear'        => 0,
             'recordTotal'       => 0,
             'recordYearDate'    => '',
             'recordTotalDate'   => '',
+            'worstYear'         => null,
+            'worstTotal'        => null,
+            'worstYearDate'     => '',
+            'worstTotalDate'    => '',
             'lastValue'         => 0,
             'lastDate'          => '',
             'firstDate'         => null,
@@ -118,6 +137,7 @@ class Compteur
             'days'              => [],
             'days-by-year'      => [],
             'weeks'             => [],
+            'medianByYear'      => [],
         ];
         $daysTotal = 0;
         $daysCurYear = 0;
@@ -173,6 +193,10 @@ class Compteur
                             $compteur['recordYear'] = $cpt;
                             $compteur['recordYearDate'] = $fDate;
                         }
+                        if(is_null($compteur['worstYear']) || $cpt < $compteur['worstYear']){
+                            $compteur['worstYear'] = $cpt;
+                            $compteur['worstYearDate'] = $fDate;
+                        }
                         $compteur['sumCurYear'] += $cpt;
                         $daysCurYear++;
                         $compteur['dataCurYear'][$tsDate] = [
@@ -193,6 +217,10 @@ class Compteur
                         $compteur['monthesY'][$year][$month]['value'] = $cpt;
                         $compteur['monthesY'][$year][$month]['date'] = $fDate;
                     }
+                    if(is_null($compteur['monthesY'][$year][$month]['worst']) || $cpt < $compteur['monthesY'][$year][$month]['worst']){
+                        $compteur['monthesY'][$year][$month]['worst'] = $cpt;
+                        $compteur['monthesY'][$year][$month]['worstDate'] = $fDate;
+                    }
                     $compteur['monthesY'][$year][$month]['cpt']++;
                     $compteur['monthesY'][$year][$month]['sum'] += $cpt;
                     // --- gestion des semaines
@@ -205,6 +233,10 @@ class Compteur
                     if($cpt > $compteur['weeksY'][$year][$week]['value']){
                         $compteur['weeksY'][$year][$week]['value'] = $cpt;
                         $compteur['weeksY'][$year][$week]['date'] = $fDate;
+                    }
+                    if(is_null($compteur['weeksY'][$year][$week]['worst']) || $cpt < $compteur['weeksY'][$year][$week]['worst']){
+                        $compteur['weeksY'][$year][$week]['worst'] = $cpt;
+                        $compteur['weeksY'][$year][$week]['worstDate'] = $fDate;
                     }
                     $compteur['weeksY'][$year][$week]['cpt']++;
                     $compteur['weeksY'][$year][$week]['sum'] += $cpt;
@@ -219,6 +251,10 @@ class Compteur
                         $compteur['days-by-year'][$year][$dayOfTheWeek]['value'] = $cpt;
                         $compteur['days-by-year'][$year][$dayOfTheWeek]['date'] = $fDate;
                     }
+                    if(is_null($compteur['days-by-year'][$year][$dayOfTheWeek]['worst']) || $cpt < $compteur['days-by-year'][$year][$dayOfTheWeek]['worst']){
+                        $compteur['days-by-year'][$year][$dayOfTheWeek]['worst'] = $cpt;
+                        $compteur['days-by-year'][$year][$dayOfTheWeek]['worstDate'] = $fDate;
+                    }
                     $compteur['days-by-year'][$year][$dayOfTheWeek]['cpt']++;
                     $compteur['days-by-year'][$year][$dayOfTheWeek]['sum'] += $cpt;
                     // --- gestion du jour de la semaine
@@ -229,6 +265,10 @@ class Compteur
                         $compteur['days'][$dayOfTheWeek]['value'] = $cpt;
                         $compteur['days'][$dayOfTheWeek]['date'] = $fDate;
                     }
+                    if(is_null($compteur['days'][$dayOfTheWeek]['worst']) || $cpt < $compteur['days'][$dayOfTheWeek]['worst']){
+                        $compteur['days'][$dayOfTheWeek]['worst'] = $cpt;
+                        $compteur['days'][$dayOfTheWeek]['worstDate'] = $fDate;
+                    }
                     $compteur['days'][$dayOfTheWeek]['cpt']++;
                     $compteur['days'][$dayOfTheWeek]['sum'] += $cpt;
                     // --- gestion depuis le début
@@ -236,11 +276,22 @@ class Compteur
                         $compteur['recordTotal'] = $cpt;
                         $compteur['recordTotalDate'] = $fDate;
                     }
+                    if(is_null($compteur['worstTotal']) || $cpt < $compteur['worstTotal']){
+                        $compteur['worstTotal'] = $cpt;
+                        $compteur['worstTotalDate'] = $fDate;
+                    }
                     $compteur['sumTotal'] += $cpt;
                     $daysTotal++;
                     $compteur['dataTotal'][$fDate] = $cpt;
                     $compteur['dataTotalDates'][$date->format('Ymd')] = $fDate;
                     $compteur['dataTotalValues'][$date->format('Ymd')] = $cpt;
+                    $compteur['dataTotalWithCplt'][$fDate] = [
+                        'date'      => $fDate,
+                        'day'       => $dayOfTheWeek,
+                        'isFerie'   => Helper::isFerie($date),
+                        'value'     => $cpt,
+                    ];
+
                 }
                 $compteur['lastDate'] = $fDate;
                 $compteur['lastValue'] = $cpt;
@@ -250,6 +301,7 @@ class Compteur
                 }
                 $compteur['avgCurYear']  = ($daysCurYear > 0 ? intval($compteur['sumCurYear'] / $daysCurYear) : 0);
                 $compteur['avgTotal']  = ($daysTotal > 0 ? intval($compteur['sumTotal'] / $daysTotal) : 0);
+                $compteur['medianTotal'] = $this->getMedian($compteur['dataTotalValues']);
             }
         }
         ksort($compteur['dataTotalDates']);
@@ -278,6 +330,7 @@ class Compteur
                                 if($compteur['monthesY'][$year][$month]['avg'] > $compteur['maxAvgMonthY']){
                                     $compteur['maxAvgMonthY'] = $compteur['monthesY'][$year][$month]['avg'];
                                 }
+                                $compteur['monthesY'][$year][$month]['median'] = $this->getMedian($compteur['monthesY'][$year][$month]);
                             }
                             if($val['value'] >= $monthesRecord[$month]["value"]){
                                 $monthesRecord[$month] = [
@@ -312,6 +365,8 @@ class Compteur
                         }
                     }
                     ksort($compteur['days-by-year'][$year]);
+                    // -- calcul de la médiane
+                    $compteur['medianByYear'][$year] = $this->getMedian($compteur['days-by-year'][$year]);
                 }
             }
         }
