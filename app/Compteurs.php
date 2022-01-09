@@ -82,6 +82,92 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        /*
+        ''   => [
+            'label'     => 'Père Soulas 1',
+            'address'   => '',
+            'color'     => '#112233',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        ''   => [
+            'label'     => 'Père Soulas 2',
+            'address'   => '',
+            'color'     => '#223311',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        ''   => [
+            'label'     => 'Figuerolles',
+            'address'   => '',
+            'color'     => '#AA77DD',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        ''   => [
+            'label'     => 'Montferrier 1',
+            'address'   => '',
+            'color'     => '#996633',
+            'totem'     => false,
+            'commune'   => 'Montferrier-sur-Lez',
+        ],
+        ''   => [
+            'label'     => 'Montferrier 2',
+            'address'   => '',
+            'color'     => '#996633',
+            'totem'     => false,
+            'commune'   => 'Montferrier-sur-Lez',
+        ],
+        ''   => [
+            'label'     => 'Pavelet',
+            'address'   => '',
+            'color'     => '#DD77BB',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        ''   => [
+            'label'     => 'Jacou',
+            'address'   => '',
+            'color'     => '#123456',
+            'totem'     => false,
+            'commune'   => 'Jacou',
+        ],
+        ''   => [
+            'label'     => 'Einstein',
+            'address'   => '',
+            'color'     => '#998888',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        ''   => [
+            'label'     => 'Arnel',
+            'address'   => '',
+            'color'     => '#aaddbb',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        ''   => [
+            'label'     => 'Mas de Gau',
+            'address'   => '',
+            'color'     => '#bbaaaa',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        ''   => [
+            'label'     => 'Lèques',
+            'address'   => '',
+            'color'     => '#99aaff',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        ''   => [
+            'label'     => 'Clapiers Simone Veil',
+            'address'   => '',
+            'color'     => '#00ffff',
+            'totem'     => true,
+            'commune'   => 'Clapiers',
+        ],
+        /* */
     ];
 
     private function __construct(){}
