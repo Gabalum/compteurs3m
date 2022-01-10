@@ -378,7 +378,7 @@ class Compteur
                     if($week < 10){
                         $week = '0'.$week;
                     }
-                    if($week == 53 && $year == date('Y')){
+                    if(($week == 53 || $week == 52) && $year == date('Y')){
                         $compteur['weeksY'][$year][$week] = $emptyArray;
                     }
                     if(!isset($compteur['weeksY'][$year][$week])){

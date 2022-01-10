@@ -21,7 +21,7 @@
     $maxDay = [];
     for($dow = 1 ; $dow <= 7 ; $dow++) {
         $maxDay[$dow] = 0;
-        for($y = 2020 ; $y <= date('Y') ; $y++) {
+        for($y = $startYear ; $y <= date('Y') ; $y++) {
             if($days[$y][$dow]['value'] > $maxDay[$dow]) {
                 $maxDay[$dow] = $days[$y][$dow]['value'];
             }
@@ -60,6 +60,7 @@
         $progress = min(100, intval($compteur->get('sumCurYear') * 100 / $compteur->get('sumByYear')[(_YEAR_-1)]));
     }
     $title = $compteur->get('label').' :: Dashboard Compteurs 3M';
+    $startYear = substr($compteur->get('firstDate'),-4);
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
 <header class="fixed bg-blue-900 text-white w-full flex pl-5 gap-3">
@@ -161,7 +162,7 @@
             <div class="table-header-group bg-slate-900 text-white">
                 <div class="table-row flex">
                     <div class="table-cell w-1/5 text-center pt-2 pb-2">Jour</div>
-                    <?php for($y = 2020 ; $y <= date('Y') ; $y++): ?>
+                    <?php for($y = $startYear ; $y <= date('Y') ; $y++): ?>
                         <div class="table-cell text-center"><?php echo $y ?></div>
                     <?php endfor ?>
                 </div>
@@ -170,7 +171,7 @@
                 <?php for($dow = 1 ; $dow <= 7 ; $dow++): ?>
                     <div class="table-row text-center <?php echo ($dow%2==0 ? 'bg-gray-200' : '') ?>">
                         <div class="table-cell text-left p-1 font-bold"><?php echo Helper::frenchDayOfTheWeek($dow) ?></div>
-                        <?php for($y = 2020 ; $y <= date('Y') ; $y++): ?>
+                        <?php for($y = $startYear ; $y <= date('Y') ; $y++): ?>
                             <?php
                                 $css = '';
                                 if($days[$y][$dow]['value'] === $maxDay[$dow]){
