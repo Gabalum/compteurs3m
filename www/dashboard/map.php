@@ -11,7 +11,7 @@
         <div id="legend" class="w-1/4">
             <?php foreach($compteurs as $compteur): ?>
                 <div class="flex">
-                    <div class="compteur" data-place="<?php echo $compteur->get('slug') ?>" data-lat="<?php echo $compteur->get('lat') ?>" data-lng="<?php echo $compteur->get('lng') ?>" data-color="<?php echo $compteur->get('color') ?>">
+                    <div class="compteur" data-name="<?php echo $compteur->get('labelHTML') ?>" data-latest="<?php echo $compteur->get('lastValue') ?>" data-place="<?php echo $compteur->get('slug') ?>" data-lat="<?php echo $compteur->get('lat') ?>" data-lng="<?php echo $compteur->get('lng') ?>" data-color="<?php echo $compteur->get('color') ?>">
                         <span class="inline-block w-3 h-3 mr-1 rounded-full" style="background:<?php echo $compteur->get('color') ?>"></span>
                         <a href="javascript:void(0)" class="text-black-900 hover:text-blue-700" id="<?php echo $compteur->get('slug') ?>">
                             <?php echo $compteur->get('labelHTML') ?>

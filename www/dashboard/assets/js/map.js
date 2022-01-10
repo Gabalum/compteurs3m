@@ -19,9 +19,16 @@ if($('#map-wrapper').length > 0){
                 iconAnchor: [18, 35],
             });
             markers[self.data('place')] = L.marker([self.data('lat'), self.data('lng')], {icon: icon});
+            markers[self.data('place')].bindTooltip(self.data('name')+' : '+self.data('latest'), {
+                direction: 'right'
+            });
             markers[self.data('place')].addTo(map);
             self.find('a').click(function(){
                 map.setView(markers[$(this).attr('id')]._latlng, 18);
+                for (const [key, value] of Object.entries(markers)) {
+                    value.closeTooltip();
+                }
+                markers[self.data('place')].openTooltip();
             });
         });
     });
