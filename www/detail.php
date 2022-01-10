@@ -56,6 +56,14 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
                 <a class="btn btn-outline-success" href="<?php echo _BASE_URL_ ?>communautaire/albert-1er">
                     Les données communautaires
                 </a>
+            <?php elseif($slug == 'clapiers-totem-simone-veil'): ?>
+                <a class="btn btn-outline-success" href="<?php echo _BASE_URL_ ?>communautaire/simone-veil">
+                    Les données communautaires
+                </a>
+            <?php elseif($slug == 'leques-totem-laverune'): ?>
+                <a class="btn btn-outline-success" href="<?php echo _BASE_URL_ ?>communautaire/laverune">
+                    Les données communautaires
+                </a>
             <?php endif ?>
             <a class="btn btn-outline-info" href="<?php echo _BASE_URL_ ?>">
                 Tous les compteurs

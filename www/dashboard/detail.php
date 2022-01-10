@@ -41,7 +41,7 @@
     $items = [];
     $curMonthVals = [];
     foreach($vals as $k => $v){
-        if((int)substr($k, 0, 4) === (_YEAR_-1)){
+        if((int)substr($k, 0, 4) === (_YEAR_-1) && (int)substr($k, 4, 2) <= (int)date('m')){
             $items[$k] = $v;
         }
         if((int)substr($k, 0, 4) === _YEAR_ && (int)substr($k, 4, 2) === (int)date('m')) {
@@ -52,11 +52,13 @@
     sort($curMonthVals);
     $median = $curMonthVals[floor(count($curMonthVals) / 2)];
     ksort($items);
-    $cumulPreviousYearRaw = array_sum(array_slice($items, 0, date('z')));
-    $maxP = max($cumulPreviousYearRaw, $compteur->get('sumCurYear')) * 3;
-    $cumulPreviousYear = intval($cumulPreviousYearRaw * 100 / $maxP);
-    $cumulCurrentYear = intval($compteur->get('sumCurYear') * 100 / $maxP);
-    $progress = min(100, intval($compteur->get('sumCurYear') * 100 / $compteur->get('sumByYear')[(_YEAR_-1)]));
+    if(count($items) > 0){
+        $cumulPreviousYearRaw = array_sum(array_slice($items, 0, date('z')));
+        $maxP = max($cumulPreviousYearRaw, $compteur->get('sumCurYear')) * 3;
+        $cumulPreviousYear = intval($cumulPreviousYearRaw * 100 / $maxP);
+        $cumulCurrentYear = intval($compteur->get('sumCurYear') * 100 / $maxP);
+        $progress = min(100, intval($compteur->get('sumCurYear') * 100 / $compteur->get('sumByYear')[(_YEAR_-1)]));
+    }
     $title = $compteur->get('label').' :: Dashboard Compteurs 3M';
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
@@ -121,29 +123,31 @@
                 </ul>
             </div>
         </div>
-        <div class="flex justify-between mb-1">
-            <span class="text-base font-medium text-blue-700 dark:text-white">Avancement par rapport à l'an dernier</span>
-            <span class="text-sm font-medium text-blue-700 dark:text-white"><?php echo $progress ?>%</span>
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
-          <div class="bg-blue-600 h-3 rounded-full" style="width: <?php echo $progress ?>%"></div>
-        </div>
-        <div class="flex justify-between mt-2 mb-1">
-            <span class="text-base font-medium text-blue-700 dark:text-white">Progression par rapport à l'an dernier</span>
-            <span class="text-sm font-medium text-blue-700 dark:text-white"><?php echo ($compteur->get('sumCurYear') > $cumulPreviousYearRaw?'+':'').($compteur->get('sumCurYear') - $cumulPreviousYearRaw) ?></span>
-        </div>
-        <div class="flex text-white">
-            <p class="w-1/12">Année&nbsp;<?php echo (_YEAR_-1) ?></p>
-            <div class="w-11/12 bg-gray-200 rounded-full h-3 dark:bg-gray-700 ml-2 mt-2">
-              <div class="<?php echo($cumulPreviousYear > $cumulCurrentYear ? 'bg-green-600' : 'bg-orange-600') ?> h-3 rounded-full" style="width: <?php echo $cumulPreviousYear ?>%"></div>
+        <?php if(count($items) > 0): ?>
+            <div class="flex justify-between mb-1">
+                <span class="text-base font-medium text-blue-700 dark:text-white">Avancement par rapport à l'an dernier</span>
+                <span class="text-sm font-medium text-blue-700 dark:text-white"><?php echo $progress ?>%</span>
             </div>
-        </div>
-        <div class="flex text-white">
-            <p class="w-1/12">Année&nbsp;<?php echo _YEAR_ ?></p>
-            <div class="w-11/12 bg-gray-200 rounded-full h-3 dark:bg-gray-700 ml-2 mt-2">
-              <div class="<?php echo($cumulPreviousYear > $cumulCurrentYear ? 'bg-orange-600' : 'bg-green-600') ?> h-3 rounded-full" style="width: <?php echo $cumulCurrentYear ?>%"></div>
+            <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
+              <div class="bg-blue-600 h-3 rounded-full" style="width: <?php echo $progress ?>%"></div>
             </div>
-        </div>
+            <div class="flex justify-between mt-2 mb-1">
+                <span class="text-base font-medium text-blue-700 dark:text-white">Progression par rapport à l'an dernier</span>
+                <span class="text-sm font-medium text-blue-700 dark:text-white"><?php echo ($compteur->get('sumCurYear') > $cumulPreviousYearRaw?'+':'').($compteur->get('sumCurYear') - $cumulPreviousYearRaw) ?></span>
+            </div>
+            <div class="flex text-white">
+                <p class="w-1/12">Année&nbsp;<?php echo (_YEAR_-1) ?></p>
+                <div class="w-11/12 bg-gray-200 rounded-full h-3 dark:bg-gray-700 ml-2 mt-2">
+                  <div class="<?php echo($cumulPreviousYear > $cumulCurrentYear ? 'bg-green-600' : 'bg-orange-600') ?> h-3 rounded-full" style="width: <?php echo $cumulPreviousYear ?>%"></div>
+                </div>
+            </div>
+            <div class="flex text-white">
+                <p class="w-1/12">Année&nbsp;<?php echo _YEAR_ ?></p>
+                <div class="w-11/12 bg-gray-200 rounded-full h-3 dark:bg-gray-700 ml-2 mt-2">
+                  <div class="<?php echo($cumulPreviousYear > $cumulCurrentYear ? 'bg-orange-600' : 'bg-green-600') ?> h-3 rounded-full" style="width: <?php echo $cumulCurrentYear ?>%"></div>
+                </div>
+            </div>
+        <?php endif ?>
     </section>
     <div id="a-jour" class="pb-10"></div>
     <section id="donnees-jour" class="pb-10">

@@ -18,15 +18,15 @@ $links = [
 ];
 if($slug == 'simone-veil'){
     $totem = TotemSisi::getInstance();
-    $retour = null;
+    $retour = _BASE_URL_.'detail/albert-1er';
     $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
 }elseif($slug == 'laverune'){
     $totem = TotemLala::getInstance();
-    $retour = null;
+    $retour = _BASE_URL_.'detail/leques-totem-laverune';
     $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
 }elseif($slug == 'albert' || $slug == 'albert-1er'){
     $totem = TotemAlbert::getInstance();
-    $retour = _BASE_URL_.'detail/albert-1er';
+    $retour = _BASE_URL_.'detail/clapiers-totem-simone-veil';
     $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
 }else{
     header('HTTP/1.0 404 Not Found');
