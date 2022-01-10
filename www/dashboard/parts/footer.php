@@ -251,5 +251,10 @@
         });
     })
 </script>
+<?php if(isset($scripts) && is_array($scripts) && count($scripts) > 0): ?>
+    <?php foreach($scripts as $script): ?>
+        <?php echo $script ?>
+    <?php endforeach ?>
+<?php endif ?>
 </body>
 </html>

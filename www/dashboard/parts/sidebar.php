@@ -13,6 +13,7 @@
        <div class="text-center">
            <a href="./" class="pr-1"><i class="fas fa-home"></i></a>
            <a href="./moyennes-mobiles" class="pr-1"><i class="fas fa-chart-line"></i></a>
+           <a href="./carte" class="pr-1"><i class="fas fa-map-marked-alt"></i></a>
        </div>
    </div>
 </aside>
