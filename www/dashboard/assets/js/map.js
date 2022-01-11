@@ -31,5 +31,11 @@ if($('#map-wrapper').length > 0){
                 markers[self.data('place')].openTooltip();
             });
         });
+        $('#reset').on('click', function(){
+            for (const [key, value] of Object.entries(markers)) {
+                value.closeTooltip();
+            }
+            map.setView(center, 12);
+        });
     });
 }

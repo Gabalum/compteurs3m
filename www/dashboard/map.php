@@ -22,6 +22,9 @@
         </div>
         <div class="w-3/4">
             <div id="map-1" data-id="1" class="map w-full h-full" data-center="[43.60815211731254,3.8779338961662457]">&nbsp;</div>
+            <div class="text-center">
+                <a id="reset" href="javascript:void(0)" class="mt-2 px-2 py-2 rounded bg-blue-400 hover:bg-blue-900 text-slate-100">Réinitialiser</a>
+            </div>
         </div>
     </div>
 </main>

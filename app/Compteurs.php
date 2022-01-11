@@ -225,7 +225,7 @@ class Compteurs
         return self::$_instance;
     }
 
-    public function getAllByDates()
+    public function getAllByDates(int $year = null)
     {
         $retour = [
             'dates' => [],
@@ -233,7 +233,9 @@ class Compteurs
         ];
         $dataTmp = [];
         $compteurs = $this->getCompteurs();
-        $year = date('Y');
+        if(is_null($year) || ($year < 2020 && $year > date('Y'))){
+            $year = date('Y');
+        }
         if(count($compteurs) > 0){
             foreach($compteurs as $k => $compteur){
                 $data = $compteur->get('dataTotal');
@@ -275,6 +277,7 @@ class Compteurs
         if(count($this->compteurs) > 0){
             foreach($this->compteurs as $k => $cpt){
                 $retour[$k] = [
+                    'id'    => $k,
                     'name'  => strip_tags($cpt['label']),
                     'color' => $cpt['color'],
                 ];

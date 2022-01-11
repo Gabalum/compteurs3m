@@ -6,4 +6,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^carte$ /dashboard/map.php [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^series-temporelles$ /dashboard/series-temp.php [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /dashboard/detail.php?cpt=$1 [L]

@@ -15,6 +15,8 @@
         @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
         .font-family-karla { font-family: karla; }
     </style>
+    <link rel="apple-touch-icon" sizes="90x90" href="<?php echo _BASE_URL_ ?>dashboard/assets/favicons/favicon.png">
+        <link rel="icon" type="image/x-icon" sizes="90x90" href="<?php echo _BASE_URL_ ?>dashboard/assets/favicons/favicon.png">
 </head>
 <body class="bg-gray-100 font-family-karla flex">
     <?php require_once(dirname(__FILE__).'/sidebar.php') ?>
