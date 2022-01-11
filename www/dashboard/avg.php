@@ -119,7 +119,7 @@
                                 <canvas id="line2-<?php echo $k ?>" class="line line2" data-labels='<?php echo json_encode(array_keys($avg2[$k])) ?>' data-values='<?php echo json_encode(array_values($avg2[$k])) ?>' data-max="<?php echo max(array_values($avg2[$k])) ?>"></canvas>
                             </div>
                         <?php else: ?>
-                            <div class="w-full">
+                            <div class="w-full md:w-1/2">
                                 <b>Lissage sur <?php echo $days ?> jours</b>
                                 <canvas id="line-<?php echo $k ?>" class="line" data-labels='<?php echo json_encode(array_keys($avg[$k])) ?>' data-values='<?php echo json_encode(array_values($avg[$k])) ?>' data-max="<?php echo max(array_values($avg[$k])) ?>"></canvas>
                             </div>
