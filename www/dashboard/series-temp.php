@@ -4,6 +4,7 @@
     $compteurs = (Compteurs::getInstance())->getCompteurs();
     $rowData = (Compteurs::getInstance())->getAllByDates();
     $rowDataY = (Compteurs::getInstance())->getAllByDates((date('Y') - 1));
+    $rowDataY2 = (Compteurs::getInstance())->getAllByDates((date('Y') - 2));
     $cptLabels = (Compteurs::getInstance())->getLabels();
     $title = 'Séries temporelles :: Dashboard Compteurs 3M';
     require_once(dirname(__FILE__).'/parts/header.php');
@@ -29,14 +30,17 @@
                 data-label="par semaine"
                 data-labels='<?php echo json_encode(array_values($rowData['dates'])) ?>'
                 data-labels-previous='<?php echo json_encode(array_values($rowDataY['dates'])) ?>'
+                data-labels-previous2='<?php echo json_encode(array_values($rowDataY2['dates'])) ?>'
                 data-values='<?php echo json_encode($rowData['data']) ?>'
                 data-values-previous='<?php echo json_encode($rowDataY['data']) ?>'
+                data-values-previous2='<?php echo json_encode($rowDataY2['data']) ?>'
                 data-cpts='<?php echo json_encode($cptLabels) ?>'
             >
             </canvas>
             <div class="text-center mt-3">
                 <a id="cpt_show" href="javascript:void(0)" class="mt-2 px-2 py-2 rounded bg-blue-400 hover:bg-blue-900 text-slate-100">Voir tous</a>
                 <a id="cpt_hide" href="javascript:void(0)" class="mt-2 px-2 py-2 rounded bg-blue-400 hover:bg-blue-900 text-slate-100">Voir aucun</a>
+                <a id="y_previous2" href="javascript:void(0)" class="mt-2 px-2 py-2 rounded bg-orange-400 hover:bg-orange-900 text-slate-100">Année <?php echo (date('Y') - 2) ?></a>
                 <a id="y_previous" href="javascript:void(0)" class="mt-2 px-2 py-2 rounded bg-orange-400 hover:bg-orange-900 text-slate-100">Année <?php echo (date('Y') - 1) ?></a>
                 <a id="y_current" href="javascript:void(0)" class="mt-2 px-2 py-2 rounded bg-orange-600 hover:bg-orange-900 text-slate-100">Année <?php echo date('Y') ?></a>
             </div>

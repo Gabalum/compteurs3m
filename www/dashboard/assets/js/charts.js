@@ -103,6 +103,19 @@ $('document').ready(function(){
                 data: v,
             });
         });
+        var labelsPrev2 = self.data('labels-previous2');
+        var datasetPrev2 = [];
+        $.each(self.data('values-previous2'), function(k, v){
+            datasetPrev2.push({
+                id: cpts[k].id,
+                label: cpts[k].name,
+                borderColor: cpts[k].color,
+                backgroundColor: cpts[k].color,
+                fill: false,
+                borderWidth: 2,
+                data: v,
+            });
+        });
         var ctx = document.getElementById(self.attr('id')).getContext('2d');
         var myLineChart = new Chart.Line(ctx, {
             data: {
@@ -147,6 +160,17 @@ $('document').ready(function(){
             });
             myLineChart.update();
         });
+        $('#y_previous2').on('click', function(){
+            myLineChart.data.datasets = datasetPrev2;
+            myLineChart.data.labels = labelsPrev2;
+            myLineChart.data.datasets.forEach(function(ds){
+                ds.hidden = !$('#cpt_'+ds.id).prop('checked');
+            });
+            myLineChart.update();
+            $(this).removeClass('bg-orange-400').addClass('bg-orange-600');
+            $('#y_current').removeClass('bg-orange-600').addClass('bg-orange-400');
+            $('#y_previous').removeClass('bg-orange-600').addClass('bg-orange-400');
+        });
         $('#y_previous').on('click', function(){
             myLineChart.data.datasets = datasetPrev;
             myLineChart.data.labels = labelsPrev;
@@ -156,6 +180,7 @@ $('document').ready(function(){
             myLineChart.update();
             $(this).removeClass('bg-orange-400').addClass('bg-orange-600');
             $('#y_current').removeClass('bg-orange-600').addClass('bg-orange-400');
+            $('#y_previous2').removeClass('bg-orange-600').addClass('bg-orange-400');
         });
         $('#y_current').on('click', function(){
             myLineChart.data.datasets = dataset;
@@ -166,6 +191,7 @@ $('document').ready(function(){
             myLineChart.update();
             $(this).removeClass('bg-orange-400').addClass('bg-orange-600');
             $('#y_previous').removeClass('bg-orange-600').addClass('bg-orange-400');
+            $('#y_previous2').removeClass('bg-orange-600').addClass('bg-orange-400');
         });
 
     });
