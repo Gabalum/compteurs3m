@@ -154,7 +154,7 @@
                     <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($currentMonth['sum']) ?> / <?php echo $currentMonth['cpt'] ?> jour<?php echo ($currentMonth['cpt'] > 1 ? 's' : '') ?></li>
                     <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($currentMonth['avg']) ?> / jour</li>
                     <li class="flex"><div class="w-1/3 text-right pr-2">Médiane :</div> <?php echo Helper::nf($median) ?> / jour</li>
-                    <li class="flex <?php echo ($recordTotal ? 'text-green-600' : ($recordYear ? 'text-blue-600' : ($recordMonth ? '' : 'text-amber-600'))) ?>">
+                    <li class="flex <?php echo ($recordTotal ? 'text-green-600' : ($recordYear ? 'text-blue-600' : ($recordMonth ? 'text-amber-600' : ''))) ?>">
                         <div class="w-1/3 text-right pr-2">Record :</div> <?php echo Helper::nf($currentMonth['value']) ?> le <?php echo $currentMonth['date'] ?>
                     </li>
                     <li class="flex <?php echo ($currentMonth['worst'] == $compteur->get('lastValue') ? 'text-orange-900' : '') ?>">
