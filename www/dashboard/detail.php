@@ -347,15 +347,19 @@
         <h3 class="text-2xl text-black">
             Semaine vs week-end
         </h3>
-        <div class="flex flex-col md:flex-row pb-5">
-            <div class="w-full md:w-1/2">
-                <b>Toutes les données</b>
+        <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5 auto-cols-fr">
+            <div class="w-full h-fit flex-0 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
+                <header class="px-5 py-4 border-b border-gray-100">
+                    <h4 class="font-semibold text-gray-800">Toutes les données</h4>
+                </header>
                 <div>
                     <canvas id="pie-day-<?php echo uniqid() ?>" class="pie pie-days" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values($compteur->getWeekWeekend())) ?>'></canvas>
                 </div>
             </div>
-            <div class="w-full md:w-1/2">
-                <b>En <?php echo date('Y') ?></b>
+            <div class="w-full h-fit flex-0 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
+                <header class="px-5 py-4 border-b border-gray-100">
+                    <h4 class="font-semibold text-gray-800">En <?php echo _YEAR_ ?></h4>
+                </header>
                 <div>
                     <canvas id="pie-day2-<?php echo uniqid() ?>" class="pie pie-days2" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values($compteur->getWeekWeekend(date('Y')))) ?>'></canvas>
                 </div>
@@ -365,16 +369,20 @@
             Jours ouvrés vs jours chomés, week-end, fériés en <?php echo date('Y') ?>
         </h3>
         <p><em>Sont considérés comme jours ouvrés les lundi, mardi, mercredi, jeudi, vendredi, hors jours fériés.</em></p>
-        <div class="flex flex-col md:flex-row pb-5">
+        <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5 auto-cols-fr">
             <?php list($jo, $jc) = $compteur->getDayByType() ?>
-            <div class="w-full md:w-1/2">
-                <b>Jours ouvrés</b>
+            <div class="w-full h-fit flex-0 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
+                <header class="px-5 py-4 border-b border-gray-100">
+                    <h4 class="font-semibold text-gray-800">Jours ouvrés</h4>
+                </header>
                 <div>
                     <canvas id="line-jo-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode(array_column($jo, 'date')) ?>' data-values='<?php echo json_encode(array_column($jo, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
                 </div>
             </div>
-            <div class="w-full md:w-1/2">
-                <b>Jours chomés, week-end, fériés</b>
+            <div class="w-full h-fit flex-1 shrink-1 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
+                <header class="px-5 py-4 border-b border-gray-100">
+                    <h4 class="font-semibold text-gray-800">Jours chomés, week-end, fériés</h4>
+                </header>
                 <div>
                     <canvas id="line-jc-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode(array_column($jc, 'date')) ?>' data-values='<?php echo json_encode(array_column($jc, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
                 </div>
@@ -383,7 +391,7 @@
         <h3 class="text-2xl text-black" id="ranking">
             Classements
         </h3>
-        <div class="grid grid-col-2 grid-flow-col gap-4 pb-5">
+        <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5">
             <?php $rankingTitle = 'Toutes les données'; $ranking = $rankingTotal; require(dirname(__FILE__).'/parts/ranking.php') ?>
             <?php $rankingTitle = 'Année '._YEAR_; $ranking = $rankingYear; require(dirname(__FILE__).'/parts/ranking.php') ?>
         </div>
