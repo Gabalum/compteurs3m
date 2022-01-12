@@ -16,13 +16,13 @@
                         $medal = 'bg-yellow-900 text-white';
                     }
                 ?>
-                <li class="flex px-2">
+                <li class="flex px-2 hover:bg-gray-200">
                     <div class="w-6 h-6 rounded-full shrink-0  my-2 mr-3 text-center <?php echo $medal ?>">
                         <?php echo $i ?>
                     </div>
-                    <div class="grow flex items-center border-b border-gray-100 text-sm py-2">
+                    <div class="grow flex items-center border-b border-gray-100 text-sm py-1">
                         <div class="grow flex justify-between">
-                            <div class="self-center <?php echo ($compteur->get('lastValue') == $value ? 'font-bold' : 'font-nprmal') ?>">
+                            <div class="self-center  text-lg <?php echo ($compteur->get('lastValue') == $value ? 'font-bold' : 'font-nprmal') ?>">
                                 <?php echo $value ?>
                             </div>
                             <div class="shrink-0 self-start ml-2 text-gray-400">
