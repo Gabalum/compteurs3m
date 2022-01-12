@@ -120,10 +120,13 @@
     <?php if($recordTotal): ?>
         <div class="bg-green-100 p-5 mb-5 px-20 w-full rounded text-green-700">
             <div class="flex justify-between">
-                <div class="flex space-x-3">
+                <div class="flex space-x-3 grow">
                     <i class="fas fa-check-circle pt-1"></i>
                     <div class="flex-1 leading-tight text-lg font-medium">
                         Nouveau record absolu !
+                    </div>
+                    <div class="shrink-0 self-start ml-2 text-sm">
+                        <a href="#ranking" class="underline">voir le classement</a>
                     </div>
                 </div>
             </div>
@@ -131,10 +134,13 @@
     <?php elseif($recordYear): ?>
         <div class="bg-blue-100 p-5 mb-5 px-20 w-full rounded text-blue-700">
             <div class="flex justify-between">
-                <div class="flex space-x-3">
+                <div class="flex space-x-3 grow">
                     <i class="fas fa-check-circle pt-1"></i>
                     <div class="flex-1 leading-tight text-lg font-medium">
                         Nouveau record de l'année !
+                    </div>
+                    <div class="shrink-0 self-start ml-2 text-sm">
+                        <a href="#ranking" class="underline">voir le classement</a>
                     </div>
                 </div>
             </div>
@@ -142,10 +148,13 @@
     <?php elseif($recordMonth): ?>
         <div class="bg-amber-100 p-5 mb-5 px-20 w-full rounded text-amber-700">
             <div class="flex justify-between">
-                <div class="flex space-x-3">
+                <div class="flex space-x-3 grow">
                     <i class="fas fa-check-circle pt-1"></i>
                     <div class="flex-1 leading-tight text-lg font-medium">
                         Nouveau record du mois !
+                    </div>
+                    <div class="shrink-0 self-start ml-2 text-sm">
+                        <a href="#ranking" class="underline">voir le classement</a>
                     </div>
                 </div>
             </div>
@@ -371,7 +380,7 @@
                 </div>
             </div>
         </div>
-        <h3 class="text-2xl text-black">
+        <h3 class="text-2xl text-black" id="ranking">
             Classements
         </h3>
         <div class="grid grid-col-2 grid-flow-col gap-4 pb-5">
