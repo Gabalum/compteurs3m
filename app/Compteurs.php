@@ -24,7 +24,7 @@ class Compteurs
             'address'   => '',
             'color'     => '#aaddbb',
             'totem'     => false,
-            'commune'   => 'Montpellier',
+            'commune'   => 'Villeneuve-les-Maguelone',
         ],
         'X2H19070220'   => [
             'label'     => 'Beracasa',
@@ -122,7 +122,7 @@ class Compteurs
             'address'   => '',
             'color'     => '#bbaaaa',
             'totem'     => false,
-            'commune'   => 'Montpellier',
+            'commune'   => 'Lattes',
         ],
         'X2H20104132'   => [
             'label'     => 'Méric',

@@ -118,47 +118,11 @@
 <main class="w-full flex-grow p-6 pb-20">
     <div id="a-summary" class="pb-10"></div>
     <?php if($recordTotal): ?>
-        <div class="bg-green-100 p-5 mb-5 px-20 w-full rounded text-green-700">
-            <div class="flex justify-between">
-                <div class="flex space-x-3 grow">
-                    <i class="fas fa-check-circle pt-1"></i>
-                    <div class="flex-1 leading-tight text-lg font-medium">
-                        Nouveau record absolu !
-                    </div>
-                    <div class="shrink-0 self-start ml-2 text-sm">
-                        <a href="#ranking" class="underline">voir le classement</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php echo DashboardHelper::alert('Nouveau record absolu !', 'green', '#ranking', 'voir le classement') ?>
     <?php elseif($recordYear): ?>
-        <div class="bg-blue-100 p-5 mb-5 px-20 w-full rounded text-blue-700">
-            <div class="flex justify-between">
-                <div class="flex space-x-3 grow">
-                    <i class="fas fa-check-circle pt-1"></i>
-                    <div class="flex-1 leading-tight text-lg font-medium">
-                        Nouveau record de l'année !
-                    </div>
-                    <div class="shrink-0 self-start ml-2 text-sm">
-                        <a href="#ranking" class="underline">voir le classement</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php echo DashboardHelper::alert("Nouveau record de l'année !", 'blue', '#ranking', 'voir le classement') ?>
     <?php elseif($recordMonth): ?>
-        <div class="bg-amber-100 p-5 mb-5 px-20 w-full rounded text-amber-700">
-            <div class="flex justify-between">
-                <div class="flex space-x-3 grow">
-                    <i class="fas fa-check-circle pt-1"></i>
-                    <div class="flex-1 leading-tight text-lg font-medium">
-                        Nouveau record du mois !
-                    </div>
-                    <div class="shrink-0 self-start ml-2 text-sm">
-                        <a href="#ranking" class="underline">voir le classement</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php echo DashboardHelper::alert("Nouveau record du mois !", 'amber', '#ranking', 'voir le classement') ?>
     <?php endif ?>
     <section id="summary" class="bg-gradient-to-b from-slate-700 to-slate-600 py-5 px-2">
         <div class="bg-slate-900 text-white p-1 rounded-xl m-1 text-center text-lg">
@@ -392,20 +356,22 @@
             Classements
         </h3>
         <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5">
-            <?php $rankingTitle = 'Toutes les données'; $ranking = $rankingTotal; require(dirname(__FILE__).'/parts/ranking.php') ?>
-            <?php $rankingTitle = 'Année '._YEAR_; $ranking = $rankingYear; require(dirname(__FILE__).'/parts/ranking.php') ?>
+            <?php echo DashboardHelper::ranking($rankingTotal, 'Toutes les données', $compteur->get('lastValue')) ?>
+            <?php echo DashboardHelper::ranking($rankingYear, 'Année '._YEAR_, $compteur->get('lastValue')) ?>
         </div>
         <h3 class="text-2xl text-black">
             Autre
         </h3>
-        <div class="flex flex-col md:flex-row pb-5">
-            <div class="w-full md:w-1/2">
-                <b>Données brutes</b>
-                <em>(Scroll au sein du tableau)</em>
-                <div class="h-80 overflow-y-scroll">
+        <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5 auto-cols-fr">
+            <div class="w-full h-fit flex-1 shrink-1 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
+                <header class="px-5 py-4 border-b border-gray-100">
+                    <h4 class="font-semibold text-gray-800">Données brutes</h4>
+                    <em class="text-sm text-gray-400">(Scroll au sein du tableau)</em>
+                </header>
+                <div class="pb-5 h-80 overflow-y-scroll">
                     <?php $max = 0 ?>
                     <?php $maxY = 0 ?>
-                    <ul class="list-group">
+                    <ul class="list-group my-2">
                         <?php foreach($data as $date => $val): ?>
                             <?php
                                 $y = substr($date, -4);
@@ -427,27 +393,32 @@
                                     $class = '';
                                 }
                             ?>
-                            <li class="flex border hover:bg-gray-200 border-dotted <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val['value'] ? 'bg-green-500' : '') ?>">
+                            <li class="px-2 flex border hover:bg-gray-200 border-dotted <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val['value'] ? 'bg-green-500' : '') ?>">
                                 <div class="w-1/6"><?php echo Helper::frenchDayOfTheWeek($val['day'], true) ?></div>
                                 <div class="font-bold w-2/6"><?php echo $date ?></div>
                                 <div class="w-2/6"><?php echo $val['value'] ?></div>
-                                <div class="w-1/6"><?php if($val['isFerie']): ?><em>(férié)</em><?php endif ?></div>
+                                <div class="w-1/6 text-gray-400"><?php if($val['isFerie']): ?><em>(férié)</em><?php endif ?></div>
                             </li>
                         <?php endforeach ?>
                     </ul>
                 </div>
-                <ul class="pt-2">
-                    <li class="pb-1"><button class="rounded-xl w-5 bg-green-500">&nbsp;</button> Record absolu</li>
-                    <li class="pb-1"><button class="rounded-xl w-5 bg-green-300">&nbsp;</button> Record absolu jusque là</li>
-                    <li class="pb-1"><button class="rounded-xl w-5 bg-blue-500">&nbsp;</button> Record en <?php echo _YEAR_ ?></li>
-                    <li class="pb-1"><button class="rounded-xl w-5 bg-blue-300">&nbsp;</button> Record en <?php echo _YEAR_ ?> jusque là</li>
-                    <li class="pb-1"><button class="rounded-xl w-5 bg-orange-500">&nbsp;</button> Pire scrore absolu</li>
-                    <li class="pb-1"><button class="rounded-xl w-5 bg-orange-300">&nbsp;</button> Pire score de l'année</li>
-                </ul>
+                <footer class="mt-2 text-sm text-gray-400 ">
+                    <ul class="pt-2 ml-5">
+                        <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-green-500">&nbsp;</button> Record absolu</li>
+                        <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-green-300">&nbsp;</button> Record absolu jusque là</li>
+                        <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-blue-500">&nbsp;</button> Record en <?php echo _YEAR_ ?></li>
+                        <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-blue-300">&nbsp;</button> Record en <?php echo _YEAR_ ?> jusque là</li>
+                        <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-orange-500">&nbsp;</button> Pire scrore absolu</li>
+                        <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-orange-300">&nbsp;</button> Pire score de l'année</li>
+                    </ul>
+                </footer>
             </div>
-            <div class="w-full md:w-1/2">
-                <b>Valeurs incrémentales</b>
-                <div>
+            <div class="w-full h-fit flex-1 shrink-1 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
+                <header class="px-5 py-4 border-b border-gray-100">
+                    <h4 class="font-semibold text-gray-800">Valeurs incrémentales</h4>
+                    <em class="text-sm text-gray-400">Pour l'année <?php echo _YEAR_ ?></em>
+                </header>
+                <div class="pb-5">
                     <canvas id="stack-<?php echo uniqid() ?>" class="bar-stack" data-labels='<?php echo json_encode(array_keys($stack)) ?>' data-values='<?php echo json_encode(array_values($stack)) ?>' data-max="<?php echo max($stack) ?>"></canvas>
                 </div>
             </div>
