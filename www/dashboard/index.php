@@ -89,33 +89,33 @@
                             <span <?php echo (($cpt->get('lastValue') == $currentMonth['value']||$cpt->get('lastValue') == $mr['value']) ? 'class="font-bold"' : '') ?>>
                                 <?php echo $cpt->get('lastValue') ?>
                             </span>
-                            <div class="text-sm <?php echo ($yesterday !== $cpt->get('lastDate') ? 'text-red-500' : '') ?>">
-                                <em>(<?php echo $cpt->get('lastDate') ?>)</em>
+                            <div class="text-sm <?php echo ($yesterday !== $cpt->get('lastDate') ? 'text-red-500' : 'text-gray-400') ?>">
+                                (<?php echo $cpt->get('lastDate') ?>)
                             </div>
                         </td>
                         <td class="text-center">
                             <span <?php echo ($currentMonth['value'] == $mr['value'] ? 'class="font-bold"' : '') ?>>
                                 <?php echo $currentMonth['value'] ?>
                             </span>
-                            <div class="text-sm"><em>(<?php echo $currentMonth['date'] ?>)</em></div>
+                            <div class="text-sm text-gray-400">(<?php echo $currentMonth['date'] ?>)</div>
                         </td>
                         <td class="text-center">
                             <span <?php echo ($cpt->get('recordYear') == $cpt->get('recordTotal') ? 'class="font-bold"' : '') ?>>
                                 <?php echo $cpt->get('recordYear') ?>
                             </span>
-                            <div class="text-sm"><em>(<?php echo $cpt->get('recordYearDate') ?>)</em></div>
+                            <div class="text-sm text-gray-400">(<?php echo $cpt->get('recordYearDate') ?>)</div>
                         </td>
-                        <td class="text-center <?php echo ($foo ? 'bg-gray-400' : 'bg-gray-300') ?>">
+                        <td class="text-center <?php echo ($foo ? 'bg-gray-300' : 'bg-gray-200') ?>">
                             <span <?php echo ($currentMonth['value'] < $mr['value'] ? 'class="font-bold"' : '') ?>>
                                 <?php echo $mr['value'] ?>
                             </span>
-                            <div class="text-sm"><em>(<?php echo $mr['date'] ?>)</em></div>
+                            <div class="text-sm text-gray-400">(<?php echo $mr['date'] ?>)</div>
                         </td>
-                        <td class="text-center <?php echo ($foo ? 'bg-gray-400' : 'bg-gray-300') ?>">
+                        <td class="text-center <?php echo ($foo ? 'bg-gray-300' : 'bg-gray-200') ?>">
                             <span <?php echo ($cpt->get('recordYear') < $cpt->get('recordTotal') ? 'class="font-bold"' : '') ?>>
                                 <?php echo $cpt->get('recordTotal') ?>
                             </span>
-                            <div class="text-sm"><em>(<?php echo $cpt->get('recordTotalDate') ?>)</em></div>
+                            <div class="text-sm text-gray-400">(<?php echo $cpt->get('recordTotalDate') ?>)</div>
                         </td>
                     </tr>
                 <?php endforeach ?>
@@ -143,7 +143,7 @@
                     <tr <?php echo ($foo ? 'class="bg-gray-200"' : '') ?>>
                         <th class="bg-gray-800 text-white text-left"><?php echo $cpt->get('labelHTML') ?></th>
                         <?php for($i = 2020 ; $i <= _YEAR_ ; $i++): ?>
-                            <td class="text-right pr-3 <?php if($i === _YEAR_): ?><?php echo ($foo ? 'bg-gray-400' : 'bg-gray-300') ?><?php endif ?>">
+                            <td class="text-right pr-3 <?php if($i === _YEAR_): ?><?php echo ($foo ? 'bg-gray-300' : 'bg-gray-200') ?><?php endif ?>">
                                 <?php echo Helper::nf($cpt->get('sumByYear')[$i]) ?>
                             </td>
                         <?php endfor ?>

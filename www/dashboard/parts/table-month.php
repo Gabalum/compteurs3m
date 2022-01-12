@@ -24,7 +24,7 @@
                 <?php else: ?>
                     <div class="table-cell ">
                         <?php echo $values['sum'] ?>
-                        <div class="text-sm"><em>(<?php echo $values['cpt'] ?> jours)</em></div>
+                        <div class="text-sm text-gray-400">(<?php echo $values['cpt'] ?> jours)</div>
                     </div>
                     <div class="table-cell ">
                         <?php echo $values['avg'] ?>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="table-cell ">
                         <?php echo $values['value'] ?>
-                        <div class="text-sm"><em>(<?php echo $values['date'] ?>)</em></div>
+                        <div class="text-sm text-gray-400">(<?php echo $values['date'] ?>)</div>
                     </div>
                 <?php endif ?>
             </div>

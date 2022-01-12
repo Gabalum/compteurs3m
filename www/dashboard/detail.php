@@ -235,7 +235,7 @@
                                 <span class="<?php echo $css ?>">
                                     <?php echo $days[$y][$dow]['value'] ?>
                                 </span>
-                                <div class="text-sm"><em>(<?php echo $days[$y][$dow]['date'] ?>)</em></div>
+                                <div class="text-sm text-gray-400">(<?php echo $days[$y][$dow]['date'] ?>)</div>
                             </div>
                         <?php endfor ?>
                     </div>
@@ -395,7 +395,7 @@
                             ?>
                             <li class="px-2 flex border hover:bg-gray-200 border-dotted <?php echo $class ?> <?php echo ($compteur->get('recordTotal') == $val['value'] ? 'bg-green-500' : '') ?>">
                                 <div class="w-1/6"><?php echo Helper::frenchDayOfTheWeek($val['day'], true) ?></div>
-                                <div class="font-bold w-2/6"><?php echo $date ?></div>
+                                <div class="w-2/6"><?php echo $date ?></div>
                                 <div class="w-2/6"><?php echo $val['value'] ?></div>
                                 <div class="w-1/6 text-gray-400"><?php if($val['isFerie']): ?><em>(férié)</em><?php endif ?></div>
                             </li>
