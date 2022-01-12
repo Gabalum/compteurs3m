@@ -5,10 +5,58 @@
     $title = 'Dashboard Compteurs 3M';
     require_once(dirname(__FILE__).'/parts/header.php');
     $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
+    $records = [];
+    foreach($compteurs as $compteur){
+        $monthes = $compteur->get('monthes');
+        $currentMonth = (is_array($monthes) && isset($monthes[date('m')]) ? $monthes[date('m')] : null);
+        if($compteur->get('lastValue') === $compteur->get('recordTotal')){
+            $records[] = [
+                'class'  => 'a text-green-600',
+                'text'   => 'Nouveau record absolu pour <b>'.$compteur->get('labelHTML').'</b> ('.$compteur->get('lastValue').')',
+            ];
+        } elseif($compteur->get('lastValue') === $compteur->get('recordYear')){
+            $records[] = [
+                'class'  => 'b text-blue-600',
+                'text'   => 'Nouveau record de l\'année pour <b>'.$compteur->get('labelHTML').'</b> ('.$compteur->get('lastValue').')',
+            ];
+        } elseif(!is_null($currentMonth) && $compteur->get('lastValue') === $currentMonth['value']){
+            $records[] = [
+                'class'  => 'c text-amber-600',
+                'text'   => 'Nouveau record du mois pour <b>'.$compteur->get('labelHTML').'</b> ('.$compteur->get('lastValue').')',
+            ];
+        } elseif($compteur->get('lastValue') === $compteur->get('worstTotal')){
+            $records[] = [
+                'class'  => 'd text-orange-900',
+                'text'   => 'Pire score absolu pour <b>'.$compteur->get('labelHTML').'</b> ('.$compteur->get('lastValue').')',
+            ];
+        } elseif($compteur->get('lastValue') === $compteur->get('worstYear')){
+            $records[] = [
+                'class'  => 'd text-orange-900',
+                'text'   => 'Pire score de l\'année pour <b>'.$compteur->get('labelHTML').'</b> ('.$compteur->get('lastValue').')',
+            ];
+        }
+    }
+    uasort($records, function($a, $b){
+        return $a['class'] > $b['class'];
+    });
 ?>
 <main class="w-full flex-grow p-6 pb-20">
     <h1 class="text-3xl text-black pb-6 text-center">Dashboard des compteurs vélo 3M</h1>
-    <section id="derniers">
+    <?php if(count($records) > 0): ?>
+        <section id="facts">
+            <h2 class="text-2xl text-black">Faits marquants</h2>
+            <div class="bg-white text-lg outline-dashed outline-2 outline-offset-2 border-rose-500 outline-rose-500 shadow-sm rounded-4 py-2 px-2 my-2">
+                <ul>
+                    <?php foreach($records as $record): ?>
+                        <li class="<?php echo $record['class'] ?>">
+                            <?php echo $record['text'] ?>
+                        </li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
+        </section>
+    <?php endif ?>
+    <section id="derniers" class="pt-10">
         <h2 class="text-2xl text-black">Derniers relevés</h2>
         <table class="min-w-full bg-white">
             <thead class="bg-gray-800 text-white">
