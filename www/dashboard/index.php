@@ -45,7 +45,7 @@
     <?php if(count($records) > 0): ?>
         <section id="facts">
             <h2 class="text-2xl text-black">Faits marquants</h2>
-            <div class="bg-white text-lg outline-dashed outline-2 outline-offset-2 border-rose-500 outline-rose-500 shadow-sm rounded-4 py-2 px-2 my-2">
+            <div class="bg-white text-sm outline-dashed outline-2 outline-offset-2 border-rose-500 outline-rose-500 shadow-sm rounded-4 py-2 px-2 my-2">
                 <ul>
                     <?php foreach($records as $record): ?>
                         <li class="<?php echo $record['class'] ?>">
@@ -155,16 +155,20 @@
     </section>
     <section id="vs" class="pt-10">
         <h2 class="text-2xl text-black">Semaine vs week-end</h2>
-        <div class="flex flex-col md:flex-row">
-            <div class="w-full md:w-1/2">
-                <b>Toutes les données</b>
-                <div>
+        <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5 auto-cols-fr">
+            <div class="w-full h-fit flex-0 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
+                <header class="px-5 py-4 border-b border-gray-100">
+                    <h4 class="font-semibold text-gray-800">Toutes les données</h4>
+                </header>
+                <div class="pb-5">
                     <canvas id="pie-day-general" class="pie pie-days" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values((Compteurs::getInstance())->getWeekWeekend())) ?>'></canvas>
                 </div>
             </div>
-            <div class="w-full md:w-1/2">
-                <b>En <?php echo date('Y') ?></b>
-                <div>
+            <div class="w-full h-fit flex-0 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
+                <header class="px-5 py-4 border-b border-gray-100">
+                    <h4 class="font-semibold text-gray-800">En <?php echo _YEAR_ ?></h4>
+                </header>
+                <div class="pb-5">
                     <canvas id="pie-day2-general" class="pie pie-days2" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values((Compteurs::getInstance())->getWeekWeekend(date('Y')))) ?>'></canvas>
                 </div>
             </div>

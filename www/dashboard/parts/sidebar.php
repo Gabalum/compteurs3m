@@ -2,7 +2,7 @@
     <div class="p-2 pb-2 text-center ">
        <a href="./" class="text-white text-xl font-semibold uppercase hover:text-gray-300">Compteurs 3M</a>
    </div>
-   <nav class="text-white text-base  flex-grow font-semibold pt-1 pb-20">
+   <nav class="text-white text-sm flex-grow pt-1 pb-20">
        <?php foreach($compteurs as $cpt): ?>
            <a href="./<?php echo $cpt->get('slug') ?>" class="flex items-center <?php echo ($cpt->get('slug') == $slug ? 'active-nav-link bg-blue-900' : '') ?> hover:bg-blue-600 text-white py-1 pl-6 nav-item">
                <?php echo $cpt->get('labelHTML') ?>

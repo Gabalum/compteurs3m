@@ -101,10 +101,10 @@
     }
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
-<header class="fixed bg-blue-900 text-white w-full flex pl-5 gap-3">
+<header class="fixed bg-blue-900 text-white w-full flex pl-5 gap-3 text-sm pt-1">
     <div class="font-bold pb-2"><?php echo $compteur->get('labelHTML') ?></div>
-    <div class="">
-        <span class="hidden lg:inline">| ID : <?php echo $compteur->get('id') ?></span>
+    <div class="hidden lg:inline">
+        | ID : <?php echo $compteur->get('id') ?>
         | <span class="<?php echo $latestColor ?>">Dernier relevé : <b><?php echo $compteur->get('lastValue') ?></b> le <?php echo $compteur->get('lastDate') ?></span>
     </div>
     <div class="">| Section :
@@ -352,7 +352,7 @@
                 <header class="px-5 py-4 border-b border-gray-100">
                     <h4 class="font-semibold text-gray-800">Toutes les données</h4>
                 </header>
-                <div>
+                <div class="pb-5">
                     <canvas id="pie-day-<?php echo uniqid() ?>" class="pie pie-days" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values($compteur->getWeekWeekend())) ?>'></canvas>
                 </div>
             </div>
@@ -360,7 +360,7 @@
                 <header class="px-5 py-4 border-b border-gray-100">
                     <h4 class="font-semibold text-gray-800">En <?php echo _YEAR_ ?></h4>
                 </header>
-                <div>
+                <div class="pb-5">
                     <canvas id="pie-day2-<?php echo uniqid() ?>" class="pie pie-days2" data-labels='<?php echo json_encode(['En semaine', 'Le week-end']) ?>' data-values='<?php echo json_encode(array_values($compteur->getWeekWeekend(date('Y')))) ?>'></canvas>
                 </div>
             </div>
@@ -375,7 +375,7 @@
                 <header class="px-5 py-4 border-b border-gray-100">
                     <h4 class="font-semibold text-gray-800">Jours ouvrés</h4>
                 </header>
-                <div>
+                <div class="pb-5">
                     <canvas id="line-jo-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode(array_column($jo, 'date')) ?>' data-values='<?php echo json_encode(array_column($jo, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
                 </div>
             </div>
@@ -383,7 +383,7 @@
                 <header class="px-5 py-4 border-b border-gray-100">
                     <h4 class="font-semibold text-gray-800">Jours chomés, week-end, fériés</h4>
                 </header>
-                <div>
+                <div class="pb-5">
                     <canvas id="line-jc-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode(array_column($jc, 'date')) ?>' data-values='<?php echo json_encode(array_column($jc, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
                 </div>
             </div>
