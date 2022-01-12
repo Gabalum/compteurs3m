@@ -64,6 +64,7 @@
         $progress = min(100, intval($compteur->get('sumCurYear') * 100 / $compteur->get('sumByYear')[(_YEAR_-1)]));
     }
     $title = $compteur->get('label').' :: Dashboard Compteurs 3M';
+// ------- gestion des records
     $recordTotal = false;
     $recordYear = false;
     $recordMonth = false;
@@ -74,6 +75,7 @@
     } elseif(!is_null($currentMonth) && $compteur->get('lastValue') === $currentMonth['value']){
         $recordMonth = true;
     }
+// ------ gestion des rankings
     $rvals = array_flip($vals);
     krsort($rvals);
     $rankingTotal = [];
@@ -115,6 +117,40 @@
 </header>
 <main class="w-full flex-grow p-6 pb-20">
     <div id="a-summary" class="pb-10"></div>
+    <?php if($recordTotal): ?>
+        <div class="bg-green-100 p-5 mb-5 px-20 w-full rounded text-green-700">
+            <div class="flex justify-between">
+                <div class="flex space-x-3">
+                    <i class="fas fa-check-circle pt-1"></i>
+                    <div class="flex-1 leading-tight text-lg font-medium">
+                        Nouveau record absolu !
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php elseif($recordYear): ?>
+        <div class="bg-blue-100 p-5 mb-5 px-20 w-full rounded text-blue-700">
+            <div class="flex justify-between">
+                <div class="flex space-x-3">
+                    <i class="fas fa-check-circle pt-1"></i>
+                    <div class="flex-1 leading-tight text-lg font-medium">
+                        Nouveau record de l'année !
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php elseif($recordMonth): ?>
+        <div class="bg-amber-100 p-5 mb-5 px-20 w-full rounded text-amber-700">
+            <div class="flex justify-between">
+                <div class="flex space-x-3">
+                    <i class="fas fa-check-circle pt-1"></i>
+                    <div class="flex-1 leading-tight text-lg font-medium">
+                        Nouveau record du mois !
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif ?>
     <section id="summary" class="bg-gradient-to-b from-slate-700 to-slate-600 py-5 px-2">
         <div class="bg-slate-900 text-white p-1 rounded-xl m-1 text-center text-lg">
             <?php echo $compteur->get('labelHTML') ?> - dernier relevé : <?php echo $compteur->get('lastValue') ?> le <?php echo $compteur->get('lastDate') ?>
