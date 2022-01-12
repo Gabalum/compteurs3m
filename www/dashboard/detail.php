@@ -41,6 +41,7 @@
     $vals = $compteur->get('dataTotalValues');
     $items = [];
     $curMonthVals = [];
+    $curYearVals = [];
     foreach($vals as $k => $v){
         if((int)substr($k, 0, 4) === (_YEAR_-1) && (int)substr($k, 4, 2) <= (int)date('m')){
             $items[$k] = $v;
@@ -48,7 +49,9 @@
         if((int)substr($k, 0, 4) === _YEAR_ && (int)substr($k, 4, 2) === (int)date('m')) {
             $curMonthVals[] = $v;
         }
-
+        if((int)substr($k, 0, 4) === _YEAR_) {
+            $curYearVals[$v] = $k;
+        }
     }
     sort($curMonthVals);
     $median = $curMonthVals[floor(count($curMonthVals) / 2)];
@@ -70,6 +73,29 @@
         $recordYear = true;
     } elseif(!is_null($currentMonth) && $compteur->get('lastValue') === $currentMonth['value']){
         $recordMonth = true;
+    }
+    $rvals = array_flip($vals);
+    krsort($rvals);
+    $rankingTotal = [];
+    $i = 0;
+    foreach($rvals as $k => $v){
+        $x = str_split($v);
+        $date = $x[6].$x[7].'-'.$x[4].$x[5].'-'.$x[0].$x[1].$x[2].$x[3];
+        $rankingTotal[$date] = $k;
+        if($i++ >= 9){
+            break;
+        }
+    }
+    krsort($curYearVals);
+    $rankingYear = [];
+    $i = 0;
+    foreach($curYearVals as $k => $v){
+        $x = str_split($v);
+        $date = $x[6].$x[7].'-'.$x[4].$x[5].'-'.$x[0].$x[1].$x[2].$x[3];
+        $rankingYear[$date] = $k;
+        if($i++ >= 9){
+            break;
+        }
     }
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
@@ -308,6 +334,13 @@
                     <canvas id="line-jc-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode(array_column($jc, 'date')) ?>' data-values='<?php echo json_encode(array_column($jc, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
                 </div>
             </div>
+        </div>
+        <h3 class="text-2xl text-black">
+            Classements
+        </h3>
+        <div class="grid grid-col-2 grid-flow-col gap-4 pb-5">
+            <?php $rankingTitle = 'Toutes les données'; $ranking = $rankingTotal; require(dirname(__FILE__).'/parts/ranking.php') ?>
+            <?php $rankingTitle = 'Année '._YEAR_; $ranking = $rankingYear; require(dirname(__FILE__).'/parts/ranking.php') ?>
         </div>
         <h3 class="text-2xl text-black">
             Autre
