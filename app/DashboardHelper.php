@@ -10,8 +10,8 @@ class DashboardHelper
             <div class="mb-5 p-2 md:p-3 md:px-20 w-full rounded '.$mainClass.'">
                 <div class="flex justify-between">
                     <div class="flex space-x-3 grow">
-                        <i class="fas fa-check-circle pt-1"></i>
-                        <div class="flex-1 leading-tight text-lg font-medium">
+                        <i class="fas fa-check-circle pt-1 hidden sm:inline-flex"></i>
+                        <div class="flex-1 leading-tight text-base sm:text-lg">
                             '.$message.'
                         </div>
                         <div class="shrink-0 self-start ml-2 text-sm">

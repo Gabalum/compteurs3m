@@ -217,15 +217,15 @@
                 <span class="text-base font-medium text-blue-700 dark:text-white">Progression par rapport à l'an dernier</span>
                 <span class="text-sm font-medium text-blue-700 dark:text-white"><?php echo ($compteur->get('sumCurYear') > $cumulPreviousYearRaw?'+':'').($compteur->get('sumCurYear') - $cumulPreviousYearRaw) ?></span>
             </div>
-            <div class="flex text-white">
-                <p class="w-1/12">Année&nbsp;<?php echo (_YEAR_-1) ?></p>
-                <div class="w-11/12 bg-gray-200 rounded-full h-3 dark:bg-gray-700 ml-2 mt-2">
+            <div class="flex flex-col sm:flex-row text-white">
+                <p class="w-full sm:w-2/12 lg:w-1/12">Année&nbsp;<?php echo (_YEAR_-1) ?></p>
+                <div class="w-full sm:w-10/12 lg:w-11/12 bg-gray-200 rounded-full h-3 dark:bg-gray-700 ml-2 mt-2">
                   <div class="<?php echo($cumulPreviousYear > $cumulCurrentYear ? 'bg-green-600' : 'bg-orange-600') ?> h-3 rounded-full" style="width: <?php echo $cumulPreviousYear ?>%"></div>
                 </div>
             </div>
-            <div class="flex text-white">
-                <p class="w-1/12">Année&nbsp;<?php echo _YEAR_ ?></p>
-                <div class="w-11/12 bg-gray-200 rounded-full h-3 dark:bg-gray-700 ml-2 mt-2">
+            <div class="flex flex-col sm:flex-row text-white">
+                <p class="w-full sm:w-2/12 lg:w-1/12">Année&nbsp;<?php echo _YEAR_ ?></p>
+                <div class="w-full sm:w-10/12 lg:w-11/12 bg-gray-200 rounded-full h-3 dark:bg-gray-700 ml-2 mt-2">
                   <div class="<?php echo($cumulPreviousYear > $cumulCurrentYear ? 'bg-orange-600' : 'bg-green-600') ?> h-3 rounded-full" style="width: <?php echo $cumulCurrentYear ?>%"></div>
                 </div>
             </div>
