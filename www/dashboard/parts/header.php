@@ -18,6 +18,11 @@
     <link rel="apple-touch-icon" sizes="90x90" href="<?php echo _BASE_URL_ ?>dashboard/assets/favicons/favicon.png">
         <link rel="icon" type="image/x-icon" sizes="90x90" href="<?php echo _BASE_URL_ ?>dashboard/assets/favicons/favicon.png">
 </head>
-<body class="bg-gray-100 font-family-karla flex">
+<body class="bg-gray-100 font-family-karla flex text-sm sm:text-base">
     <?php require_once(dirname(__FILE__).'/sidebar.php') ?>
+    <a class="p-3 space-y-2 bg-slate-600 rounded shadow absolute top left inline-block sm:hidden z-20" href="javascript:void();" id="burger">
+        <span class="block w-8 h-0.5 bg-white"></span>
+        <span class="block w-8 h-0.5 bg-white"></span>
+        <span class="block w-8 h-0.5 bg-white"></span>
+    </a>
     <div id="mainContent" class="w-full flex flex-col h-screen overflow-y-scroll scroll-smooth">

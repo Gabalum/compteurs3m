@@ -7,6 +7,9 @@
     $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
     $records = [];
     foreach($compteurs as $compteur){
+        if($compteur->get('lastDate') !== $yesterday){
+            continue;
+        }
         $monthes = $compteur->get('monthes');
         $currentMonth = (is_array($monthes) && isset($monthes[date('m')]) ? $monthes[date('m')] : null);
         if($compteur->get('lastValue') === $compteur->get('recordTotal')){
@@ -61,7 +64,7 @@
         <table class="min-w-full bg-white">
             <thead class="bg-gray-800 text-white">
                 <tr>
-                    <th rowspan="2">Compteur</th>
+                    <th class="w-1/4" rowspan="2">Compteur</th>
                     <th rowspan="2">Dernier relevé</th>
                     <th colspan="2">Année <?php echo date('Y') ?></th>
                     <th colspan="2">Total</th>
@@ -84,7 +87,7 @@
                         $mr = (is_array($monthesRecord) && isset($monthesRecord[date('m')]) ? $monthesRecord[date('m')] : ['value' => '-', 'date' => '-']);
                     ?>
                     <tr <?php echo ($foo ? 'class="bg-gray-200"' : '') ?>>
-                        <th class="bg-gray-800 text-white"><?php echo $cpt->get('labelHTML') ?></th>
+                        <th class="bg-gray-800 text-white text-left pl-2"><?php echo $cpt->get('labelHTML') ?></th>
                         <td class="text-center">
                             <span <?php echo (($cpt->get('lastValue') == $currentMonth['value']||$cpt->get('lastValue') == $mr['value']) ? 'class="font-bold"' : '') ?>>
                                 <?php echo $cpt->get('lastValue') ?>
@@ -127,7 +130,7 @@
         <table class="min-w-full bg-white">
             <thead class="bg-gray-800 text-white">
                 <tr>
-                    <th>Compteur</th>
+                    <th class="w-1/4">Compteur</th>
                     <?php for($i = 2020 ; $i <= _YEAR_ ; $i++): ?>
                         <th><?php echo $i ?></th>
                     <?php endfor ?>
@@ -141,7 +144,7 @@
                         $foo = !$foo;
                     ?>
                     <tr <?php echo ($foo ? 'class="bg-gray-200"' : '') ?>>
-                        <th class="bg-gray-800 text-white text-left"><?php echo $cpt->get('labelHTML') ?></th>
+                        <th class="bg-gray-800 text-white text-left pl-2"><?php echo $cpt->get('labelHTML') ?></th>
                         <?php for($i = 2020 ; $i <= _YEAR_ ; $i++): ?>
                             <td class="text-right pr-3 <?php if($i === _YEAR_): ?><?php echo ($foo ? 'bg-gray-300' : 'bg-gray-200') ?><?php endif ?>">
                                 <?php echo Helper::nf($cpt->get('sumByYear')[$i]) ?>

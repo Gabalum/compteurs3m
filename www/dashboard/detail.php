@@ -128,46 +128,79 @@
         <div class="bg-slate-900 text-white p-1 rounded-xl m-1 text-center text-lg">
             <?php echo $compteur->get('labelHTML') ?> - dernier relevé : <?php echo $compteur->get('lastValue') ?> le <?php echo $compteur->get('lastDate') ?>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
             <div class="bg-slate-900 text-white p-4 rounded-xl">
                 <div class="text-center font-bold">Toutes les données</div>
                 <ul>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($compteur->get('sumTotal')) ?> / <?php echo count($compteur->get('dataTotal')) ?> jours</li>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($compteur->get('avgTotal')) ?> / jour</li>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Médiane :</div> <?php echo Helper::nf($compteur->get('medianTotal')) ?> / jour</li>
-                    <li class="flex <?php echo ($recordTotal ? 'text-green-600' : '') ?>">
-                        <div class="w-1/3 text-right pr-2">Record :</div> <?php echo Helper::nf($compteur->get('recordTotal')) ?> le <?php echo $compteur->get('recordTotalDate') ?>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Total :</div>
+                        <div><?php echo Helper::nf($compteur->get('sumTotal')) ?> / <?php echo count($compteur->get('dataTotal')) ?> jours</div>
                     </li>
-                    <li class="flex <?php echo ($compteur->get('worstTotal') == $compteur->get('lastValue') ? 'text-orange-900' : '') ?>">
-                        <div class="w-1/3 text-right pr-2">Pire :</div> <?php echo Helper::nf($compteur->get('worstTotal')) ?> le <?php echo $compteur->get('worstTotalDate') ?>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Moyenne :</div>
+                        <div><?php echo Helper::nf($compteur->get('avgTotal')) ?> / jour</div>
+                    </li>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Médiane :</div>
+                        <div><?php echo Helper::nf($compteur->get('medianTotal')) ?> / jour</div>
+                    </li>
+                    <li class="grid grid-cols-2 <?php echo ($recordTotal ? 'text-green-600' : '') ?>">
+                        <div class="text-right pr-2">Record :</div>
+                        <div><?php echo Helper::nf($compteur->get('recordTotal')) ?> le <?php echo $compteur->get('recordTotalDate') ?></div>
+                    </li>
+                    <li class="grid grid-cols-2 <?php echo ($compteur->get('worstTotal') == $compteur->get('lastValue') ? 'text-orange-900' : '') ?>">
+                        <div class="text-right pr-2">Pire :</div>
+                        <div><?php echo Helper::nf($compteur->get('worstTotal')) ?> le <?php echo $compteur->get('worstTotalDate') ?></div>
                     </li>
                 </ul>
             </div>
             <div class="bg-slate-900 text-white p-4 rounded-xl">
                 <div class="text-center font-bold">Cette année <?php echo date('Y') ?></div>
                 <ul>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($compteur->get('sumCurYear')) ?> / <?php echo count($compteur->get('dataCurYear')) ?> jour<?php echo ($compteur->get('dataCurYear') > 1 ? 's' : '') ?></li>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($compteur->get('avgCurYear')) ?> / jour</li>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Médiane :</div> <?php echo Helper::nf($compteur->get('medianByYear')[_YEAR_]) ?> / jour</li>
-                    <li class="flex <?php echo ($recordTotal ? 'text-green-600' : ($recordYear ? 'text-blue-600' : '')) ?>">
-                        <div class="w-1/3 text-right pr-2">Record :</div> <?php echo Helper::nf($compteur->get('recordYear')) ?> le <?php echo $compteur->get('recordYearDate') ?>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Total :</div>
+                        <div><?php echo Helper::nf($compteur->get('sumCurYear')) ?> / <?php echo count($compteur->get('dataCurYear')) ?> jour<?php echo ($compteur->get('dataCurYear') > 1 ? 's' : '') ?></div>
                     </li>
-                    <li class="flex <?php echo ($compteur->get('worstYear') == $compteur->get('lastValue') ? 'text-orange-900' : '') ?>">
-                        <div class="w-1/3 text-right pr-2">Pire :</div> <?php echo Helper::nf($compteur->get('worstYear')) ?> le <?php echo $compteur->get('worstYearDate') ?>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Moyenne :</div>
+                        <div><?php echo Helper::nf($compteur->get('avgCurYear')) ?> / jour</div>
+                    </li>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Médiane :</div>
+                        <div><?php echo Helper::nf($compteur->get('medianByYear')[_YEAR_]) ?> / jour</div>
+                    </li>
+                    <li class="grid grid-cols-2 <?php echo ($recordTotal ? 'text-green-600' : ($recordYear ? 'text-blue-600' : '')) ?>">
+                        <div class="text-right pr-2">Record :</div>
+                        <div><?php echo Helper::nf($compteur->get('recordYear')) ?> le <?php echo $compteur->get('recordYearDate') ?></div>
+                    </li>
+                    <li class="grid grid-cols-2 <?php echo ($compteur->get('worstYear') == $compteur->get('lastValue') ? 'text-orange-900' : '') ?>">
+                        <div class="text-right pr-2">Pire :</div>
+                        <div><?php echo Helper::nf($compteur->get('worstYear')) ?> le <?php echo $compteur->get('worstYearDate') ?></div>
                     </li>
                 </ul>
             </div>
             <div class="bg-slate-900 text-white p-4 rounded-xl">
                 <div class="text-center font-bold">Ce mois-ci <?php echo Helper::frenchMonth(date('m'), false).' '.date('Y') ?></div>
                 <ul>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Total :</div> <?php echo Helper::nf($currentMonth['sum']) ?> / <?php echo $currentMonth['cpt'] ?> jour<?php echo ($currentMonth['cpt'] > 1 ? 's' : '') ?></li>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Moyenne :</div> <?php echo Helper::nf($currentMonth['avg']) ?> / jour</li>
-                    <li class="flex"><div class="w-1/3 text-right pr-2">Médiane :</div> <?php echo Helper::nf($median) ?> / jour</li>
-                    <li class="flex <?php echo ($recordTotal ? 'text-green-600' : ($recordYear ? 'text-blue-600' : ($recordMonth ? 'text-amber-600' : ''))) ?>">
-                        <div class="w-1/3 text-right pr-2">Record :</div> <?php echo Helper::nf($currentMonth['value']) ?> le <?php echo $currentMonth['date'] ?>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Total :</div>
+                        <div><?php echo Helper::nf($currentMonth['sum']) ?> / <?php echo $currentMonth['cpt'] ?> jour<?php echo ($currentMonth['cpt'] > 1 ? 's' : '') ?></div>
                     </li>
-                    <li class="flex <?php echo ($currentMonth['worst'] == $compteur->get('lastValue') ? 'text-orange-900' : '') ?>">
-                        <div class="w-1/3 text-right pr-2">Pire :</div> <?php echo Helper::nf($currentMonth['worst']) ?> le <?php echo $currentMonth['worstDate'] ?>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Moyenne :</div>
+                        <div><?php echo Helper::nf($currentMonth['avg']) ?> / jour</div>
+                    </li>
+                    <li class="grid grid-cols-2">
+                        <div class="text-right pr-2">Médiane :</div>
+                        <div><?php echo Helper::nf($median) ?> / jour</div>
+                    </li>
+                    <li class="grid grid-cols-2 <?php echo ($recordTotal ? 'text-green-600' : ($recordYear ? 'text-blue-600' : ($recordMonth ? 'text-amber-600' : ''))) ?>">
+                        <div class="text-right pr-2">Record :</div>
+                        <div><?php echo Helper::nf($currentMonth['value']) ?> le <?php echo $currentMonth['date'] ?></div>
+                    </li>
+                    <li class="grid grid-cols-2 <?php echo ($currentMonth['worst'] == $compteur->get('lastValue') ? 'text-orange-900' : '') ?>">
+                        <div class="text-right pr-2">Pire :</div>
+                        <div><?php echo Helper::nf($currentMonth['worst']) ?> le <?php echo $currentMonth['worstDate'] ?></div>
                     </li>
                 </ul>
             </div>
@@ -246,15 +279,15 @@
             Comparaison année en cours
         </h3>
         <?php $max = max(array_merge(array_column($compteur->get('days'), 'avg'), array_column($days[date('Y')], 'avg'))) ?>
-        <div class="flex">
-            <div class="w-1/2 pr-3">
+        <div class="flex flex-col sm:flex-row">
+            <div class="w-full sm:w-1/2 mr-3 sm:mr-0 pr-3">
                 <div class="font-bold">Toutes les données</div>
                 <?php $tmpDays = $compteur->get('days'); ?>
                 <?php $avg = $compteur->get('avgTotal') ?>
                 <?php $isCurrentY = false ?>
                 <?php require(dirname(__FILE__).'/parts/table-day.php') ?>
             </div>
-            <div class="w-1/2 pr-3">
+            <div class="w-full sm:w-1/2 mr-3 sm:mr-0 pr-3">
                 <div class="font-bold">En <?php echo date('Y') ?></div>
                 <?php $tmpDays = $days[date('Y')] ?>
                 <?php $avg = $compteur->get('avgCurYear') ?>
@@ -356,8 +389,8 @@
             Classements
         </h3>
         <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5">
-            <?php echo DashboardHelper::ranking($rankingTotal, 'Toutes les données', $compteur->get('lastValue')) ?>
-            <?php echo DashboardHelper::ranking($rankingYear, 'Année '._YEAR_, $compteur->get('lastValue')) ?>
+            <?php echo DashboardHelper::displayRanking($rankingTotal, 'Toutes les données', $compteur->get('lastValue')) ?>
+            <?php echo DashboardHelper::displayRanking($rankingYear, 'Année '._YEAR_, $compteur->get('lastValue')) ?>
         </div>
         <h3 class="text-2xl text-black">
             Autre

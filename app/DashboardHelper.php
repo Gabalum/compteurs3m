@@ -23,7 +23,7 @@ class DashboardHelper
         ';
     }
 
-    public static function ranking($ranking = [], $rankingTitle = '', $lastValue = 0)
+    public static function displayRanking($ranking = [], $rankingTitle = '', $lastValue = 0)
     {
         $retour = '
             <div class="bg-white shadow-lg rounded-sm border border-gray-200 mt-5">

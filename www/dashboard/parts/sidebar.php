@@ -1,4 +1,4 @@
-<aside class="relative bg-slate-900 text-white h-screen flex flex-col w-50  shadow-xl  overflow-y-scroll">
+<aside id="sidebar" class="absolute hidden sm:relative sm:block bg-slate-900 text-white h-screen flex flex-col sm:w-50  shadow-xl  overflow-y-scroll z-10">
     <div class="p-2 pb-2 text-center ">
        <a href="./" class="text-white text-xl font-semibold uppercase hover:text-gray-300">Compteurs 3M</a>
    </div>
