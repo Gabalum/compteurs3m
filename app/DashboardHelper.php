@@ -1,6 +1,8 @@
 <?php
 namespace App;
 
+use Carbon\Carbon;
+
 class DashboardHelper
 {
     public static function alert($message = '', $color = '', $link = '', $linkLabel = '')
@@ -33,6 +35,16 @@ class DashboardHelper
                 <ul class="my-1">';
         $i = 1;
         foreach($ranking as $date => $value){
+            if(is_array($value)){ // par semaine
+                $tmpDate = Carbon::now();
+                $tmpDate->setISODate($value['year'], $value['num']);
+                $date = $tmpDate->startOfWeek()->format('d').' au '.$tmpDate->endOfWeek()->format('d').' '.Helper::frenchMonth($tmpDate->endOfWeek()->format('m'), false).' '.$tmpDate->endOfWeek()->format('Y');
+                $rValue = $value['sum'];
+                $value = Helper::nf($value['sum']);
+            }else{
+                $rValue = $value;
+                $value = Helper::nf($value);
+            }
             $medal = 'bg-white-600 text-black text-sm';
             if($i === 1){
                 $medal = 'bg-yellow-500 text-gray-900 text-base';
@@ -42,13 +54,13 @@ class DashboardHelper
                 $medal = 'bg-yellow-900 text-white text-base';
             }
             $retour .= '
-                <li class="flex px-2 hover:bg-gray-200 '.($lastValue == $value ? 'bg-green-100' : '').'">
+                <li class="flex px-2 hover:bg-gray-200 '.($lastValue == $rValue ? 'bg-green-100' : '').'">
                     <div class="w-6 h-6 rounded-full shrink-0 my-2 mr-3 text-center '.$medal.'">
                         '.$i.'
                     </div>
                     <div class="grow flex items-center border-b border-gray-100 text-sm py-1">
                         <div class="grow flex justify-between">
-                            <div class="self-center '.($i < 4 ? 'text-lg' : '').' '.($lastValue == $value ? 'font-bold' : 'font-normal').'">
+                            <div class="self-center '.($i < 4 ? 'text-lg' : '').' '.($lastValue == $rValue ? 'font-bold' : 'font-normal').'">
                                 '.$value.'
                             </div>
                             <div class="shrink-0 self-start ml-2 text-gray-400 text-sm">

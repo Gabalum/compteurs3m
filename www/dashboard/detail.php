@@ -99,6 +99,44 @@
             break;
         }
     }
+    $rankingWeek = [];
+    $rankingWeekY = [];
+    $mt = $compteur->get('medianTotal');
+    $dw = (int)date('W');
+    $latestWeek = 0;
+    foreach($weeksY as $year => $weeks){
+        foreach($weeks as $nb => $week){
+            if($week['sum'] > $mt){
+                if($year === _YEAR_ && (int)$nb === $dw){
+
+                }else{
+                    $rankingWeek[] = [
+                        'num'   => (int)$nb,
+                        'year'  => $year,
+                        'sum'   => $week['sum']
+                    ];
+                    if($year === _YEAR_){
+                        $rankingWeekY[] = [
+                            'num'   => (int)$nb,
+                            'year'  => $year,
+                            'sum'   => $week['sum']
+                        ];
+                    }
+                }
+                if($year === _YEAR_ && (int)$nb === ($dw-1)){
+                    $latestWeek = $week['sum'];
+                }
+            }
+        }
+    }
+    usort($rankingWeek, function($a, $b){
+        return $a['sum'] < $b['sum'];
+    });
+    usort($rankingWeekY, function($a, $b){
+        return $a['sum'] < $b['sum'];
+    });
+    $rankingWeek = array_slice($rankingWeek, 0, 10);
+    $rankingWeekY = array_slice($rankingWeekY, 0, 10);
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
 <header class="fixed bg-blue-900 text-white w-full flex pl-5 gap-3 text-sm pt-1">
@@ -118,11 +156,11 @@
 <main class="w-full flex-grow p-6 pb-20">
     <div id="a-summary" class="pb-10"></div>
     <?php if($recordTotal): ?>
-        <?php echo DashboardHelper::alert('Nouveau record absolu !', 'green', '#ranking', 'voir le classement') ?>
+        <?php echo DashboardHelper::alert('Nouveau record absolu !', 'green', '#ranking', 'voir le top 10') ?>
     <?php elseif($recordYear): ?>
-        <?php echo DashboardHelper::alert("Nouveau record de l'année !", 'blue', '#ranking', 'voir le classement') ?>
+        <?php echo DashboardHelper::alert("Nouveau record de l'année !", 'blue', '#ranking', 'voir le top 10') ?>
     <?php elseif($recordMonth): ?>
-        <?php echo DashboardHelper::alert("Nouveau record du mois !", 'amber', '#ranking', 'voir le classement') ?>
+        <?php echo DashboardHelper::alert("Nouveau record du mois !", 'amber', '#ranking', 'voir le top 10') ?>
     <?php endif ?>
     <section id="summary" class="bg-gradient-to-b from-slate-700 to-slate-600 py-5 px-2">
         <div class="bg-slate-900 text-white p-1 rounded-xl m-1 text-center text-lg">
@@ -386,11 +424,18 @@
             </div>
         </div>
         <h3 class="text-2xl text-black" id="ranking">
-            Classements
+            Top 10
         </h3>
         <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5">
             <?php echo DashboardHelper::displayRanking($rankingTotal, 'Toutes les données', $compteur->get('lastValue')) ?>
             <?php echo DashboardHelper::displayRanking($rankingYear, 'Année '._YEAR_, $compteur->get('lastValue')) ?>
+        </div>
+        <h3 class="text-2xl text-black" id="ranking">
+            Top 10 semaines
+        </h3>
+        <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5">
+            <?php echo DashboardHelper::displayRanking($rankingWeek, 'Toutes les données', $latestWeek) ?>
+            <?php echo DashboardHelper::displayRanking($rankingWeekY, 'Année '._YEAR_, $latestWeek) ?>
         </div>
         <h3 class="text-2xl text-black">
             Autre
