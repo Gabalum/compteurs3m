@@ -1,4 +1,5 @@
 <?php namespace App; ?>
+<?php ksort($tmpDays) ?>
 <div class="table min-w-full bg-white border border-gray-500">
     <div class="table-header-group bg-slate-900 text-white">
         <div class="table-row flex">

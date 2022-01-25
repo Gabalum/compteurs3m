@@ -33,7 +33,7 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
-        /*
+        /* 
         'XTH21070328'   => [
             'label'     => 'Clapiers (Totem Simone Veil)',
             'address'   => '',
@@ -41,7 +41,7 @@ class Compteurs
             'totem'     => true,
             'commune'   => 'Clapiers',
         ],
-        */
+        /* */
         'X2H20042633'   => [
             'label'     => 'Celleneuve',
             'address'   => '137 avenue de Lodève, Montpellier',
@@ -165,6 +165,20 @@ class Compteurs
             'label'     => 'Père Soulas 2',
             'address'   => '',
             'color'     => '#ee0000',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H21111120'   => [
+            'label'     => 'Saint-Jaumes 1',
+            'address'   => '',
+            'color'     => '#abef99',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H21111121'   => [
+            'label'     => 'Saint-Jaumes 2',
+            'address'   => '',
+            'color'     => '#15202b',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],

@@ -68,6 +68,11 @@ class Compteur
         return $this->commune;
     }
 
+    public function orderByDO($a, $b)
+    {
+        return $a->dateObserved > $b->dateObserved;
+    }
+
     public function getData()
     {
         if($this->data == null){
@@ -117,6 +122,7 @@ class Compteur
             'dataTotalDates'    => [],
             'dataTotalValues'   => [],
             'dataTotalWithCplt' => [],
+            'dataByYear'        => [],
             'sumCurYear'        => 0,
             'avgCurYear'        => 0,
             'sumTotal'          => 0,
@@ -165,8 +171,9 @@ class Compteur
         if($data && strlen($data) > 0){
             $values = json_decode($data);
             if(count($values) > 0){
+                uasort($values, [$this, 'orderByDO']);
                 foreach($values as $val){
-                    if(intval($val->intensity) < 8){
+                    if(intval($val->intensity) < 3){
                         continue; // garde fou contre les erreurs de relevé
                     }
                     if(in_array($val->id, $doubles)){
@@ -364,11 +371,21 @@ class Compteur
                             $compteur['days-by-year'][$year][$dow]['avg'] = intval($val['sum'] / $val['cpt']);
                         }
                     }
-                    ksort($compteur['days-by-year'][$year]);
-                    // -- calcul de la médiane
-                    $compteur['medianByYear'][$year] = $this->getMedian($compteur['days-by-year'][$year]);
-                    $compteur['sumByYear'][$year] = array_sum(array_column($compteur['days-by-year'][$year], 'sum'));
                 }
+            }
+        }
+        if(count($compteur['dataTotal'])){
+            foreach($compteur['dataTotal'] as $date => $value){
+                $year = substr($date, -4);
+                if(!isset($compteur['dataByYear'][$year])){
+                    $compteur['dataByYear'][$year] = [];
+                }
+                $compteur['dataByYear'][$year][] = $value;
+            }
+            foreach($compteur['dataByYear'] as $year => $values){
+                ksort($compteur['dataByYear'][$year]);
+                $compteur['medianByYear'][$year] = $this->getMedian($values);
+                $compteur['sumByYear'][$year] = array_sum($values);
             }
         }
         $compteur['maxAvgWeeksY'] = 0;
