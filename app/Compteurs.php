@@ -33,7 +33,7 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
-        /* 
+        /*
         'XTH21070328'   => [
             'label'     => 'Clapiers (Totem Simone Veil)',
             'address'   => '',
@@ -169,14 +169,14 @@ class Compteurs
             'commune'   => 'Montpellier',
         ],
         'X2H21111120'   => [
-            'label'     => 'Saint-Jaumes 1',
+            'label'     => 'Saint-Jaumes nord',
             'address'   => '',
             'color'     => '#abef99',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
         'X2H21111121'   => [
-            'label'     => 'Saint-Jaumes 2',
+            'label'     => 'Saint-Jaumes sud',
             'address'   => '',
             'color'     => '#15202b',
             'totem'     => false,

@@ -298,7 +298,7 @@
                                 }
                                 if($y === _YEAR_){
                                     if($days[$y][$dow]['value'] === $compteur->get('lastValue')){
-                                        $css .= 'text-green-600';
+                                        $css .= ' text-green-600';
                                     }
                                 }
                             ?>
@@ -435,7 +435,7 @@
         </h3>
         <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5">
             <?php echo DashboardHelper::displayRanking($rankingWeek, 'Toutes les données', $latestWeek) ?>
-            <?php echo DashboardHelper::displayRanking($rankingWeekY, 'Année '._YEAR_, $latestWeek) ?>
+            <?php echo DashboardHelper::displayRanking($rankingWeekY, 'Année '._YEAR_, $latestWeek, true) ?>
         </div>
         <h3 class="text-2xl text-black">
             Autre

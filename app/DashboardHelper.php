@@ -25,7 +25,7 @@ class DashboardHelper
         ';
     }
 
-    public static function displayRanking($ranking = [], $rankingTitle = '', $lastValue = 0)
+    public static function displayRanking($ranking = [], $rankingTitle = '', $lastValue = 0, $alterColor = false)
     {
         $retour = '
             <div class="bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
@@ -34,6 +34,11 @@ class DashboardHelper
                 </header>
                 <ul class="my-1">';
         $i = 1;
+        if($alterColor){
+            $color = 'bg-amber-100';
+        }else{
+            $color = 'bg-green-100';
+        }
         foreach($ranking as $date => $value){
             if(is_array($value)){ // par semaine
                 $tmpDate = Carbon::now();
@@ -54,7 +59,7 @@ class DashboardHelper
                 $medal = 'bg-yellow-900 text-white text-base';
             }
             $retour .= '
-                <li class="flex px-2 hover:bg-gray-200 '.($lastValue == $rValue ? 'bg-green-100' : '').'">
+                <li class="flex px-2 hover:bg-gray-200 '.($lastValue == $rValue ? $color : '').'">
                     <div class="w-6 h-6 rounded-full shrink-0 my-2 mr-3 text-center '.$medal.'">
                         '.$i.'
                     </div>

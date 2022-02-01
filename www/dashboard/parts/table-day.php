@@ -18,7 +18,7 @@
                         $css .= ' font-bold';
                     }
                     if($tmpDays[$dow]['value'] === $compteur->get('lastValue')){
-                        $css .= 'text-green-600';
+                        $css .= ' text-green-600';
                     }
                 }
             ?>
