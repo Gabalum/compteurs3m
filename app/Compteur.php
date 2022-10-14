@@ -15,8 +15,9 @@ class Compteur
     private $totem = false;
     private $commune = '';
     private $address = '';
+    private $fix = [];
 
-    public function __construct($id, $name = '', $address = '', $color = '', bool $totem = false, string $commune = '')
+    public function __construct($id, $name = '', $address = '', $color = '', bool $totem = false, string $commune = '', array $fix = [])
     {
         $this->id = $id;
         $this->name = $name;
@@ -31,6 +32,9 @@ class Compteur
         }
         $this->totem = $totem;
         $this->commune = $commune;
+        if(isset($fix[$id])){
+            $this->fix = $fix[$id];
+        }
     }
 
     public function getName(bool $stripTags = false) : string
@@ -76,7 +80,7 @@ class Compteur
     public function getData()
     {
         if($this->data == null){
-            if(!file_exists($this->file)){
+            if(isset($_GET['reload']) || !file_exists($this->file)){
                 $this->retrieveData();
             }elseif((date('dmY', filemtime($this->file)) !== date('dmY') || date('Hi', filemtime($this->file)) < 1000) && time() - filemtime($this->file) > 900){ // Si le fichier date de la veille ou d'avant 10, on regarde toutes les 15 minutes
                 $this->retrieveData();
@@ -180,18 +184,23 @@ class Compteur
                         continue; // éviter les valeurs en double avec l'ajout des données 2020 en archive
                     }
                     $doubles[] = $val->id;
-                    $cpt = intval($val->intensity);
+
                     $date = new CptDate($val->dateObserved);
                     $year = $date->format('Y');
                     $month = $date->format('m');
                     $week = $date->format('W');
                     $fDate = $date->format('d-m-Y');
-                    if($fDate == '11-05-2020'){
-                        continue; // élimination donnée eronnée
-                    }
                     $tsDate = $date->format('U');
+                    $openDataValue = (int) $val->intensity;
+                    if(isset($this->fix[$tsDate])){ // 14/10/2022 tableau de fix des valeurs
+                        $cpt = (int) $this->fix[$tsDate];
+                        $cptWithAsterisk = $cpt.'<sup>*</sup>';
+                        $fixedValue = true;
+                    }else{
+                        $cpt = (int)$val->intensity;
+                        $cptWithAsterisk = $cpt;
+                    }
                     $dayOfTheWeek = $date->format('N');
-                    $cpt = $val->intensity;
                     if(is_null($compteur['firstDate'])){
                         $compteur['firstDate'] = $fDate;
                     }
@@ -297,7 +306,7 @@ class Compteur
                         'date'      => $fDate,
                         'day'       => $dayOfTheWeek,
                         'isFerie'   => Helper::isFerie($date),
-                        'value'     => $cpt,
+                        'value'     => $cptWithAsterisk,
                     ];
 
                 }

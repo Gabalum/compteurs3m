@@ -19,6 +19,13 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        'X2H22043033'   => [
+            'label'     => 'Allée de la Méditerranée',
+            'address'   => '',
+            'color'     => '#998888',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
         'X2H21070350'   => [
             'label'     => 'Arnel',
             'address'   => '',
@@ -42,6 +49,20 @@ class Compteurs
             'commune'   => 'Clapiers',
         ],
         /* */
+        'X2H22043031'   => [
+            'label'     => 'Castelnau - Aube-Rouge 1',
+            'address'   => '',
+            'color'     => '#de5c9d',
+            'totem'     => false,
+            'commune'   => 'Castelnau-le-Lez',
+        ],
+        'X2H22043032'   => [
+            'label'     => 'Castelnau - Aube-Rouge 2',
+            'address'   => '',
+            'color'     => '#de5c9d',
+            'totem'     => false,
+            'commune'   => 'Castelnau-le-Lez',
+        ],
         'X2H20042633'   => [
             'label'     => 'Celleneuve',
             'address'   => '137 avenue de Lodève, Montpellier',
@@ -83,6 +104,13 @@ class Compteurs
             'color'     => '#123456',
             'totem'     => false,
             'commune'   => 'Jacou',
+        ],
+        'X2H22043030'   => [
+            'label'     => 'Juvignac - Europe',
+            'address'   => '',
+            'color'     => '#123456',
+            'totem'     => false,
+            'commune'   => 'Juvignac',
         ],
         'X2H21070349'   => [
             'label'     => 'Lapeyronie',
@@ -168,6 +196,20 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        'X2H22043034'   => [
+            'label'     => 'Renouvier (bande cyclable)',
+            'address'   => '',
+            'color'     => '#ee0000',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22043035'   => [
+            'label'     => 'Renouvier (chaussée)',
+            'address'   => '',
+            'color'     => '#abef99',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
         'X2H21111120'   => [
             'label'     => 'Saint-Jaumes nord',
             'address'   => '',
@@ -179,6 +221,13 @@ class Compteurs
             'label'     => 'Saint-Jaumes sud',
             'address'   => '',
             'color'     => '#15202b',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22043029'   => [
+            'label'     => 'Thomassy (RM65)',
+            'address'   => '',
+            'color'     => '#112222',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
@@ -196,10 +245,11 @@ class Compteurs
 
     public function getCompteurs()
     {
+        $fix = (Fix::getInstance())->getData();
         $retour = [];
         if(count($this->compteurs) > 0){
             foreach($this->compteurs as $id => $cpt){
-                $retour[$id] = new Compteur($id, $cpt['label'], $cpt['address'], $cpt['color'], $cpt['totem'], $cpt['commune']);
+                $retour[$id] = new Compteur($id, $cpt['label'], $cpt['address'], $cpt['color'], $cpt['totem'], $cpt['commune'], $fix);
             }
         }
         return $retour;

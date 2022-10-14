@@ -1,6 +1,7 @@
 <?php
     namespace App;
     require_once(dirname(__DIR__, 2).'/bootstrap.php');
+    $quantieme = intval(((date('z')+1)/365)*100);
     $slug = (isset($_GET['cpt']) ? strip_tags($_GET['cpt']) : '');
     $compteur = (Compteurs::getInstance())->getCompteurBySlug($slug);
     if(is_null($compteur)){
@@ -246,9 +247,10 @@
         <?php if(count($items) > 0): ?>
             <div class="flex justify-between mb-1">
                 <span class="text-base font-medium text-blue-700 dark:text-white">Avancement par rapport à l'an dernier</span>
-                <span class="text-sm font-medium text-blue-700 dark:text-white"><?php echo $progress ?>%</span>
+                <span class="text-sm font-medium text-blue-700 dark:text-white"><?php echo $progress ?>% (jours de l'année : <?php echo $quantieme ?>%)</span>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
+            <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700" style="position:relative">
+              <div style="position: absolute;border:0;border-left:2px solid red;left: <?php echo $quantieme ?>%;top: -5px;">&nbsp;</div>
               <div class="bg-blue-600 h-3 rounded-full" style="width: <?php echo $progress ?>%"></div>
             </div>
             <div class="flex justify-between mt-2 mb-1">
@@ -488,6 +490,7 @@
                         <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-blue-300">&nbsp;</button> Record en <?php echo _YEAR_ ?> jusque là</li>
                         <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-orange-500">&nbsp;</button> Pire scrore absolu</li>
                         <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1 bg-orange-300">&nbsp;</button> Pire score de l'année</li>
+                        <li class="pb-1"><button class="inline-block align-bottom rounded-xl w-4 h-4 mt-1"><sup>*</sup></button> Score communautaire de remplacement</li>
                     </ul>
                 </footer>
             </div>
