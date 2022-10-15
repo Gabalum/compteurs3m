@@ -175,6 +175,7 @@ class Compteur
         if($data && strlen($data) > 0){
             $values = json_decode($data);
             if(count($values) > 0){
+                $values = $this->completeNoDataDays($values);
                 uasort($values, [$this, 'orderByDO']);
                 foreach($values as $val){
                     if(intval($val->intensity) < 3){
@@ -572,5 +573,29 @@ class Compteur
             }
         }
         return $retour;
+    }
+
+    public function completeNoDataDays($values)
+    {
+        $verif = [];
+        foreach($values as $val) {
+            $date = new CptDate($val->dateObserved);
+            $verif[] = (int)$date->format('U');
+        }
+        foreach($this->fix as $d => $v) {
+            if(!in_array((int)$d, $verif)){
+                $tmp = new \stdClass();
+                $tmp->id = "Manual_".$this->id.'_'.$d;
+                $tmp->intensity = (int)$v;
+                $date = \DateTime::createFromFormat('U', $d);
+                $date->modify('+1 day');
+                $date2 = clone $date;
+                $date2->modify('+1 day');
+                $date = $date->format('Y-m-d\T00:00:00').'/'.$date2->format('Y-m-d\T00:00:00');
+                $tmp->dateObserved = $date;
+                $values[] = $tmp;
+            }
+        }
+        return $values;
     }
 }

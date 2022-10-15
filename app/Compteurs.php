@@ -262,7 +262,6 @@ class Compteurs
             foreach($this->compteurs as $id => $cpt){
                 if(Helper::slugify(strip_tags($cpt['label']), '-') == $slug){
                     $retour = new Compteur($id, $cpt['label'], $cpt['address'], $cpt['color'], $cpt['totem'], $cpt['commune']);
-                    break;
                 }
             }
         }
