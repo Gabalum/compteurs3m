@@ -458,6 +458,9 @@
                                 if($val['value'] > $max){
                                     $class = 'bg-green-300';
                                     $max = $val['value'];
+                                    if($y == _YEAR_){
+                                        $maxY = $val['value'];
+                                    }
                                 }elseif($y == _YEAR_ && $val['value'] > $maxY){
                                     if($compteur->get('recordYear') == $val['value']){
                                         $class = 'bg-blue-500';
@@ -494,13 +497,40 @@
                     </ul>
                 </footer>
             </div>
-            <div class="w-full h-fit flex-1 shrink-1 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
-                <header class="px-5 py-4 border-b border-gray-100">
-                    <h4 class="font-semibold text-gray-800">Valeurs incrémentales</h4>
-                    <em class="text-sm text-gray-400">Pour l'année <?php echo _YEAR_ ?></em>
-                </header>
-                <div class="pb-5">
-                    <canvas id="stack-<?php echo uniqid() ?>" class="bar-stack" data-labels='<?php echo json_encode(array_keys($stack)) ?>' data-values='<?php echo json_encode(array_values($stack)) ?>' data-max="<?php echo max($stack) ?>"></canvas>
+            <div class="w-full h-fit flex-1 shrink-1 mt-5">
+                <div class="bg-white shadow-lg rounded-sm border border-gray-200">
+                    <header class="px-5 py-4 border-b border-gray-100">
+                        <h4 class="font-semibold text-gray-800">Valeurs incrémentales</h4>
+                        <em class="text-sm text-gray-400">Pour l'année <?php echo _YEAR_ ?></em>
+                    </header>
+                    <div class="pb-5">
+                        <canvas id="stack-<?php echo uniqid() ?>" class="bar-stack" data-labels='<?php echo json_encode(array_keys($stack)) ?>' data-values='<?php echo json_encode(array_values($stack)) ?>' data-max="<?php echo max($stack) ?>"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white shadow-lg rounded-sm border border-gray-200 my-5 pb-5">
+                    <header class="px-5 py-4 border-b border-gray-100">
+                        <h4 class="font-semibold text-gray-800">Valeurs par années</h4>
+                    </header>
+                    <div class="table min-w-full bg-white border border-gray-500">
+                        <div class="table-header-group bg-slate-900 text-white">
+                            <div class="table-row flex">
+                                <div class="table-cell w-1/4 text-center pt-2 pb-2">Année</div>
+                                <div class="table-cell w-1/4 text-center pt-2 pb-2">Total</div>
+                                <div class="table-cell w-1/4 text-center pt-2 pb-2">Moyenne</div>
+                            </div>
+                        </div>
+                        <div class="table-row-group">
+                            <?php foreach($compteur->get('sumByYear') as $y => $v): ?>
+                                <div class="table-row flex text-center <?php echo ($y%2==0 ? 'bg-gray-200' : '') ?>">
+                                    <div class="table-cell font-bold">
+                                        <?php echo $y ?>
+                                    </div>
+                                    <div class="table-cell"><?php echo Helper::nf($v) ?></div>
+                                    <div class="table-cell"><?php echo (isset($compteur->get('medianByYear')[$y]) ? Helper::nf($compteur->get('medianByYear')[$y]) : '-') ?></div>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -15,7 +15,7 @@
                     <?php echo Helper::frenchMonth($month, false) ?>
                 </div>
                 <?php if($values['cpt'] == 0): ?>
-                    <div class="table-cel"></div>
+                    <div class="table-cell"></div>
                     <div class="table-cell">
                         -
                         <div class="text-sm">&nbsp;</div>

@@ -178,7 +178,7 @@ class Compteur
                 $values = $this->completeNoDataDays($values);
                 uasort($values, [$this, 'orderByDO']);
                 foreach($values as $val){
-                    if(intval($val->intensity) < 3){
+                    if(intval($val->intensity) < 15){
                         continue; // garde fou contre les erreurs de relevé
                     }
                     if(in_array($val->id, $doubles)){
@@ -304,10 +304,11 @@ class Compteur
                     $compteur['dataTotalDates'][$date->format('Ymd')] = $fDate;
                     $compteur['dataTotalValues'][$date->format('Ymd')] = $cpt;
                     $compteur['dataTotalWithCplt'][$fDate] = [
-                        'date'      => $fDate,
-                        'day'       => $dayOfTheWeek,
-                        'isFerie'   => Helper::isFerie($date),
-                        'value'     => $cptWithAsterisk,
+                        'date'          => $fDate,
+                        'day'           => $dayOfTheWeek,
+                        'isFerie'       => Helper::isFerie($date),
+                        'value'         => $cptWithAsterisk,
+                        'originalvalue' => $openDataValue,
                     ];
 
                 }
