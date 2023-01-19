@@ -70,6 +70,27 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        'X2H22104767'   => [
+            'label'     => 'Clos l\'Armet',
+            'address'   => 'Chemin du Clos l\Armet, Castelnau-le-Lez',
+            'color'     => '#d95dde',
+            'totem'     => false,
+            'commune'   => 'Castelnau-le-Lez',
+        ],
+        'X2H22104770'   => [
+            'label'     => 'Colonel Pavelet',
+            'address'   => '',
+            'color'     => '#DD8899',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22104765'   => [
+            'label'     => 'Cournonsec',
+            'address'   => '',
+            'color'     => '#0088dd',
+            'totem'     => false,
+            'commune'   => 'Cournonsec',
+        ],
         'X2H20063163'   => [
             'label'     => 'Delmas 1',
             'address'   => '73 Avenue François Delmas, Montpellier',
@@ -91,12 +112,40 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        'X2H22104772'   => [
+            'label'     => 'Georges Frêche 1',
+            'address'   => '',
+            'color'     => '#f76479',
+            'totem'     => false,
+            'commune'   => 'Castelnau-le-Lez',
+        ],
+        'X2H22104771'   => [
+            'label'     => 'Georges Frêche 2',
+            'address'   => '',
+            'color'     => '#ab91dd',
+            'totem'     => false,
+            'commune'   => 'Castelnau-le-Lez',
+        ],
         'X2H20063162'   => [
             'label'     => 'Gerhardt',
             'address'   => '1 rue Gerhardt, Montpellier',
             'color'     => '#479f76',
             'totem'     => false,
             'commune'   => 'Montpellier',
+        ],
+        'X2H22104766'   => [
+            'label'     => 'Grabels',
+            'address'   => '',
+            'color'     => '#f6d7ee',
+            'totem'     => false,
+            'commune'   => 'Grabels',
+        ],
+        'X2H22104769'   => [
+            'label'     => 'Gossec',
+            'address'   => '',
+            'color'     => '#e9aab4',
+            'totem'     => false,
+            'commune'   => '',
         ],
         'X2H21070346'   => [
             'label'     => 'Jacou',
@@ -147,6 +196,13 @@ class Compteurs
             'totem'     => true,
             'commune'   => 'Montpellier',
         ],
+        'X2H22104777'   => [
+            'label'     => 'Léon Vallois',
+            'address'   => '',
+            'color'     => '#ffaa99',
+            'totem'     => true,
+            'commune'   => 'Montpellier',
+        ],
         'X2H21070351'   => [
             'label'     => 'Mas de Gau',
             'address'   => '',
@@ -158,6 +214,13 @@ class Compteurs
             'label'     => 'Méric',
             'address'   => 'Rue de la Draye, Montpellier',
             'color'     => '#336600',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22104768'   => [
+            'label'     => 'Mermoz',
+            'address'   => '',
+            'color'     => '#996633',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
@@ -193,6 +256,20 @@ class Compteurs
             'label'     => 'Père Soulas 2',
             'address'   => '',
             'color'     => '#ee0000',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22104773'   => [
+            'label'     => 'Pompignane 1',
+            'address'   => '',
+            'color'     => '#00ee00',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22104774'   => [
+            'label'     => 'Pompignane 2',
+            'address'   => '',
+            'color'     => '#99dd99',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
@@ -235,6 +312,20 @@ class Compteurs
             'label'     => 'Vieille-Poste',
             'address'   => '1211 rue de la Vieille-Poste, Montpellier',
             'color'     => '#031633',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22104775'   => [
+            'label'     => 'Vieusens 1',
+            'address'   => '',
+            'color'     => '#ff8800',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22104776'   => [
+            'label'     => 'Vieusens 2',
+            'address'   => '',
+            'color'     => '#0088FF',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
@@ -369,5 +460,15 @@ class Compteurs
             $retour['weekend'] = intval($retour['weekend'] / $count);
         }
         return $retour;
+    }
+
+    public function getIds()
+    {
+        return array_keys($this->compteurs);
+    }
+
+    public function getList()
+    {
+        return $this->compteurs;
     }
 }

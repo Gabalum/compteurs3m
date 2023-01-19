@@ -73,24 +73,41 @@ class Helper
         return $retour;
     }
 
-    public static function frenchMonth($num = 0, $prefixed = true)
+    public static function frenchMonth($num = 0, $prefixed = true, $mini = false)
     {
         $retour = '';
         $num = intval($num);
-        $mois = [
-            1 => 'janvier',
-            2 => 'février',
-            3 => 'mars',
-            4 => "avril",
-            5 => 'mai',
-            6 => 'juin',
-            7 => 'juillet',
-            8 => "août",
-            9 => 'septembre',
-            10 => "octobre",
-            11 => "novembre",
-            12 => "décembre",
-        ];
+        if($mini){
+            $mois = [
+                1 => 'jan.',
+                2 => 'fév.',
+                3 => 'mars',
+                4 => "avr.",
+                5 => 'mai',
+                6 => 'juin',
+                7 => 'juil',
+                8 => "août",
+                9 => 'sep.',
+                10 => "oct.",
+                11 => "nov.",
+                12 => "déc.",
+            ];
+        }else{
+            $mois = [
+                1 => 'janvier',
+                2 => 'février',
+                3 => 'mars',
+                4 => "avril",
+                5 => 'mai',
+                6 => 'juin',
+                7 => 'juillet',
+                8 => "août",
+                9 => 'septembre',
+                10 => "octobre",
+                11 => "novembre",
+                12 => "décembre",
+            ];
+        }
         if(isset($mois[$num])){
             if($prefixed){
                 if(in_array($num, [4, 8, 10])){

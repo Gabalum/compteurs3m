@@ -98,8 +98,8 @@ $weatherData = (new Meteo())->getWeather($days);
                         </h2>
                     </div>
                     <div class="row compteur-data">
-                        <div class="col-5 col-sm-4 data-col <?php if(file_exists(__DIR__.'/assets/img/'.$k.'.jpg')): ?>with-photo<?php endif ?>">
-                            <?php if(file_exists(__DIR__.'/assets/img/'.$k.'.jpg')): ?>
+                        <div class="col-5 col-sm-4 data-col <?php if(file_exists(__DIR__.'/assets/img/'.$k.'.jpg') || file_exists(__DIR__.'/assets/img/'.$k.'.png')): ?>with-photo<?php endif ?>">
+                            <?php if(file_exists(__DIR__.'/assets/img/'.$k.'.jpg') || file_exists(__DIR__.'/assets/img/'.$k.'.png')): ?>
                                 <ul class="nav nav-tabs nav-tabs-pm" id="tabs-<?php echo $k ?>" role="tablist">
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link active" id="link-map-<?php echo $k ?>" data-bs-toggle="tab" href="#tab-map-<?php echo $k ?>" role="tab" aria-controls="tab-map-<?php echo $k ?>" aria-selected="true">Carte</a>
@@ -113,7 +113,11 @@ $weatherData = (new Meteo())->getWeather($days);
                                         <div class="map" id="map-<?php echo $k ?>" data-id="<?php echo $k ?>" data-lat="<?php echo $compteur->get('lat') ?>" data-lng="<?php echo $compteur->get('lng') ?>"></div>
                                     </div>
                                     <div class="tab-pane fade" id="tab-photo-<?php echo $k ?>" role="tabpanel" aria-labelledby="tab-photo-<?php echo $k ?>">
-                                        <img src="<?php echo _BASE_URL_.'assets/img/'.$k.'.jpg' ?>" />
+                                        <?php if(file_exists(__DIR__.'/assets/img/'.$k.'.jpg')): ?>
+                                            <img src="<?php echo _BASE_URL_.'assets/img/'.$k.'.jpg' ?>" />
+                                        <?php elseif(file_exists(__DIR__.'/assets/img/'.$k.'.png')): ?>
+                                            <img src="<?php echo _BASE_URL_.'assets/img/'.$k.'.png' ?>" />
+                                        <?php endif ?>
                                     </div>
                                 </div>
                             <?php else: ?>

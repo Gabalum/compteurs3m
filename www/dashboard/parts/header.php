@@ -14,6 +14,9 @@
     <style>
         @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
         .font-family-karla { font-family: karla; }
+        .sticky{ position: sticky; }
+        .sticky.table-header-group{ top: 25px; }
+        .sticky.h-sticky{ top: 60px; }
     </style>
     <link rel="apple-touch-icon" sizes="90x90" href="<?php echo _BASE_URL_ ?>dashboard/assets/favicons/favicon.png">
         <link rel="icon" type="image/x-icon" sizes="90x90" href="<?php echo _BASE_URL_ ?>dashboard/assets/favicons/favicon.png">

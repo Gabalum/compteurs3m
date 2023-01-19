@@ -8,6 +8,7 @@
         $slug = "albert-1er";
         $compteur = (Compteurs::getInstance())->getCompteurBySlug($slug);
     }
+    $timeseries = (new Timeserie($compteur->getId()))->getData();
     $rowData = (Compteurs::getInstance())->getAllByDates();
     $cptLabels = (Compteurs::getInstance())->getLabels();
     $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
@@ -151,7 +152,8 @@
         <a href="#a-jour">Par jour</a>&nbsp;•&nbsp;
         <a href="#a-semaine">Par semaine</a>&nbsp;•&nbsp;
         <a href="#a-mois">Par mois</a>&nbsp;•&nbsp;
-        <a href="#a-stats">Stats</a>
+        <a href="#a-stats">Stats</a>&nbsp;•&nbsp;
+        <a href="#a-timeseries">Timeseries</a>
     </div>
 </header>
 <main class="w-full flex-grow p-6 pb-20">
@@ -167,7 +169,7 @@
         <div class="bg-slate-900 text-white p-1 rounded-xl m-1 text-center text-lg">
             <?php echo $compteur->get('labelHTML') ?> - dernier relevé : <?php echo $compteur->get('lastValue') ?> le <?php echo $compteur->get('lastDate') ?>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-1">
             <div class="bg-slate-900 text-white p-4 rounded-xl">
                 <div class="text-center font-bold">Toutes les données</div>
                 <ul>
@@ -244,6 +246,13 @@
                 </ul>
             </div>
         </div>
+        <?php if(is_array($timeseries) && isset($timeseries['record']) && isset($timeseries['record']['value']) && (int)$timeseries['record']['value'] > 0): ?>
+            <div class="bg-slate-800 text-white p-1 rounded-xl mb-4 text-center text-lg">
+                Record horaire en <?php echo date('Y') ?> : <b><?php echo $timeseries['record']['value'] ?></b> <?php echo $timeseries['record']['date'] ?>
+            </div>
+        <?php else: ?>
+            <div class="mb-4"></div>
+        <?php endif ?>
         <?php if(count($items) > 0): ?>
             <div class="flex justify-between mb-1">
                 <span class="text-base font-medium text-blue-700 dark:text-white">Avancement par rapport à l'an dernier</span>
@@ -535,5 +544,87 @@
             </div>
         </div>
     </section>
+    <?php if(is_array($timeseries)): ?>
+        <div id="a-timeseries" class="pb-10"></div>
+        <section id="timeseries">
+            <h2 class="text-3xl text-black">
+                Timeseries
+            </h2>
+            <h3 class="text-2xl text-black">
+                Par jour de la semaine
+            </h3>
+            <div class="table min-w-full bg-white border border-gray-500 mb-5">
+                <div class="table-header-group bg-slate-900 text-white sticky">
+                    <div class="table-row flex">
+                        <div class="table-cell w-1/5 text-center pt-2 pb-2">H \ J</div>
+                        <?php for($dow = 1 ; $dow <= 7 ; $dow++): ?>
+                            <div class="table-cell text-center"><?php echo Helper::frenchDayOfTheWeek($dow) ?></div>
+                        <?php endfor ?>
+                    </div>
+                </div>
+                <div class="table-row-group">
+                    <?php for($hour = 0 ; $hour < 24 ; $hour++): ?>
+                        <div class="table-row text-center  <?php echo ($hour%2==0 ? 'bg-gray-200' : '') ?>">
+                            <div class="table-cell p-1">
+                                <div class="text-left font-bold sticky h-sticky">
+                                    De <?php echo $hour ?>h à <?php echo ($hour+1) ?>h
+                                </div>
+                                <div class="text-right">Moy.</div>
+                                <div class="text-right">Med.</div>
+                                <div class="text-right">Min.</div>
+                                <div class="text-right">Max.</div>
+                            </div>
+                            <?php for($dow = 1 ; $dow <= 7 ; $dow++): ?>
+                                <div class="table-cell">
+                                    <br>
+                                    <?php echo $timeseries['days'][$dow]['avg'][$hour] ?><br>
+                                    <?php echo $timeseries['days'][$dow]['med'][$hour] ?><br>
+                                    <?php echo $timeseries['days'][$dow]['min'][$hour] ?><br>
+                                    <?php echo $timeseries['days'][$dow]['max'][$hour] ?><br>
+                                </div>
+                            <?php endfor ?>
+                        </div>
+                    <?php endfor ?>
+                </div>
+            </div>
+            <h3 class="text-2xl text-black">
+                Par mois
+            </h3>
+            <div class="table min-w-full bg-white border border-gray-500 mb-5">
+                <div class="table-header-group bg-slate-900 text-white sticky">
+                    <div class="table-row flex">
+                        <div class="table-cell w-1/5 text-center pt-2 pb-2">H \ J</div>
+                        <?php for($m = 1 ; $m <= 12 ; $m++): ?>
+                            <div class="table-cell text-center"><?php echo Helper::frenchMonth($m, false, true) ?></div>
+                        <?php endfor ?>
+                    </div>
+                </div>
+                <div class="table-row-group">
+                    <?php for($hour = 0 ; $hour < 24 ; $hour++): ?>
+                        <div class="table-row text-center <?php echo ($hour%2==0 ? 'bg-gray-200' : '') ?>">
+                            <div class="table-cell p-1">
+                                <div class="text-left font-bold sticky h-sticky">
+                                    De <?php echo $hour ?>h à <?php echo ($hour+1) ?>h
+                                </div>
+                                <div class="text-right">Moy.</div>
+                                <div class="text-right">Med.</div>
+                                <div class="text-right">Min.</div>
+                                <div class="text-right">Max.</div>
+                            </div>
+                            <?php for($m = 1 ; $m <= 12 ; $m++): ?>
+                                <div class="table-cell">
+                                    <br>
+                                    <?php echo $timeseries['monthes'][$m]['avg'][$hour] ?><br>
+                                    <?php echo $timeseries['monthes'][$m]['med'][$hour] ?><br>
+                                    <?php echo $timeseries['monthes'][$m]['min'][$hour] ?><br>
+                                    <?php echo $timeseries['monthes'][$m]['max'][$hour] ?><br>
+                                </div>
+                            <?php endfor ?>
+                        </div>
+                    <?php endfor ?>
+                </div>
+            </div>
+        </section>
+    <?php endif ?>
 </main>
 <?php require_once(dirname(__FILE__).'/parts/footer.php') ?>

@@ -6,6 +6,7 @@
     require_once(dirname(__FILE__).'/parts/header.php');
     $yesterday = (new \DateTime())->modify('-1 day')->format('d-m-Y');
     $records = [];
+    $tsRecords = [];
     foreach($compteurs as $compteur){
         if($compteur->get('lastDate') !== $yesterday){
             continue;
@@ -38,10 +39,18 @@
                 'text'   => 'Pire score de l\'année pour <b>'.$compteur->get('labelHTML').'</b> ('.$compteur->get('lastValue').')',
             ];
         }
+
+        $ts = (new Timeserie($compteur->get('id')))->getData();
+        if(is_array($ts) && isset($ts['record'])){
+            $tsRecords[] = [$compteur->get('labelHTML'), $ts['record']['value'], $ts['record']['date']];
+        }
+
     }
     uasort($records, function($a, $b){
         return $a['class'] > $b['class'];
     });
+
+
 ?>
 <main class="w-full flex-grow p-6 pb-20">
     <h1 class="text-3xl text-black pb-6 text-center">Dashboard des compteurs vélo 3M</h1>
@@ -156,6 +165,30 @@
             </tbody>
         </table>
     </section>
+
+    <?php if(count($tsRecords) > 0): ?>
+        <section id="recordsTs" class="pt-10">
+            <h2 class="text-2xl text-black">Records horaires de l'année</h2>
+            <table class="min-w-full bg-white">
+                <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th class="w-1/4">Compteur</th>
+                        <th colspan="2">Valeur</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    <?php foreach($tsRecords as $i => $ts): ?>
+                        <tr <?php echo ($i%2 == 0 ? 'class="bg-gray-200"' : '') ?>>
+                            <th class="text-right"><?php echo $ts[0] ?></th>
+                            <td class="text-center"><b><?php echo $ts[1] ?></b></td>
+                            <td><?php echo $ts[2] ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </section>
+    <?php endif ?>
+
     <section id="vs" class="pt-10">
         <h2 class="text-2xl text-black">Semaine vs week-end</h2>
         <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5 auto-cols-fr">

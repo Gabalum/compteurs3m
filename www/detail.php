@@ -1,6 +1,7 @@
 <?php
 namespace App;
 require_once('../bootstrap.php');
+use Carbon\Carbon;
 $slug = (isset($_GET['cpt']) ? strip_tags($_GET['cpt']) : '');
 $compteur = (Compteurs::getInstance())->getCompteurBySlug($slug);
 $compteurs = (Compteurs::getInstance())->getCompteurs();
@@ -14,8 +15,42 @@ $desc = 'Détail du compteur '.$compteur->get('label').'. Découvrez les compteu
 $days = date('z')+1;
 if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
     $imgSocial = _BASE_URL_.'assets/img/'.$compteur->get('id').'.jpg';
+}elseif(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.png')){
+    $imgSocial = _BASE_URL_.'assets/img/'.$compteur->get('id').'.png';
 }else{
     $imgSocial = _BASE_URL_.'assets/img/albert-fb.jpg';
+}
+$timeseries = (new Timeserie($compteur->getId()))->getData();
+// calcul semaine record
+$weekRecord = null;
+$weeksY = $compteur->get('weeksY');
+$rankingWeek = [];
+$mt = $compteur->get('medianTotal');
+foreach($weeksY as $year => $weeks){
+    foreach($weeks as $nb => $week){
+        if($week['sum'] > $mt){
+            $rankingWeek[] = [
+                'num'   => (int)$nb,
+                'year'  => $year,
+                'sum'   => $week['sum']
+            ];
+        }
+    }
+}
+if(count($rankingWeek) > 0){
+    usort($rankingWeek, function($a, $b){
+        return $a['sum'] < $b['sum'];
+    });
+    $rankingWeek = array_slice($rankingWeek, 0, 1);
+    foreach($rankingWeek as $date => $value){
+        if(is_array($value)){ // par semaine
+            $tmpDate = Carbon::now();
+            $tmpDate->setISODate($value['year'], $value['num']);
+            $date = 'du '.$tmpDate->startOfWeek()->format('d').' au '.$tmpDate->endOfWeek()->format('d').' '.Helper::frenchMonth($tmpDate->endOfWeek()->format('m'), false).' '.$tmpDate->endOfWeek()->format('Y');
+            $weekRecord = [$value['sum'], $date];
+        }
+    }
+
 }
 ?><!doctype html>
 <html lang="fr">
@@ -87,6 +122,8 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
                         </div>
                         <?php if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')): ?>
                             <img class="photo-detail" src="<?php echo _BASE_URL_.'assets/img/'.$compteur->get('id').'.jpg' ?>" />
+                        <?php elseif(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.png')): ?>
+                            <img class="photo-detail" src="<?php echo _BASE_URL_.'assets/img/'.$compteur->get('id').'.png' ?>" />
                         <?php endif ?>
                         <div class="map detail" id="map-<?php echo $compteur->get('id') ?>" data-id="<?php echo $compteur->get('id') ?>" data-lat="<?php echo $compteur->get('lat') ?>" data-lng="<?php echo $compteur->get('lng') ?>"></div>
                     </div>
@@ -111,7 +148,27 @@ if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
                     </div>
                 </div>
             </div>
+
             <div class="col col-12 col-sm-8 detail-data-col">
+
+                <?php if(is_array($timeseries) && isset($timeseries['record']) && isset($timeseries['record']['value']) && (int)$timeseries['record']['value'] > 0): ?>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h6>Records</h6>
+                                <em>(données horaires en rodage - uniquement sur l'année <?php echo date('Y') ?>)</em>
+                            </div>
+                            <div class="card-body text-black">
+                                Sur une heure : <b><?php echo $timeseries['record']['value'] ?></b> <?php echo $timeseries['record']['date'] ?><br>
+                                Sur une journée : <b><?php echo $compteur->get('recordTotal') ?></b> le <?php echo $compteur->get('recordTotalDate') ?><br>
+                                <?php if(is_array($weekRecord)): ?>
+                                    Sur une semaine : <b><?php echo $weekRecord[0] ?></b> <?php echo $weekRecord[1] ?><br>
+                                <?php endif ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif ?>
+
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">
