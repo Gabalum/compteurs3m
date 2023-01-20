@@ -178,9 +178,6 @@ class Compteur
                 $values = $this->completeNoDataDays($values);
                 uasort($values, [$this, 'orderByDO']);
                 foreach($values as $val){
-                    if(intval($val->intensity) < 15){
-                        continue; // garde fou contre les erreurs de relevé
-                    }
                     if(in_array($val->id, $doubles)){
                         continue; // éviter les valeurs en double avec l'ajout des données 2020 en archive
                     }
@@ -200,6 +197,12 @@ class Compteur
                     }else{
                         $cpt = (int)$val->intensity;
                         $cptWithAsterisk = $cpt;
+                    }
+                    if($fixedValue && $cpt < 15){
+                        continue;
+                    }
+                    if(!$fixedValue && intval($val->intensity) < 15){
+                        continue; // garde fou contre les erreurs de relevé
                     }
                     $dayOfTheWeek = $date->format('N');
                     if(is_null($compteur['firstDate'])){
