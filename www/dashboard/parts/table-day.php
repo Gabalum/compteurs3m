@@ -27,7 +27,7 @@
                     <?php echo Helper::frenchDayOfTheWeek($dow) ?>
                 </div>
                 <div class="table-cell ">
-                    <?php echo $values['sum'] ?>
+                    <?php echo Helper::nf($values['sum']) ?>
                     <div class="text-sm text-gray-400">(<?php echo $values['cpt'] ?> jours)</div>
                 </div>
                 <div class="table-cell ">

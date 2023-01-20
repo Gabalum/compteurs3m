@@ -71,7 +71,7 @@ class Compteurs
             'commune'   => 'Montpellier',
         ],
         'X2H22104767'   => [
-            'label'     => 'Clos l\'Armet',
+            'label'     => 'Clos l‘Armet',
             'address'   => 'Chemin du Clos l\Armet, Castelnau-le-Lez',
             'color'     => '#d95dde',
             'totem'     => false,

@@ -15,7 +15,13 @@ if(is_null($compteur)){
 }
 $title = $compteur->get('label')." | Les compteurs de Montpellier 3M";
 $desc = 'Détail du compteur '.$compteur->get('label').'. Découvrez les compteurs vélos grâce aux données en Open Data de Montpellier 3M';
-$days = date('z')+1;
+if(_THEYEAR_ == date('Y')){
+    $days = date('z')+1;
+    $nbDays = 0;
+}else{
+    $days = (date('Y') - _THEYEAR_)*365 + date('z')+1;
+    $nbDays = 365;
+}
 if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')){
     $imgSocial = _BASE_URL_.'assets/img/'.$compteur->get('id').'.jpg';
 }elseif(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.png')){
@@ -168,7 +174,7 @@ if($hasArchives){
 
             <div class="col col-12 col-sm-8 detail-data-col">
 
-                <?php if(is_array($timeseries) && isset($timeseries['record']) && isset($timeseries['record']['value']) && (int)$timeseries['record']['value'] > 0): ?>
+                <?php if(_THEYEAR_ === 2023 && is_array($timeseries) && isset($timeseries['record']) && isset($timeseries['record']['value']) && (int)$timeseries['record']['value'] > 0): ?>
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
@@ -176,11 +182,7 @@ if($hasArchives){
                                 <em>(données horaires en rodage - uniquement sur l'année <?php echo _THEYEAR_ ?>)</em>
                             </div>
                             <div class="card-body text-black">
-                                <?php if(_THEYEAR_ < 2023): ?>
-                                    Sur une heure &nbsp;&nbsp;: <b><?php echo Helper::nf($timeseries['record']['value']) ?></b> <?php echo $timeseries['record']['date'] ?><br>
-                                <?php else: ?>
-                                    Sur une heure &nbsp;&nbsp;: <em class="text-secondary">données non disponibles avant 2023</em><br>
-                                <?php endif ?>
+                                Sur une heure &nbsp;&nbsp;: <b><?php echo Helper::nf($timeseries['record']['value']) ?></b> <?php echo $timeseries['record']['date'] ?><br>
                                 Sur une journée : <b><?php echo Helper::nf($compteur->get('recordTotal')) ?></b> le <?php echo $compteur->get('recordTotalDate') ?><br>
                                 <?php if(is_array($weekRecord)): ?>
                                     Sur une semaine : <b><?php echo Helper::nf($weekRecord[0]) ?></b> <?php echo $weekRecord[1] ?><br>
@@ -196,7 +198,7 @@ if($hasArchives){
                             <h6>Passages par jour</h6>
                             <em>En <?php echo _THEYEAR_ ?></em>
                         </div>
-                        <canvas id="bar-day-<?php echo $compteur->get('id') ?>" class="bar-detail bar-day" data-labels='<?php echo json_encode($compteur->get('chartDates', $days)) ?>' data-values='<?php echo json_encode($compteur->get('chartData', $days)) ?>'></canvas>
+                        <canvas id="bar-day-<?php echo $compteur->get('id') ?>" class="bar-detail bar-day" data-labels='<?php echo json_encode($compteur->get('chartDates', $days, $nbDays)) ?>' data-values='<?php echo json_encode($compteur->get('chartData', $days, $nbDays)) ?>'></canvas>
                     </div>
                 </div>
                 <?php $days = $compteur->get('days-by-year') ?>

@@ -434,18 +434,26 @@ class Compteur
         fclose($file);
     }
 
-    private function getChartDates(int $days = 0) : array
+    private function getChartDates(int $days = 0, int $nb = 0) : array
     {
         $retour = [];
         $dateLimit = new \DateTime();
         $dateLimit->modify('-'.$days.' days');
         $dateLimit = $dateLimit->format('Ymd');
+        if($nb > 0) {
+            $dateEnd = new \DateTime();
+            $dateEnd->modify('-'.$days.' days');
+            $dateEnd->modify('+'.$nb.' days');
+            $dateEnd = $dateEnd->format('Ymd');
+        }else{
+            $dateEnd = date('Ymd');
+        }
         $dates = $this->get('dataTotalDates');
         if(is_array($dates) && count($dates) > 0){
             foreach($dates as $date){
                 $exp = explode('-', $date);
                 if(count($exp) == 3){
-                    if($exp[2].$exp[1].$exp[0] > $dateLimit){
+                    if($exp[2].$exp[1].$exp[0] > $dateLimit && $exp[2].$exp[1].$exp[0] <= $dateEnd) {
                         $retour[] = $date;
                     }
                 }
@@ -553,14 +561,14 @@ class Compteur
         return [$retourJo, $retourJc];
     }
 
-    public function get($item, $days = 14)
+    public function get($item, $days = 14, $nbDays = 0)
     {
         if(is_null($this->data)){
             $this->getData();
         }
         $retour = null;
         if($item == 'chartDates'){
-            $retour = $this->getChartDates($days);
+            $retour = $this->getChartDates($days, $nbDays);
         }elseif($item == 'chartData'){
             $retour = $this->getChartData($days);
         }elseif($item == 'monthRecord'){
