@@ -4,6 +4,9 @@ require_once('../bootstrap.php');
 use Carbon\Carbon;
 $slug = (isset($_GET['cpt']) ? strip_tags($_GET['cpt']) : '');
 $compteur = (Compteurs::getInstance())->getCompteurBySlug($slug);
+$years = $compteur->getAvailableYears();
+$year = (isset($_GET["year"]) && in_array((int) $_GET['year'], $years) ? (int) $_GET['year'] : (int) date("Y"));
+define('_THEYEAR_', $year);
 $compteurs = (Compteurs::getInstance())->getCompteurs();
 if(is_null($compteur)){
     header('HTTP/1.0 404 Not Found');
@@ -50,7 +53,18 @@ if(count($rankingWeek) > 0){
             $weekRecord = [$value['sum'], $date];
         }
     }
+}
 
+$archives = '';
+$hasArchives = (count($years) > 1);
+if($hasArchives){
+    foreach($years as $year){
+        if($year === _THEYEAR_){
+            $archives .= ' <b class="text-secondary">'.$year.'</b>';
+        }else{
+            $archives .= ' <a class="link-secondary" href="'._BASE_URL_.'detail/'.$compteur->get('slug').'/'.$year.'">'.$year.'</a>';
+        }
+    }
 }
 ?><!doctype html>
 <html lang="fr">
@@ -118,6 +132,9 @@ if(count($rankingWeek) > 0){
                                 <li>Type : <?php echo ($compteur->isTotem() ? 'Totem' : 'Capteur') ?></li>
                                 <?php /* ?><li>Commune : <?php echo $compteur->getCommune() ?></li><?php /* */ ?>
                                 <li>Mise en service : <?php echo str_replace('-', '/', $compteur->get('firstDate')) ?></li>
+                                <?php if(strlen($archives) > 0): ?>
+                                    <li>Archives : <?php echo $archives ?></li>
+                                <?php endif ?>
                             </ul>
                         </div>
                         <?php if(file_exists(__DIR__.'/assets/img/'.$compteur->get('id').'.jpg')): ?>
@@ -156,10 +173,14 @@ if(count($rankingWeek) > 0){
                         <div class="card-body">
                             <div class="card-title">
                                 <h6>Records</h6>
-                                <em>(données horaires en rodage - uniquement sur l'année <?php echo date('Y') ?>)</em>
+                                <em>(données horaires en rodage - uniquement sur l'année <?php echo _THEYEAR_ ?>)</em>
                             </div>
                             <div class="card-body text-black">
-                                Sur une heure &nbsp;&nbsp;: <b><?php echo Helper::nf($timeseries['record']['value']) ?></b> <?php echo $timeseries['record']['date'] ?><br>
+                                <?php if(_THEYEAR_ < 2023): ?>
+                                    Sur une heure &nbsp;&nbsp;: <b><?php echo Helper::nf($timeseries['record']['value']) ?></b> <?php echo $timeseries['record']['date'] ?><br>
+                                <?php else: ?>
+                                    Sur une heure &nbsp;&nbsp;: <em class="text-secondary">données non disponibles avant 2023</em><br>
+                                <?php endif ?>
                                 Sur une journée : <b><?php echo Helper::nf($compteur->get('recordTotal')) ?></b> le <?php echo $compteur->get('recordTotalDate') ?><br>
                                 <?php if(is_array($weekRecord)): ?>
                                     Sur une semaine : <b><?php echo Helper::nf($weekRecord[0]) ?></b> <?php echo $weekRecord[1] ?><br>
@@ -173,32 +194,32 @@ if(count($rankingWeek) > 0){
                     <div class="card-body">
                         <div class="card-title">
                             <h6>Passages par jour</h6>
-                            <em>En <?php echo date('Y') ?></em>
+                            <em>En <?php echo _THEYEAR_ ?></em>
                         </div>
                         <canvas id="bar-day-<?php echo $compteur->get('id') ?>" class="bar-detail bar-day" data-labels='<?php echo json_encode($compteur->get('chartDates', $days)) ?>' data-values='<?php echo json_encode($compteur->get('chartData', $days)) ?>'></canvas>
                     </div>
                 </div>
                 <?php $days = $compteur->get('days-by-year') ?>
-                <?php if(count($days) > 0 && isset($days[date('Y')]) && count($days[date('Y')]) > 0): ?>
-                    <?php $days = $days[date('Y')] ?>
+                <?php if(count($days) > 0 && isset($days[_THEYEAR_]) && count($days[_THEYEAR_]) > 0): ?>
+                    <?php $days = $days[_THEYEAR_] ?>
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
                                 <h6>Records par jour de la semaine</h6>
-                                <em>En <?php echo date('Y') ?></em>
+                                <em>En <?php echo _THEYEAR_ ?></em>
                             </div>
                             <canvas id="bar-day2-<?php echo $compteur->get('id') ?>" class="bar-detail bar-days2 records" data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'value')) ?>'></canvas>
                         </div>
                     </div>
                 <?php endif ?>
                 <?php $days = $compteur->get('days-by-year') ?>
-                <?php if(count($days) > 0 && isset($days[date('Y')]) && count($days[date('Y')]) > 0): ?>
-                    <?php $days = $days[date('Y')] ?>
+                <?php if(count($days) > 0 && isset($days[_THEYEAR_]) && count($days[_THEYEAR_]) > 0): ?>
+                    <?php $days = $days[_THEYEAR_] ?>
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
                                 <h6>Moyennes par jour de la semaine</h6>
-                                <em>En <?php echo date('Y') ?>, calculées en fonction des données disponibles (certains jours peuvent être manquants)</em>
+                                <em>En <?php echo _THEYEAR_ ?>, calculées en fonction des données disponibles (certains jours peuvent être manquants)</em>
                             </div>
                             <canvas id="bar-day3-<?php echo $compteur->get('id') ?>" class="bar-detail bar-days3 records" data-labels='<?php echo json_encode(array_map(Helper::class.'::frenchDayOfTheWeek', array_keys($days))) ?>' data-values='<?php echo json_encode(array_column($days, 'avg')) ?>'></canvas>
                         </div>
@@ -210,7 +231,7 @@ if(count($rankingWeek) > 0){
                         <div class="card-body">
                             <div class="card-title">
                                 <h6>Passages par semaine</h6>
-                                <em>En <?php echo date('Y') ?>, total en fonction des données disponibles (certains jours peuvent être manquants)</em>
+                                <em>En <?php echo _THEYEAR_ ?>, total en fonction des données disponibles (certains jours peuvent être manquants)</em>
                             </div>
                             <canvas id="bar-weeks-<?php echo $compteur->get('id') ?>" class="bar-detail bar-weeks" data-labels='<?php echo json_encode(array_keys($weeks)) ?>' data-values='<?php echo json_encode(array_column($weeks, 'sum')) ?>'></canvas>
                         </div>

@@ -599,4 +599,9 @@ class Compteur
         }
         return $values;
     }
+
+    public function getAvailableYears()
+    {
+        return array_keys($this->get('weeksY'));
+    }
 }
