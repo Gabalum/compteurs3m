@@ -159,10 +159,10 @@ if(count($rankingWeek) > 0){
                                 <em>(données horaires en rodage - uniquement sur l'année <?php echo date('Y') ?>)</em>
                             </div>
                             <div class="card-body text-black">
-                                Sur une heure : <b><?php echo $timeseries['record']['value'] ?></b> <?php echo $timeseries['record']['date'] ?><br>
-                                Sur une journée : <b><?php echo $compteur->get('recordTotal') ?></b> le <?php echo $compteur->get('recordTotalDate') ?><br>
+                                Sur une heure &nbsp;&nbsp;: <b><?php echo Helper::nf($timeseries['record']['value']) ?></b> <?php echo $timeseries['record']['date'] ?><br>
+                                Sur une journée : <b><?php echo Helper::nf($compteur->get('recordTotal')) ?></b> le <?php echo $compteur->get('recordTotalDate') ?><br>
                                 <?php if(is_array($weekRecord)): ?>
-                                    Sur une semaine : <b><?php echo $weekRecord[0] ?></b> <?php echo $weekRecord[1] ?><br>
+                                    Sur une semaine : <b><?php echo Helper::nf($weekRecord[0]) ?></b> <?php echo $weekRecord[1] ?><br>
                                 <?php endif ?>
                             </div>
                         </div>
