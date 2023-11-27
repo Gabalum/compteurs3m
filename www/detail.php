@@ -227,7 +227,7 @@ if($hasArchives){
                         </div>
                     </div>
                 <?php endif ?>
-                <?php $weeks = $compteur->get('weeks') ?>
+                <?php $weeks = (_THEYEAR_ == date('Y') ? $compteur->get('weeks') : $weeksY[_THEYEAR_]) ?>
                 <?php if(count($weeks) > 0): ?>
                     <div class="card">
                         <div class="card-body">

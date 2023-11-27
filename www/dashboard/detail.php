@@ -139,6 +139,45 @@
     });
     $rankingWeek = array_slice($rankingWeek, 0, 10);
     $rankingWeekY = array_slice($rankingWeekY, 0, 10);
+
+    $monthesY = $compteur->get('monthesY');
+    $rankingMonthes = [];
+    $rankingMonthesY = [];
+    $dw = (int)date('m');
+    $latestMonth = 0;
+    foreach($monthesY as $year => $monthes){
+        foreach($monthes as $x => $month){
+            if($month['avg'] > $mt){
+                $nb = (int) explode('-',$month['date'])[1];
+                if($year === _YEAR_ && $nb === $dw){
+                }else{
+                    $rankingMonthes[] = [
+                        'num'   => $nb,
+                        'year'  => $year,
+                        'sum'   => $month['sum']
+                    ];
+                    if($year === _YEAR_){
+                        $rankingMonthesY[] = [
+                            'num'   => $nb,
+                            'year'  => $year,
+                            'sum'   => $month['sum']
+                        ];
+                    }
+                }
+                if($year === _YEAR_ && (int)$nb === ($dw-1)){
+                    $latestWeek = $month['sum'];
+                }
+            }
+        }
+    }
+    usort($rankingMonthes, function($a, $b){
+        return $a['sum'] < $b['sum'];
+    });
+    usort($rankingMonthesY, function($a, $b){
+        return $a['sum'] < $b['sum'];
+    });
+    $rankingMonthes = array_slice($rankingMonthes, 0, 5);
+    $rankingMonthesY = array_slice($rankingMonthesY, 0, 5);
     require_once(dirname(__FILE__).'/parts/header.php');
 ?>
 <header class="fixed bg-blue-900 text-white w-full flex pl-5 gap-3 text-sm pt-1">
@@ -442,12 +481,21 @@
             <?php echo DashboardHelper::displayRanking($rankingYear, 'Année '._YEAR_, $compteur->get('lastValue')) ?>
         </div>
         <h3 class="text-2xl text-black" id="ranking">
-            Top 10 semaines
+            Top <?php echo min(count($rankingWeek), 10) ?> semaines
         </h3>
         <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5">
             <?php echo DashboardHelper::displayRanking($rankingWeek, 'Toutes les données', $latestWeek) ?>
             <?php echo DashboardHelper::displayRanking($rankingWeekY, 'Année '._YEAR_, $latestWeek, true) ?>
         </div>
+        <?php if(count($rankingMonthes) > 0): ?>
+            <h3 class="text-2xl text-black" id="ranking">
+                Top <?php echo min(count($rankingMonthes), 5) ?> mois
+            </h3>
+            <div class="grid grid-col-2 md:grid-flow-col gap-4 pb-5">
+                <?php echo DashboardHelper::displayRanking($rankingMonthes, 'Toutes les données', $latestMonth, false, true) ?>
+                <?php echo DashboardHelper::displayRanking($rankingMonthesY, 'Année '._YEAR_, $latestMonth, true, true) ?>
+            </div>
+        <?php endif ?>
         <h3 class="text-2xl text-black">
             Autre
         </h3>

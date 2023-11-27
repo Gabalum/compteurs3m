@@ -3,13 +3,13 @@
     require_once(dirname(__DIR__, 2).'/bootstrap.php');
     $compteurs = (Compteurs::getInstance())->getList();
     $lines = [];
-    $header = ['id du compteur', 'nom du compteur', 'date', 'plage horaire', 'effectif'];
+    $header = ['id du compteur', 'nom du compteur', 'date', 'heure', 'effectif'];
     foreach($compteurs as $id => $cpt){
         $ts = (new Timeserie($id))->getData();
         if(is_array($ts) && isset($ts['raw']) && is_array($ts['raw']) && count($ts['raw']) > 0){
             foreach($ts['raw'] as $date => $value){
                 $date = new \DateTime($date);
-                $lines[] = [$id, $cpt['label'], $date->format('d-m-Y'), (int)$date->format('H').'h-'.((int)$date->format('H')+1).'h', $value];
+                $lines[] = [$id, Helper::slugify($cpt['label']), $date->format('d-m-Y'), $date->format('H:m:s'), $value];
             }
         }
     }

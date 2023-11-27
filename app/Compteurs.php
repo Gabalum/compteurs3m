@@ -316,14 +316,14 @@ class Compteurs
             'commune'   => 'Montpellier',
         ],
         'X2H22104775'   => [
-            'label'     => 'Vieusens 1',
+            'label'     => 'Vieussens (côté pair)',
             'address'   => '',
             'color'     => '#ff8800',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
         'X2H22104776'   => [
-            'label'     => 'Vieusens 2',
+            'label'     => 'Vieussens (côté impair)',
             'address'   => '',
             'color'     => '#0088FF',
             'totem'     => false,

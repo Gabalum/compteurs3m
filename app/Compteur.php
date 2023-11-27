@@ -147,6 +147,7 @@ class Compteur
             'days'              => [],
             'days-by-year'      => [],
             'weeks'             => [],
+            'weeksY'             => [],
             'medianByYear'      => [],
             'sumByYear'         => [],
         ];

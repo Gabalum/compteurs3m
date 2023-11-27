@@ -43,7 +43,7 @@ class Tomtom
     public function retrieveData()
     {
         $values = [];
-        $data = @file_get_contents($this->link);
+        $data = @gzdecode(@file_get_contents($this->link));
         if(strlen($data) > 0){
             $data = @json_decode($data);
             if (json_last_error() === JSON_ERROR_NONE) {

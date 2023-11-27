@@ -256,7 +256,7 @@ $weatherData = (new Meteo())->getWeather($days);
                                                 <div class="card card-total">
                                                     <div class="card-body">
                                                         <h5 class="card-title">Total</h5>
-                                                        <p class="card-text cpt"><?php echo $monthRecord['sum'] ?></p>
+                                                        <p class="card-text cpt"><?php echo Helper::nf($monthRecord['sum']) ?></p>
                                                         <h6 class="card-subtitle mb-2 text-muted">Pour le mois <?php echo Helper::frenchMonth(date('m')) ?></h6>
                                                     </div>
                                                 </div>
@@ -265,7 +265,7 @@ $weatherData = (new Meteo())->getWeather($days);
                                                 <div class="card card-total">
                                                     <div class="card-body">
                                                         <h5 class="card-title">Total</h5>
-                                                        <p class="card-text cpt"><?php echo $compteur->get('sumCurYear') ?></p>
+                                                        <p class="card-text cpt"><?php echo Helper::nf($compteur->get('sumCurYear')) ?></p>
                                                         <h6 class="card-subtitle mb-2 text-muted">Pour l'année <?php echo date('Y') ?></h6>
                                                     </div>
                                                 </div>
@@ -274,7 +274,7 @@ $weatherData = (new Meteo())->getWeather($days);
                                                 <div class="card card-total">
                                                     <div class="card-body">
                                                         <h5 class="card-title">Total</h5>
-                                                        <p class="card-text cpt"><?php echo $compteur->get('sumTotal') ?></p>
+                                                        <p class="card-text cpt"><?php echo Helper::nf($compteur->get('sumTotal')) ?></p>
                                                         <h6 class="card-subtitle mb-2 text-muted">Depuis le <?php echo $compteur->get('firstDate') ?></h6>
                                                     </div>
                                                 </div>
