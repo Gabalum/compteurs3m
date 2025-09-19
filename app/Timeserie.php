@@ -24,12 +24,15 @@ class Timeserie
         ],
     ];
 
-    public function __construct($id)
+    public function __construct($id, $year = null)
     {
         $this->id = $id;
         $this->ecocounterId = 'urn:ngsi-ld:EcoCounter:'.$id;
         $this->file = dirname(__DIR__).'/data/timeseries/'.$id.'.json';
-        $dateStart  = _YEAR_.'-01-01T00:00:00';
+        if(is_null($year)) {
+            $year = _YEAR_;
+        }
+        $dateStart  = $year.'-01-01T00:00:00';
         $dateEnd    = date('Y-m-d').'T23:59:59';
         $this->link = 'https://portail-api-data.montpellier3m.fr/ecocounter_timeseries/'.urlencode($this->ecocounterId).'/attrs/intensity?fromDate='.urlencode($dateStart).'&toDate='.urlencode($dateEnd);
         $oneDay = [];

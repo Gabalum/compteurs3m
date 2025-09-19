@@ -3,6 +3,9 @@ namespace App;
 require_once('../bootstrap.php');
 use Carbon\Carbon;
 $slug = (isset($_GET['cpt']) ? strip_tags($_GET['cpt']) : '');
+if($slug == 'sabine'){
+    $slug = 'sabines';
+}
 $compteur = (Compteurs::getInstance())->getCompteurBySlug($slug);
 $years = $compteur->getAvailableYears();
 $year = (isset($_GET["year"]) && in_array((int) $_GET['year'], $years) ? (int) $_GET['year'] : (int) date("Y"));

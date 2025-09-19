@@ -21,8 +21,8 @@ class Compteur
     {
         $this->id = $id;
         $this->name = $name;
-        $this->archiveLink = 'http://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_'.$id.'_archive.json';
-        $this->link = 'http://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_'.$id.'.json';
+        $this->archiveLink = 'https://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_'.$id.'_archive.json';
+        $this->link = 'https://data.montpellier3m.fr/sites/default/files/ressources/MMM_EcoCompt_'.$id.'.json';
         $this->file = dirname(__DIR__).'/data/'.$id.'.json';
         $this->address = $address;
         if(strlen($color) === 0){
@@ -162,7 +162,11 @@ class Compteur
         $dataToday = trim($dataToday);
         $dataToday = str_replace('{"int', ',{"int', $dataToday);
         $dataToday = substr($dataToday, 1);
-        $data .= ','.$dataToday;
+        if(strlen($data) === 0) {
+            $data .= $dataToday;
+        } else {
+            $data .= ','.$dataToday;
+        }
 // ! --- correction 17 mai
         if(file_exists(dirname(__DIR__).'/dataarchive/MMM_EcoCompt_'.$this->id.'_Archive2020.json')){
             $dataArchive2020 = @file_get_contents(dirname(__DIR__).'/dataarchive/MMM_EcoCompt_'.$this->id.'_Archive2020.json');

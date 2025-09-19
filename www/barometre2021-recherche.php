@@ -26,14 +26,14 @@ if(isset($_GET['insee'])){
 }
 $items = [];
 if(count($insee) > 0){
-    $date = filemtime(__DIR__.'/barometre.json');
+    $date = filemtime(__DIR__.'/barometre2021.json');
     if(((time() - $date) / 60) > 10){
-        $handler = fopen(__DIR__.'/barometre.json', 'w+');
-        $data = file_get_contents('https://www.barometre-velo.fr/stats/progress.geojson');
+        $handler = fopen(__DIR__.'/barometre2021.json', 'w+');
+        $data = file_get_contents('https://barometre.parlons-velo.fr/api/4cds56c4sdc4c56ds4cre84c13ez8c4ezc6eza9c84ze16464cdsc1591cdzf8ez/stats/geojson');
         fwrite($handler, $data);
         fclose($handler);
     }else{
-        $data = file_get_contents(__DIR__.'/barometre.json');
+        $data = file_get_contents(__DIR__.'/barometre2021.json');
     }
     $data = @json_decode($data);
     if(is_object($data) && isset($data->features)){

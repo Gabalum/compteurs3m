@@ -40,8 +40,8 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
-        /*
-        'XTH21070328'   => [
+        /* */
+        'XTH24072390'   => [
             'label'     => 'Clapiers (Totem Simone Veil)',
             'address'   => '',
             'color'     => '#00ffff',
@@ -63,7 +63,8 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Castelnau-le-Lez',
         ],
-        'X2H20042633'   => [
+        //'X2H20042633'   => [
+        'Y2H20042633'   => [
             'label'     => 'Celleneuve',
             'address'   => '137 avenue de Lodève, Montpellier',
             'color'     => '#de5c9d',
@@ -91,14 +92,16 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Cournonsec',
         ],
-        'X2H20063163'   => [
+        //'X2H20063163'   => [
+        'Y2H20063163'   => [
             'label'     => 'Delmas 1',
             'address'   => '73 Avenue François Delmas, Montpellier',
             'color'     => '#fd9843',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
-        'X2H20063164'   => [
+        //'X2H20063164'   => [
+        'Y2H20063164'   => [
             'label'     => 'Delmas 2',
             'address'   => '73 Avenue François Delmas, Montpellier',
             'color'     => '#ffcd39',
@@ -126,7 +129,8 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Castelnau-le-Lez',
         ],
-        'X2H20063162'   => [
+        //'X2H20063162'   => [
+        'Y2H20063162'   => [
             'label'     => 'Gerhardt',
             'address'   => '1 rue Gerhardt, Montpellier',
             'color'     => '#479f76',
@@ -161,6 +165,14 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Juvignac',
         ],
+        //'ED223110494'   => [
+        'COM23120117'   => [
+            'label'     => 'Lac du Crès',
+            'address'   => '',
+            'color'     => '#1654321',
+            'totem'     => true,
+            'commune'   => 'Le Crès',
+        ],
         'X2H21070349'   => [
             'label'     => 'Lapeyronie',
             'address'   => '',
@@ -168,14 +180,16 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
-        'X2H20042635'   => [
+        //'X2H20042635'   => [
+        'Y2H20042635'   => [
             'label'     => 'Lattes 1',
             'address'   => 'Avenue Georges Frêche, Pérols',
             'color'     => '#4dd4ac',
             'totem'     => false,
             'commune'   => 'Pérols',
         ],
-        'X2H20042634'   => [
+        //'X2H20042634'   => [
+        'Y2H20042634'   => [
             'label'     => 'Lattes 2',
             'address'   => 'Avenue Georges Frêche, Pérols',
             'color'     => '#3dd5f3',
@@ -273,6 +287,14 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        //'ED223110496'   => [
+        'COM23120114'   => [
+            'label'     => 'Quai de Cythère',
+            'address'   => '',
+            'color'     => '#ee0000',
+            'totem'     => true,
+            'commune'   => 'Montpellier',
+        ],
         'X2H22043034'   => [
             'label'     => 'Renouvier (bande cyclable)',
             'address'   => '',
@@ -285,6 +307,22 @@ class Compteurs
             'address'   => '',
             'color'     => '#abef99',
             'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        //'ED223110500'   => [
+        'COM23120112'   => [
+            'label'     => 'Rue Pierre Causse',
+            'address'   => '',
+            'color'     => '#abef99',
+            'totem'     => true,
+            'commune'   => 'Montpellier',
+        ],
+        //'ED223110501'   => [
+        'COM23120110'   => [
+            'label'     => 'Sabines',
+            'address'   => '',
+            'color'     => '#abef99',
+            'totem'     => true,
             'commune'   => 'Montpellier',
         ],
         'X2H21111120'   => [
@@ -301,6 +339,22 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        //'ED223110495'   => [
+        'COM23120113'   => [
+            'label'     => 'Saint-Lazare',
+            'address'   => '',
+            'color'     => '#15202b',
+            'totem'     => true,
+            'commune'   => 'Montpellier',
+        ],
+        //'ED223110497'   => [
+        'COM23120111'   => [
+            'label'     => 'Saint-Martin Cité-Mion',
+            'address'   => '',
+            'color'     => '#15202b',
+            'totem'     => true,
+            'commune'   => 'Montpellier',
+        ],
         'X2H22043029'   => [
             'label'     => 'Thomassy (RM65)',
             'address'   => '',
@@ -308,8 +362,16 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        /*
         'X2H20063161'   => [
             'label'     => 'Vieille-Poste',
+            'address'   => '1211 rue de la Vieille-Poste, Montpellier',
+            'color'     => '#031633',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],*/
+        'ZLT25011699'   => [
+            'label'     => 'Vieille-Poste (2025)',
             'address'   => '1211 rue de la Vieille-Poste, Montpellier',
             'color'     => '#031633',
             'totem'     => false,
@@ -329,6 +391,14 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        //'ED223110499'   => [
+        'COM24010120'   => [
+            'label'     => 'Villeneuve',
+            'address'   => '',
+            'color'     => '#FF8800',
+            'totem'     => true,
+            'commune'   => 'Villeneuve-les-Maguelone',
+        ],
         /* */
     ];
 
@@ -340,7 +410,9 @@ class Compteurs
         $retour = [];
         if(count($this->compteurs) > 0){
             foreach($this->compteurs as $id => $cpt){
-                $retour[$id] = new Compteur($id, $cpt['label'], $cpt['address'], $cpt['color'], $cpt['totem'], $cpt['commune'], $fix);
+                if(isset($cpt['label'])) {
+                    $retour[$id] = new Compteur($id, $cpt['label'], $cpt['address'], $cpt['color'], $cpt['totem'], $cpt['commune'], $fix);
+                }
             }
         }
         return $retour;

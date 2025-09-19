@@ -1,11 +1,18 @@
 <?php
     namespace App;
+    $year = date('Y');
+    if(isset($_GET['year'])) {
+        $y = intval($_GET['year']);
+        if($y > 2020 && $y <= date('Y')) {
+            $year = $_GET['year'];
+        }
+    }
     require_once(dirname(__DIR__, 2).'/bootstrap.php');
     $compteurs = (Compteurs::getInstance())->getList();
     $lines = [];
     $header = ['id du compteur', 'nom du compteur', 'date', 'heure', 'effectif'];
     foreach($compteurs as $id => $cpt){
-        $ts = (new Timeserie($id))->getData();
+        $ts = (new Timeserie($id, $year))->getData();
         if(is_array($ts) && isset($ts['raw']) && is_array($ts['raw']) && count($ts['raw']) > 0){
             foreach($ts['raw'] as $date => $value){
                 $date = new \DateTime($date);
