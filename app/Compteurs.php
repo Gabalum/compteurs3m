@@ -63,8 +63,8 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Castelnau-le-Lez',
         ],
-        //'X2H20042633'   => [
-        'Y2H20042633'   => [
+        'X2H20042633'   => [
+        //'Y2H20042633'   => [
             'label'     => 'Celleneuve',
             'address'   => '137 avenue de Lodève, Montpellier',
             'color'     => '#de5c9d',
@@ -92,16 +92,16 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Cournonsec',
         ],
-        //'X2H20063163'   => [
-        'Y2H20063163'   => [
+        'X2H20063163'   => [
+        //'Y2H20063163'   => [
             'label'     => 'Delmas 1',
             'address'   => '73 Avenue François Delmas, Montpellier',
             'color'     => '#fd9843',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
-        //'X2H20063164'   => [
-        'Y2H20063164'   => [
+        'X2H20063164'   => [
+        //'Y2H20063164'   => [
             'label'     => 'Delmas 2',
             'address'   => '73 Avenue François Delmas, Montpellier',
             'color'     => '#ffcd39',
@@ -129,8 +129,8 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Castelnau-le-Lez',
         ],
-        //'X2H20063162'   => [
-        'Y2H20063162'   => [
+        'X2H20063162'   => [
+        //'Y2H20063162'   => [
             'label'     => 'Gerhardt',
             'address'   => '1 rue Gerhardt, Montpellier',
             'color'     => '#479f76',
@@ -180,16 +180,16 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
-        //'X2H20042635'   => [
-        'Y2H20042635'   => [
+        'X2H20042635'   => [
+        //'Y2H20042635'   => [
             'label'     => 'Lattes 1',
             'address'   => 'Avenue Georges Frêche, Pérols',
             'color'     => '#4dd4ac',
             'totem'     => false,
             'commune'   => 'Pérols',
         ],
-        //'X2H20042634'   => [
-        'Y2H20042634'   => [
+        'X2H20042634'   => [
+        //'Y2H20042634'   => [
             'label'     => 'Lattes 2',
             'address'   => 'Avenue Georges Frêche, Pérols',
             'color'     => '#3dd5f3',
