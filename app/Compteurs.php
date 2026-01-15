@@ -78,13 +78,14 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Castelnau-le-Lez',
         ],
-        'X2H22104770'   => [
+        /*
+        'X2H21070345'   => [
             'label'     => 'Colonel Pavelet',
             'address'   => '',
             'color'     => '#DD8899',
             'totem'     => false,
             'commune'   => 'Montpellier',
-        ],
+        ],*/
         'X2H22104765'   => [
             'label'     => 'Cournonsec',
             'address'   => '',
@@ -115,6 +116,27 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
+        'ZLT25112692' => [
+            'label' => 'Galerie (V. Hugo)',
+            'address' => '',
+            'color' => '#FF8800',
+            'totem' => false,
+            'commune' => 'Montpellier',
+        ],
+        'ZLT25112669' => [
+            'label' => 'Galerie (F. Mistral)',
+            'address' => '',
+            'color' => '#0088FF',
+            'totem' => false,
+            'commune' => 'Montpellier',
+        ],
+        'ZLT25112720' => [
+            'label' => 'Gambetta',
+            'address' => '',
+            'color' => '#88FF00',
+            'totem' => false,
+            'commune' => 'Montpellier',
+        ],
         'X2H22104772'   => [
             'label'     => 'Georges Frêche 1',
             'address'   => '',
@@ -134,6 +156,13 @@ class Compteurs
             'label'     => 'Gerhardt',
             'address'   => '1 rue Gerhardt, Montpellier',
             'color'     => '#479f76',
+            'totem'     => false,
+            'commune'   => 'Montpellier',
+        ],
+        'X2H22104770'   => [
+            'label'     => 'Gerhardt 2',
+            'address'   => '',
+            'color'     => '#DD8899',
             'totem'     => false,
             'commune'   => 'Montpellier',
         ],
@@ -252,6 +281,20 @@ class Compteurs
             'totem'     => false,
             'commune'   => 'Montferrier-sur-Lez',
         ],
+        'ZLT25112719' => [
+            'label' => 'Pas du loup (pair)',
+            'address' => '',
+            'color' => '#888888',
+            'totem' => false,
+            'commune' => 'Montpellier',
+        ],
+        'ZLT25112718' => [
+            'label' => 'Pas du loup (impair)',
+            'address' => '',
+            'color' => '#666666',
+            'totem' => false,
+            'commune' => 'Montpellier',
+        ],
         'X2H21070345'   => [
             'label'     => 'Pavelet',
             'address'   => '',
@@ -325,6 +368,13 @@ class Compteurs
             'totem'     => true,
             'commune'   => 'Montpellier',
         ],
+        'COM24010119' => [
+            'label' => 'Saint-Georges-d\'Orques',
+            'address'   => '',
+            'color'     => '#99efab',
+            'totem'     => false,
+            'commune' => 'Saint-Georges-d\'Orques',
+        ],
         'X2H21111120'   => [
             'label'     => 'Saint-Jaumes nord',
             'address'   => '',
@@ -361,6 +411,13 @@ class Compteurs
             'color'     => '#112222',
             'totem'     => false,
             'commune'   => 'Montpellier',
+        ],
+        'COM24010121' => [
+            'label' => 'Université Paul Valéry',
+            'address' => '',
+            'color' => '#981199',
+            'totem' => true,
+            'commune' => 'Montpellier',
         ],
         /*
         'X2H20063161'   => [

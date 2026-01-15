@@ -25,7 +25,7 @@
     for($dow = 1 ; $dow <= 7 ; $dow++) {
         $maxDay[$dow] = 0;
         for($y = $startYear ; $y <= date('Y') ; $y++) {
-            if($days[$y][$dow]['value'] > $maxDay[$dow]) {
+            if(isset($days[$y][$dow]) && $days[$y][$dow]['value'] > $maxDay[$dow]) {
                 $maxDay[$dow] = $days[$y][$dow]['value'];
             }
         }
@@ -342,6 +342,9 @@
                         <div class="table-cell text-left p-1 font-bold"><?php echo Helper::frenchDayOfTheWeek($dow) ?></div>
                         <?php for($y = $startYear ; $y <= date('Y') ; $y++): ?>
                             <?php
+                                if(!isset($days[$y][$dow])) {
+                                    continue;
+                                }
                                 $css = '';
                                 if($days[$y][$dow]['value'] === $maxDay[$dow]){
                                     $css .= ' font-bold';
@@ -461,7 +464,17 @@
                     <h4 class="font-semibold text-gray-800">Jours ouvrés</h4>
                 </header>
                 <div class="pb-5">
-                    <canvas id="line-jo-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode(array_column($jo, 'date')) ?>' data-values='<?php echo json_encode(array_column($jo, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
+                    <?php 
+                        $arrayJoDate = array_column($jo, 'date');
+                        $arrayJoValue = array_column($jo, 'value');
+                        $arrayJcValue = array_column($jc, 'value');
+                        $arrayJcDate = array_column($jc, 'date');
+                    ?>
+                    <?php if(is_array($arrayJcValue) && is_array($arrayJoDate) && is_array($arrayJoValue) && count($arrayJcValue) > 1 && count($arrayJoValue) > 1) : ?>
+                        <canvas id="line-jo-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode($arrayJoDate) ?>' data-values='<?php echo json_encode($arrayJoValue) ?>' data-max="<?php echo max(max($arrayJoValue), max($arrayJcValue)) * 1.1 ?>"></canvas>
+                    <?php else: ?>
+                        <em class="pl-5 text-gray-400 text-sm">Trop peu de données</em>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="w-full h-fit flex-1 shrink-1 bg-white shadow-lg rounded-sm border border-gray-200 mt-5">
@@ -469,7 +482,11 @@
                     <h4 class="font-semibold text-gray-800">Jours chomés, week-end, fériés</h4>
                 </header>
                 <div class="pb-5">
-                    <canvas id="line-jc-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode(array_column($jc, 'date')) ?>' data-values='<?php echo json_encode(array_column($jc, 'value')) ?>' data-max="<?php echo max(max(array_column($jo, 'value')), max(array_column($jc, 'value'))) * 1.1 ?>"></canvas>
+                    <?php if(is_array($arrayJcValue) && is_array($arrayJcDate) && is_array($arrayJoValue) && count($arrayJcValue) > 1 && count($arrayJoValue) > 1) : ?>
+                        <canvas id="line-jc-<?php echo uniqid() ?>" class="line" data-labels='<?php echo json_encode($arrayJcDate) ?>' data-values='<?php echo json_encode($arrayJcValue) ?>' data-max="<?php echo max(max($arrayJoValue), max($arrayJcValue)) * 1.1 ?>"></canvas>
+                    <?php else: ?>
+                        <em class="pl-5 text-gray-400 text-sm">Trop peu de données</em>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -592,12 +609,12 @@
             </div>
         </div>
     </section>
-    <?php if(is_array($timeseries)): ?>
-        <div id="a-timeseries" class="pb-10"></div>
-        <section id="timeseries">
-            <h2 class="text-3xl text-black">
-                Timeseries
-            </h2>
+    <div id="a-timeseries" class="pb-10"></div>
+    <section id="timeseries">
+        <h2 class="text-3xl text-black">
+            Timeseries
+        </h2>
+        <?php if(is_array($timeseries)): ?>
             <h3 class="text-2xl text-black">
                 Par jour de la semaine
             </h3>
@@ -671,8 +688,11 @@
                         </div>
                     <?php endfor ?>
                 </div>
-            </div>
-        </section>
-    <?php endif ?>
+            <?php else: ?>
+
+                <p><em class="pl-5 text-gray-400 text-sm">Données non disponibles</em></p>
+            <?php endif ?>
+        </div>
+    </section>
 </main>
 <?php require_once(dirname(__FILE__).'/parts/footer.php') ?>

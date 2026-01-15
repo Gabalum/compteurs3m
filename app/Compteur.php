@@ -80,7 +80,7 @@ class Compteur
     public function getData()
     {
         if($this->data == null){
-            if(isset($_GET['reload']) || !file_exists($this->file)){
+            if(isset($_GET['reload']) || !file_exists($this->file)) {
                 $this->retrieveData();
             }elseif((date('dmY', filemtime($this->file)) !== date('dmY') || date('Hi', filemtime($this->file)) < 1000) && time() - filemtime($this->file) > 900){ // Si le fichier date de la veille ou d'avant 10, on regarde toutes les 15 minutes
                 $this->retrieveData();
@@ -182,12 +182,17 @@ class Compteur
             if(count($values) > 0){
                 $values = $this->completeNoDataDays($values);
                 uasort($values, [$this, 'orderByDO']);
+                $fixedValue = false;
+
                 foreach($values as $val){
                     if(in_array($val->id, $doubles)){
                         continue; // éviter les valeurs en double avec l'ajout des données 2020 en archive
                     }
                     $doubles[] = $val->id;
 
+                    if(is_null($val->dateObserved) || $val->dateObserved == 'null') {
+                        continue;
+                    }
                     $date = new CptDate($val->dateObserved);
                     $year = $date->format('Y');
                     $month = $date->format('m');
@@ -596,6 +601,9 @@ class Compteur
     {
         $verif = [];
         foreach($values as $val) {
+            if(is_null($val->dateObserved) || $val->dateObserved == 'null') {
+                continue;
+            }
             $date = new CptDate($val->dateObserved);
             $verif[] = (int)$date->format('U');
         }
